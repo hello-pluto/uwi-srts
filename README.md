@@ -6,8 +6,6 @@ The University of the West Indies (UWI) Shuttle Routing & Tracking System develo
 
 ## Structure
 - application - Contains the code for the Android application
-- milestones - Contains the milestones deliverable to the lecturer
-- requirements - Contains the elicited requirements from the clients as well as their justifications.
 
 ## Group Members
 - Amanda Seenath
