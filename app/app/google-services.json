@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "103548808958",
+    "firebase_url": "https://uwi-srts.firebaseio.com",
+    "project_id": "uwi-srts",
+    "storage_bucket": "uwi-srts.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:103548808958:android:eb61ba247814addb",
+        "android_client_info": {
+          "package_name": "edu.uwi.sta.srts"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "103548808958-jm7matan6265b7s35uounfva326vp93t.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "edu.uwi.sta.srts",
+            "certificate_hash": "ed09356a7cb39753134beaa79c16ea016e7f9ce6"
+          }
+        },
+        {
+          "client_id": "103548808958-ur7fe7m4g3nmaevtmuuq2uqqs2h0i3ra.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAVZt2RA2WDUfGUhzNTSZdSpliL0tBpHZM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "103548808958-ur7fe7m4g3nmaevtmuuq2uqqs2h0i3ra.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
