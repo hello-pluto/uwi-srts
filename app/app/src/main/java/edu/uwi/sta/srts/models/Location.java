@@ -9,7 +9,7 @@
  * Project
  * UWI Shuttle Routing and Tracking System Project
  *
- * This class represents a location on the map
+ * This class represents a location on the map.
  */
 package edu.uwi.sta.srts.models;
 
