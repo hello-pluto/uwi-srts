@@ -18,4 +18,28 @@ public class Administrator extends User {
 
     private String passwordHash;
 
+    /**
+     * Default constructor for Firebase
+     */
+    public Administrator() {
+
+    }
+
+    /**
+     * Constructor that requires a user's email and password hash
+     * @param email The admin user's email
+     * @param passwordHash The admin user's password
+     */
+    public Administrator(String email, String passwordHash) {
+        super(email);
+        this.passwordHash = passwordHash;
+    }
+
+    public String getPasswordHash() {
+        return passwordHash;
+    }
+
+    public void setPasswordHash(String passwordHash) {
+        this.passwordHash = passwordHash;
+    }
 }

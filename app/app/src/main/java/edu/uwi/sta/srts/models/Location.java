@@ -14,35 +14,57 @@
 package edu.uwi.sta.srts.models;
 
 public class Location {
-    private String locationName;
-    private double lat;
-    private double longT;
 
+    private String locationId;
 
-    public String getLocationName(){
-        return locationName;
+    private String name;
+
+    private double latitude;
+
+    private double longitude;
+
+    /**
+     * Constructor that requires a location's name, latitude and longitude
+     * @param name The location's name e.g. SAC
+     * @param latitude The latitude coordinate of the location
+     * @param longitude The longitude coordinate of the location
+     */
+    public Location(String name, double latitude, double longitude) {
+        this.name = name;
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
 
-    public double getLat() {
-        return lat;
+    public String getLocationId() {
+        return locationId;
     }
 
-    public double getLongT() {
-        return longT;
+    public void setLocationId(String locationId) {
+        this.locationId = locationId;
     }
 
-    public void setLat(double lat) {
-        this.lat = lat;
+    public String getName() {
+        return name;
     }
 
-    public void setLocationName(String locationName) {
-        this.locationName = locationName;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public void setLongT(double longT) {
-        this.longT = longT;
+    public double getLatitude() {
+        return latitude;
     }
 
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
 
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
 }
 
