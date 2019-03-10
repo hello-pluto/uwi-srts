@@ -20,7 +20,7 @@ public class Vehicle {
 
     private int seats;
 
-    private String licencePlate;
+    private String licensePlateNo;
 
     private Location location;
 
@@ -38,11 +38,11 @@ public class Vehicle {
     /**
      * Constructor that requires the number of seats, licence plate number of a vehicle
      * @param seats The maximum amount of passengers that the vehicle can hold e.g. 12
-     * @param licencePlate The licence plate number of the vehicle
+     * @param licensePlateNo The licence plate number of the vehicle
      */
-    public Vehicle(int seats, String licencePlate) {
+    public Vehicle(int seats, String licensePlateNo) {
         this.seats = seats;
-        this.licencePlate = licencePlate;
+        this.licensePlateNo = licensePlateNo;
         this.location = null;
         this.driverId = null;
         this.routeId = null;
@@ -52,13 +52,13 @@ public class Vehicle {
      * Constructor that requires the number of seats, licence plate number, location, driverId
      * and routeId of a vehicle
      * @param seats The maximum amount of passengers that the vehicle can hold e.g. 12
-     * @param licencePlate The licence plate number of the vehicle
+     * @param licensePlateNo The licence plate number of the vehicle
      * @param driverId The driver that the vehicle is currently assigned to
      * @param routeId The route that the vehicle is currently taking
      */
-    public Vehicle(int seats, String licencePlate, String driverId, String routeId) {
+    public Vehicle(int seats, String licensePlateNo, String driverId, String routeId) {
         this.seats = seats;
-        this.licencePlate = licencePlate;
+        this.licensePlateNo = licensePlateNo;
         this.location = null;
         this.driverId = driverId;
         this.routeId = routeId;
@@ -80,12 +80,12 @@ public class Vehicle {
         this.seats = seats;
     }
 
-    public String getLicencePlate() {
-        return licencePlate;
+    public String getLicensePlateNo() {
+        return licensePlateNo;
     }
 
-    public void setLicencePlate(String licencePlate) {
-        this.licencePlate = licencePlate;
+    public void setLicensePlateNo(String licensePlateNo) {
+        this.licensePlateNo = licensePlateNo;
     }
 
     public Location getLocation() {
