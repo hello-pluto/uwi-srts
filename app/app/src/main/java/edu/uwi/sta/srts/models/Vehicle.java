@@ -21,6 +21,7 @@ public class Vehicle {
     private int seats;
 
     private String licensePlateNo;
+    // test
 
     private Location location;
 
