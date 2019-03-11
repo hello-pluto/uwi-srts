@@ -20,6 +20,21 @@ public abstract class User {
 
     private String email;
 
+    /**
+     * Default constructor for Firebase
+     */
+    public User(){
+
+    }
+
+    /**
+     * Constructor that requires a user's email address
+     * @param email The user's email address
+     */
+    public User(String email) {
+        this.email = email;
+    }
+
     public String getUserId() {
         return userId;
     }

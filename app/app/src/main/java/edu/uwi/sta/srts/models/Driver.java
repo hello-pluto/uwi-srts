@@ -18,5 +18,28 @@ public class Driver extends User {
 
     private String passwordHash;
 
+    /**
+     * Default constructor for Firebase
+     */
+    public Driver() {
 
+    }
+
+    /**
+     * Constructor that requires a user's email and password hash
+     * @param email The driver user's email
+     * @param passwordHash The driver user's password
+     */
+    public Driver(String email, String passwordHash) {
+        super(email);
+        this.passwordHash = passwordHash;
+    }
+
+    public String getPasswordHash() {
+        return passwordHash;
+    }
+
+    public void setPasswordHash(String passwordHash) {
+        this.passwordHash = passwordHash;
+    }
 }

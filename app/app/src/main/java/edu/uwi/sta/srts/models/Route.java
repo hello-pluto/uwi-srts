@@ -32,7 +32,7 @@ public class Route {
     /**
      * Constructor that requires a route name and frequency
      * @param name The name of the route e.g. JFK-SAL
-     * @param frequency The number of minutes between each shuttle arrival
+     * @param frequency The number of minutes between each shuttle arrival e.g. 15 (minutes)
      */
     public Route(String name, int frequency){
         this.name = name;

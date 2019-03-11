@@ -20,16 +20,35 @@ public class Student extends User {
 
     private String lastName;
 
+    /**
+     * Default constructor for Firebase
+     */
+    public Student() {
+
+    }
+
+    /**
+     * Constructor that requires a student's email, first name and last name
+     * @param email The student user's email
+     * @param firstName The student user's first name
+     * @param lastName The student user's last name
+     */
+    public Student(String email, String firstName, String lastName) {
+        super(email);
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
+
     public String getFirstName() {
         return firstName;
     }
 
-    public String getLastName() {
-        return lastName;
-    }
-
     public void setFirstName(String firstName) {
         this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
     }
 
     public void setLastName(String lastName) {
