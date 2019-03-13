@@ -14,14 +14,15 @@
 
 package edu.uwi.sta.srts.models;
 
-public class Vehicle {
+import edu.uwi.sta.srts.models.utils.Location;
+
+public class Vehicle implements Model{
 
     private String vehicleId;
 
-    private int seats;
+    private int capacity;
 
     private String licensePlateNo;
-    // test
 
     private Location location;
 
@@ -37,12 +38,20 @@ public class Vehicle {
     }
 
     /**
-     * Constructor that requires the number of seats, licence plate number of a vehicle
-     * @param seats The maximum amount of passengers that the vehicle can hold e.g. 12
+     * Constructor that fetches the vehicle corresponding to the given vehicleId
+     * @param vehicleId The vehicleId of the vehicle to fetch from the database
+     */
+    public Vehicle(String vehicleId){
+        // TODO: Fetch vehicle from database corresponding to vehicleId
+    }
+
+    /**
+     * Constructor that requires the number of capacity, licence plate number of a vehicle
+     * @param capacity The maximum amount of passengers that the vehicle can hold e.g. 12
      * @param licensePlateNo The licence plate number of the vehicle
      */
-    public Vehicle(int seats, String licensePlateNo) {
-        this.seats = seats;
+    public Vehicle(int capacity, String licensePlateNo) {
+        this.capacity = capacity;
         this.licensePlateNo = licensePlateNo;
         this.location = null;
         this.driverId = null;
@@ -50,15 +59,15 @@ public class Vehicle {
     }
 
     /**
-     * Constructor that requires the number of seats, licence plate number, location, driverId
+     * Constructor that requires the number of capacity, licence plate number, location, driverId
      * and routeId of a vehicle
-     * @param seats The maximum amount of passengers that the vehicle can hold e.g. 12
+     * @param capacity The maximum amount of passengers that the vehicle can hold e.g. 12
      * @param licensePlateNo The licence plate number of the vehicle
      * @param driverId The driver that the vehicle is currently assigned to
      * @param routeId The route that the vehicle is currently taking
      */
-    public Vehicle(int seats, String licensePlateNo, String driverId, String routeId) {
-        this.seats = seats;
+    public Vehicle(int capacity, String licensePlateNo, String driverId, String routeId) {
+        this.capacity = capacity;
         this.licensePlateNo = licensePlateNo;
         this.location = null;
         this.driverId = driverId;
@@ -73,12 +82,12 @@ public class Vehicle {
         this.vehicleId = vehicleId;
     }
 
-    public int getSeats() {
-        return seats;
+    public int getCapacity() {
+        return capacity;
     }
 
-    public void setSeats(int seats) {
-        this.seats = seats;
+    public void setCapacity(int capacity) {
+        this.capacity = capacity;
     }
 
     public String getLicensePlateNo() {
@@ -111,5 +120,15 @@ public class Vehicle {
 
     public void setRouteId(String routeId) {
         this.routeId = routeId;
+    }
+
+    @Override
+    public int hashCode() {
+        return this.getVehicleId().hashCode();
+    }
+
+    @Override
+    public void save() {
+        // TODO: sync with database
     }
 }

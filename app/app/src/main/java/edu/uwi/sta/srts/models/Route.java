@@ -14,7 +14,7 @@
 
 package edu.uwi.sta.srts.models;
 
-public class Route {
+public class Route implements Model {
 
     private String routeId;
 
@@ -30,7 +30,15 @@ public class Route {
     }
 
     /**
-     * Constructor that requires a route name and frequency
+     * Constructor that fetches the route corresponding to the given routeId
+     * @param routeId The routeId of the route to fetch
+     */
+    public Route(String routeId){
+        // TODO: Fetch route from database corresponding to routeId
+    }
+
+    /**
+     * Constructor that create a new route object and requires a route name and frequency
      * @param name The name of the route e.g. JFK-SAL
      * @param frequency The number of minutes between each shuttle arrival e.g. 15 (minutes)
      */
@@ -64,12 +72,12 @@ public class Route {
     }
 
     @Override
-    public boolean equals(Object o) {
-        return this.getRouteId().equals(((Route)o).getRouteId());
+    public int hashCode() {
+        return this.getRouteId().hashCode();
     }
 
     @Override
-    public int hashCode() {
-        return this.getRouteId().hashCode();
+    public void save() {
+        // TODO: Sync route data with database
     }
 }

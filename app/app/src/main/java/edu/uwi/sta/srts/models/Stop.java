@@ -9,12 +9,14 @@
  * Project
  * UWI Shuttle Routing and Tracking System Project
  *
- * This class represents a stop in a route in the system
+ * This class represents a stop on a route in the system
  */
 
 package edu.uwi.sta.srts.models;
 
-public class Stop {
+import edu.uwi.sta.srts.models.utils.Location;
+
+public class Stop implements Model{
 
     private String stopId;
 
@@ -27,6 +29,14 @@ public class Stop {
      */
     public Stop(){
 
+    }
+
+    /**
+     * Constructor that fetches the stop corresponding to the given stopId
+     * @param stopId The stopId of the stop to fetch
+     */
+    public Stop(String stopId){
+        // TODO: Fetch stop from database corresponding to stopId
     }
 
     /**
@@ -64,12 +74,12 @@ public class Stop {
     }
 
     @Override
-    public boolean equals(Object o) {
-        return this.getStopId().equals(((Stop)o).getStopId());
+    public int hashCode() {
+        return this.getStopId().hashCode();
     }
 
     @Override
-    public int hashCode() {
-        return this.getStopId().hashCode();
+    public void save() {
+        // TODO: Sync stop data with database
     }
 }

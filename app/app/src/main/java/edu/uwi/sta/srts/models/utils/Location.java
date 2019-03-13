@@ -9,13 +9,12 @@
  * Project
  * UWI Shuttle Routing and Tracking System Project
  *
- * This class represents a location on the map.
+ * This encapsulates the information for a single location object
  */
-package edu.uwi.sta.srts.models;
+
+package edu.uwi.sta.srts.models.utils;
 
 public class Location {
-
-    private String locationId;
 
     private String name;
 
@@ -33,14 +32,6 @@ public class Location {
         this.name = name;
         this.latitude = latitude;
         this.longitude = longitude;
-    }
-
-    public String getLocationId() {
-        return locationId;
-    }
-
-    public void setLocationId(String locationId) {
-        this.locationId = locationId;
     }
 
     public String getName() {
