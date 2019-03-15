@@ -18,77 +18,62 @@ import edu.uwi.sta.srts.models.utils.Location;
 import edu.uwi.sta.srts.models.Vehicle;
 import edu.uwi.sta.srts.views.View;
 
-public class VehicleController implements Controller{
-
-    private Vehicle model;
-
-    private View view;
-
+public class VehicleController extends Controller{
+    
     /**
      * Constructor that requires the vehicle model and its corresponding view
      * @param model The vehicle model
      * @param view The corresponding view
      */
     public VehicleController(Vehicle model, View view) {
-        this.model = model;
-        this.view = view;
+        super(model, view);
     }
 
     public String getVehicleId() {
-        return this.model.getVehicleId();
+        return ((Vehicle)this.model).getId();
     }
 
     public void setVehicleId(String vehicleId) {
-        this.model.setVehicleId(vehicleId);
+        ((Vehicle)this.model).setId(vehicleId);
     }
 
     public int getVehicleCapacity() {
-        return this.model.getCapacity();
+        return ((Vehicle)this.model).getCapacity();
     }
 
     public void setVehicleCapacity(int capacity) {
-        this.model.setCapacity(capacity);
+        ((Vehicle)this.model).setCapacity(capacity);
     }
 
     public String getVehicleLicensePlateNo() {
-        return this.model.getLicensePlateNo();
+        return ((Vehicle)this.model).getLicensePlateNo();
     }
 
     public void setVehicleLicensePlateNo(String licensePlateNo) {
-        this.model.setLicensePlateNo(licensePlateNo);
+        ((Vehicle)this.model).setLicensePlateNo(licensePlateNo);
     }
 
     public Location getVehicleLocation() {
-        return this.model.getLocation();
+        return ((Vehicle)this.model).getLocation();
     }
 
     public void setVehicleLocation(Location location) {
-        this.model.setLocation(location);
+        ((Vehicle)this.model).setLocation(location);
     }
 
     public String getVehicleDriverId() {
-        return this.model.getDriverId();
+        return ((Vehicle)this.model).getDriverId();
     }
 
     public void setVehicleDriverId(String driverId) {
-        this.model.setDriverId(driverId);
+        ((Vehicle)this.model).setDriverId(driverId);
     }
 
     public String getVehicleRouteId() {
-        return this.model.getRouteId();
+        return ((Vehicle)this.model).getRouteId();
     }
 
     public void setVehicleRouteId(String routeId) {
-        this.model.setRouteId(routeId);
-    }
-
-    @Override
-    public void saveModel() {
-        this.model.save();
-    }
-
-    @Override
-    public void updateView() {
-        this.view.update();
+        ((Vehicle)this.model).setRouteId(routeId);
     }
 }

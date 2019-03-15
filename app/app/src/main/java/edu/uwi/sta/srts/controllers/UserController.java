@@ -18,11 +18,7 @@ import edu.uwi.sta.srts.models.User;
 import edu.uwi.sta.srts.models.utils.UserType;
 import edu.uwi.sta.srts.views.View;
 
-public class UserController implements Controller {
-
-    private User model;
-
-    private View view;
+public class UserController extends Controller {
 
     /**
      * Constructor that requires the user model and its corresponding view
@@ -30,65 +26,54 @@ public class UserController implements Controller {
      * @param view The corresponding view
      */
     public UserController(User model, View view) {
-        this.model = model;
-        this.view = view;
+        super(model, view);
     }
 
     public String getUserId() {
-        return this.model.getUserId();
+        return ((User)this.model).getId();
     }
 
     public void setUserId(String userId) {
-        this.model.setUserId(userId);
+        ((User)this.model).setId(userId);
     }
 
     public String getUserEmail() {
-        return this.model.getEmail();
+        return ((User)this.model).getEmail();
     }
 
     public void setUserEmail(String email) {
-        this.model.setEmail(email);
+        ((User)this.model).setEmail(email);
     }
 
     public String getUserFullName() {
-        return this.model.getEmail();
+        return ((User)this.model).getFullName();
     }
 
     public void setUserFullName(String fullName) {
-        this.model.setFullName(fullName);
+        ((User)this.model).setFullName(fullName);
     }
 
     public String getUserPassHash() {
-        return this.model.getPassHash();
+        return ((User)this.model).getPassHash();
     }
 
     public void setUserPassHash(String passHash) {
-        this.model.setPassHash(passHash);
+        ((User)this.model).setPassHash(passHash);
     }
 
     public UserType getUserType() {
-        return this.model.getUserType();
+        return ((User)this.model).getUserType();
     }
 
     public void setUserType(UserType userType) {
-        this.model.setUserType(userType);
+        ((User)this.model).setUserType(userType);
     }
 
     public boolean isUserVerified() {
-        return this.model.isVerified();
+        return ((User)this.model).isVerified();
     }
 
     public void setUserVerified(boolean verified) {
-        this.model.setVerified(verified);
-    }
-
-    @Override
-    public void saveModel() {
-        this.model.save();
-    }
-
-    @Override
-    public void updateView() {
-        this.view.update();
+        ((User)this.model).setVerified(verified);
     }
 }

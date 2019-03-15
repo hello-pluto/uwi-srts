@@ -14,10 +14,46 @@
 
 package edu.uwi.sta.srts.models;
 
-public interface Model {
+import com.google.firebase.database.Exclude;
+
+public abstract class Model {
+
+    protected String id;
+
+    @Exclude
+    protected boolean changed;
+
+    public Model(){
+        this.id = "";
+        this.changed = false;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    @Exclude
+    public boolean isChanged() {
+        return changed;
+    }
+
+    @Exclude
+    public void setChanged(boolean changed) {
+        this.changed = changed;
+    }
+
+    @Override
+    public int hashCode() {
+        return this.id.hashCode();
+    }
 
     /**
      * Method that saves the model i.e. syncs it with the databse
      */
-    void save();
+    @Exclude
+    public abstract void save();
 }

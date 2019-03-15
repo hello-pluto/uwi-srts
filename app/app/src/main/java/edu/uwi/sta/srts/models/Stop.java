@@ -14,11 +14,17 @@
 
 package edu.uwi.sta.srts.models;
 
+import android.support.annotation.NonNull;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
+
+import edu.uwi.sta.srts.models.utils.DatabaseHelper;
 import edu.uwi.sta.srts.models.utils.Location;
 
-public class Stop implements Model{
-
-    private String stopId;
+public class Stop extends Model{
 
     private String routeId;
 
@@ -28,7 +34,7 @@ public class Stop implements Model{
      * Default constructor for Firebase
      */
     public Stop(){
-
+        super();
     }
 
     /**
@@ -36,7 +42,26 @@ public class Stop implements Model{
      * @param stopId The stopId of the stop to fetch
      */
     public Stop(String stopId){
-        // TODO: Fetch stop from database corresponding to stopId
+        super();
+        DatabaseHelper.getInstance().getDatabaseReference("stops").child(stopId)
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        Stop s = dataSnapshot.getValue(Stop.class);
+                        if(s != null) {
+                            Stop.this.setRouteId(s.getRouteId());
+                            Stop.this.setLocation(s.getLocation());
+                            Stop.this.setId(s.getId());
+
+                            setChanged(true);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
     }
 
     /**
@@ -45,16 +70,9 @@ public class Stop implements Model{
      * @param location The location of the stop
      */
     public Stop(String routeId, Location location){
+        super();
         this.routeId = routeId;
         this.location = location;
-    }
-
-    public String getStopId() {
-        return stopId;
-    }
-
-    public void setStopId(String stopId) {
-        this.stopId = stopId;
     }
 
     public String getRouteId() {
@@ -74,12 +92,14 @@ public class Stop implements Model{
     }
 
     @Override
-    public int hashCode() {
-        return this.getStopId().hashCode();
-    }
-
-    @Override
     public void save() {
-        // TODO: Sync stop data with database
+        if(getId().equals("")){
+            DatabaseReference ref = DatabaseHelper.getInstance().getDatabaseReference("stops").push();
+            this.setId(ref.getKey());
+            ref.setValue(this);
+        }else{
+            DatabaseHelper.getInstance().getDatabaseReference("stops")
+                    .child(getId()).setValue(this);
+        }
     }
 }

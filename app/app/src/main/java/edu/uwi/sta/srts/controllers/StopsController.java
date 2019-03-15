@@ -20,11 +20,7 @@ import edu.uwi.sta.srts.models.Stop;
 import edu.uwi.sta.srts.models.Stops;
 import edu.uwi.sta.srts.views.View;
 
-public class StopsController implements Controller{
-
-    private Stops model;
-
-    private View view;
+public class StopsController extends Controller{
 
     /**
      * Constructor that requires the route model and its corresponding view
@@ -32,29 +28,18 @@ public class StopsController implements Controller{
      * @param view The corresponding view
      */
     public StopsController(Stops model, View view) {
-        this.model = model;
-        this.view = view;
+        super(model, view);
     }
 
     public ArrayList<Stop> getStops() {
-        return this.model.getStops();
+        return ((Stops)this.model).getStops();
     }
 
     public void addStop(Stop stop){
-        this.model.addStop(stop);
+        ((Stops)this.model).addStop(stop);
     }
 
-    public void removeStop(Stop stop){
-        this.model.removeStop(stop);
-    }
-
-    @Override
-    public void saveModel() {
-        this.model.save();
-    }
-
-    @Override
-    public void updateView() {
-        this.view.update();
+    public void removeStop(int index){
+        ((Stops)this.model).removeStop(index);
     }
 }

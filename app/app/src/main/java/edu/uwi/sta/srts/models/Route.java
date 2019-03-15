@@ -14,9 +14,16 @@
 
 package edu.uwi.sta.srts.models;
 
-public class Route implements Model {
+import android.support.annotation.NonNull;
 
-    private String routeId;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
+
+import edu.uwi.sta.srts.models.utils.DatabaseHelper;
+
+public class Route extends Model {
 
     private String name;
 
@@ -26,7 +33,7 @@ public class Route implements Model {
      * Default constructor for Firebase
      */
     public Route(){
-
+        super();
     }
 
     /**
@@ -34,7 +41,26 @@ public class Route implements Model {
      * @param routeId The routeId of the route to fetch
      */
     public Route(String routeId){
-        // TODO: Fetch route from database corresponding to routeId
+        super();
+        DatabaseHelper.getInstance().getDatabaseReference("routes").child(routeId)
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        Route r = dataSnapshot.getValue(Route.class);
+                        if(r != null) {
+                            Route.this.setName(r.getName());
+                            Route.this.setFrequency(r.getFrequency());
+                            Route.this.setId(r.getId());
+
+                            setChanged(true);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
     }
 
     /**
@@ -43,16 +69,9 @@ public class Route implements Model {
      * @param frequency The number of minutes between each shuttle arrival e.g. 15 (minutes)
      */
     public Route(String name, int frequency){
+        super();
         this.name = name;
         this.frequency = frequency;
-    }
-
-    public String getRouteId() {
-        return routeId;
-    }
-
-    public void setRouteId(String routeId) {
-        this.routeId = routeId;
     }
 
     public String getName() {
@@ -72,12 +91,14 @@ public class Route implements Model {
     }
 
     @Override
-    public int hashCode() {
-        return this.getRouteId().hashCode();
-    }
-
-    @Override
     public void save() {
-        // TODO: Sync route data with database
+        if(getId().equals("")){
+            DatabaseReference ref = DatabaseHelper.getInstance().getDatabaseReference("routes").push();
+            this.setId(ref.getKey());
+            ref.setValue(this);
+        }else{
+            DatabaseHelper.getInstance().getDatabaseReference("routes")
+                    .child(getId()).setValue(this);
+        }
     }
 }

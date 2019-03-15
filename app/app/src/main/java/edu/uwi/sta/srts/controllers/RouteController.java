@@ -17,11 +17,7 @@ package edu.uwi.sta.srts.controllers;
 import edu.uwi.sta.srts.models.Route;
 import edu.uwi.sta.srts.views.View;
 
-public class RouteController implements Controller{
-
-    private Route model;
-
-    private View view;
+public class RouteController extends Controller{
 
     /**
      * Constructor that requires the route model and its corresponding view
@@ -29,41 +25,30 @@ public class RouteController implements Controller{
      * @param view The corresponding view
      */
     public RouteController(Route model, View view) {
-        this.model = model;
-        this.view = view;
+        super(model, view);
     }
 
     public String getRouteId() {
-        return this.model.getRouteId();
+        return ((Route)this.model).getId();
     }
 
     public void setRouteId(String routeId) {
-        this.model.setRouteId(routeId);
+        ((Route)this.model).setId(routeId);
     }
 
     public String getRouteName() {
-        return this.model.getName();
+        return ((Route)((Route)this.model)).getName();
     }
 
     public void setRouteName(String name) {
-        this.model.setName(name);
+        ((Route)this.model).setName(name);
     }
 
     public int getRouteFrequency() {
-        return this.model.getFrequency();
+        return ((Route)this.model).getFrequency();
     }
 
     public void setRouteFrequency(int frequency) {
-        this.model.setFrequency(frequency);
-    }
-
-    @Override
-    public void saveModel() {
-        this.model.save();
-    }
-
-    @Override
-    public void updateView() {
-        this.view.update();
+        ((Route)this.model).setFrequency(frequency);
     }
 }

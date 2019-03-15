@@ -14,47 +14,70 @@
 
 package edu.uwi.sta.srts.models;
 
+import android.support.annotation.NonNull;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
+
 import java.util.ArrayList;
-import java.util.HashMap;
 
-public class Routes implements Model {
+import edu.uwi.sta.srts.models.utils.DatabaseHelper;
 
-    private HashMap<String, Route> routes =  new HashMap<>();
+public class Routes extends Model {
+
+    private ArrayList<Route> routes =  new ArrayList<>();
 
     /**
      * Default constructor that fetches all routes from the database
      */
     public Routes() {
-        // TODO: Fetch data for all routes from the database.
+        super();
+        DatabaseHelper.getInstance().getDatabaseReference("routes")
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        routes.clear();
+                        for (DataSnapshot route: dataSnapshot.getChildren()) {
+                            Route r = route.getValue(Route.class);
+                            routes.add(r);
+                        }
+
+                        setChanged(true);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
     }
 
     /**
      * Constructor that accepts a local collection of routes
      * @param routes The collection of routes
      */
-    public Routes(HashMap<String, Route> routes){
-        this.routes.putAll(routes);
+    public Routes(ArrayList<Route> routes){
+        super();
+        this.routes.addAll(routes);
     }
 
     public ArrayList<Route> getRoutes() {
-        return new ArrayList<Route>(this.routes.values());
+        return this.routes;
     }
 
     public void addRoute(Route route){
-        this.routes.put(route.getRouteId(), route);
+        this.routes.add(route);
     }
 
-    public void removeRoute(Route route){
-        this.routes.remove(route.getRouteId());
-    }
-
-    @Override
-    public int hashCode() {
-        return this.routes.hashCode();
+    public void removeRoute(int index){
+        this.routes.remove(index);
     }
 
     @Override
     public void save() {
-        // TODO: sync with database
+        for(Route route: this.getRoutes()){
+            route.save();
+        }
     }
 }

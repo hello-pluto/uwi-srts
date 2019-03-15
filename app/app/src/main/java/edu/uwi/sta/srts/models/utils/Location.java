@@ -23,6 +23,13 @@ public class Location {
     private double longitude;
 
     /**
+     * Default constructor for firebase
+     */
+    public Location() {
+
+    }
+
+    /**
      * Constructor that requires a location's name, latitude and longitude
      * @param name The location's name e.g. SAC
      * @param latitude The latitude coordinate of the location

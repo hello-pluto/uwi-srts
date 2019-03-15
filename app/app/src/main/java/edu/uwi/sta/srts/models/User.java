@@ -14,11 +14,17 @@
 
 package edu.uwi.sta.srts.models;
 
+import android.support.annotation.NonNull;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
+
+import edu.uwi.sta.srts.models.utils.DatabaseHelper;
 import edu.uwi.sta.srts.models.utils.UserType;
 
-public class User implements Model{
-
-    private String userId;
+public class User extends Model{
 
     private String email;
 
@@ -34,7 +40,7 @@ public class User implements Model{
      * Default constructor for Firebase
      */
     public User(){
-
+        super();
     }
 
     /**
@@ -42,7 +48,29 @@ public class User implements Model{
      * @param userId The userId of the user to fetch
      */
     public User(String userId){
-        // TODO: Fetch user from database corresponding to userId
+        super();
+        DatabaseHelper.getInstance().getDatabaseReference("users").child(userId)
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        User u = dataSnapshot.getValue(User.class);
+                        if(u != null) {
+                            User.this.setEmail(u.getEmail());
+                            User.this.setFullName(u.getFullName());
+                            User.this.setPassHash(u.getPassHash());
+                            User.this.setUserType(u.getUserType());
+                            User.this.setVerified(u.isVerified());
+                            User.this.setId(u.getId());
+
+                            setChanged(true);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
     }
 
     /**
@@ -70,14 +98,6 @@ public class User implements Model{
         this.passHash = passHash;
         this.userType = userType;
         this.verified = false;
-    }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
     }
 
     public String getEmail() {
@@ -121,12 +141,14 @@ public class User implements Model{
     }
 
     @Override
-    public int hashCode() {
-        return this.getUserId().hashCode();
-    }
-
-    @Override
     public void save() {
-        // TODO: Sync data with database
+        if(getId().equals("")){
+            DatabaseReference ref = DatabaseHelper.getInstance().getDatabaseReference("users").push();
+            this.setId(ref.getKey());
+            ref.setValue(this);
+        }else{
+            DatabaseHelper.getInstance().getDatabaseReference("users")
+                    .child(getId()).setValue(this);
+        }
     }
 }

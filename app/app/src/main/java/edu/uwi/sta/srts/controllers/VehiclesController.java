@@ -20,11 +20,7 @@ import edu.uwi.sta.srts.models.Vehicle;
 import edu.uwi.sta.srts.models.Vehicles;
 import edu.uwi.sta.srts.views.View;
 
-public class VehiclesController implements Controller{
-
-    private Vehicles model;
-
-    private View view;
+public class VehiclesController extends Controller{
 
     /**
      * Constructor that requires the vehicle model and its corresponding view
@@ -32,29 +28,18 @@ public class VehiclesController implements Controller{
      * @param view The corresponding view
      */
     public VehiclesController(Vehicles model, View view) {
-        this.model = model;
-        this.view = view;
+        super(model, view);
     }
 
     public ArrayList<Vehicle> getModels() {
-        return this.model.getVehicles();
+        return ((Vehicles)this.model).getVehicles();
     }
 
     public void addVehicle(Vehicle vehicle){
-        this.model.addVehicle(vehicle);
+        ((Vehicles)this.model).addVehicle(vehicle);
     }
 
-    public void removeVehicle(Vehicle vehicle){
-        this.model.removeVehicle(vehicle);
-    }
-
-    @Override
-    public void saveModel() {
-        this.model.save();
-    }
-
-    @Override
-    public void updateView() {
-        this.view.update();
+    public void removeVehicle(int index){
+        ((Vehicles)this.model).removeVehicle(index);
     }
 }

@@ -20,11 +20,7 @@ import edu.uwi.sta.srts.models.Route;
 import edu.uwi.sta.srts.models.Routes;
 import edu.uwi.sta.srts.views.View;
 
-public class RoutesController implements Controller{
-
-    private Routes model;
-
-    private View view;
+public class RoutesController extends Controller{
 
     /**
      * Constructor that requires the routes model and its corresponding view
@@ -32,29 +28,28 @@ public class RoutesController implements Controller{
      * @param view The corresponding view
      */
     public RoutesController(Routes model, View view) {
-        this.model = model;
-        this.view = view;
+        super(model, view);
     }
 
     public ArrayList<Route> getRoutes() {
-        return this.model.getRoutes();
+        return ((Routes)this.model).getRoutes();
     }
 
     public void addRoute(Route route){
-        this.model.addRoute(route);
+        ((Routes)this.model).addRoute(route);
     }
 
-    public void removeRoute(Route route){
-        this.model.removeRoute(route);
+    public void removeRoute(int index){
+        ((Routes)this.model).removeRoute(index);
     }
 
-    @Override
-    public void saveModel() {
-        this.model.save();
-    }
+    public Route filter(String routeId){
+        for (Route route: ((Routes)this.model).getRoutes()) {
+            if(route.getId().equals(routeId)){
+                return route;
+            }
+        }
 
-    @Override
-    public void updateView() {
-        this.view.update();
+        return null;
     }
 }

@@ -14,18 +14,44 @@
 
 package edu.uwi.sta.srts.models;
 
+import android.support.annotation.NonNull;
+import android.util.Log;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
+
 import java.util.ArrayList;
-import java.util.HashMap;
 
-public class Vehicles implements Model {
+import edu.uwi.sta.srts.models.utils.DatabaseHelper;
 
-    private HashMap<String, Vehicle> vehicles =  new HashMap<>();
+public class Vehicles extends Model {
+
+    private ArrayList<Vehicle> vehicles =  new ArrayList<>();
 
     /**
      * Default constructor that fetches all vehicles from the database
      */
     public Vehicles() {
-        // TODO: Fetch data for all vehicles from the database.
+        super();
+        DatabaseHelper.getInstance().getDatabaseReference("vehicles")
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        vehicles.clear();
+                        for (DataSnapshot route: dataSnapshot.getChildren()) {
+                            Vehicle v = route.getValue(Vehicle.class);
+                            vehicles.add(v);
+                        }
+
+                        setChanged(true);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
     }
 
     /**
@@ -33,36 +59,52 @@ public class Vehicles implements Model {
      * @param routeId The routeId of the vehicles to fetch from the database
      */
     public Vehicles(String routeId){
-        // TODO: Fetch data from database about all vehicles on this route
+        super();
+        DatabaseHelper.getInstance().getDatabaseReference("vehicles").child("routeId").equalTo(routeId)
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        vehicles.clear();
+                        for (DataSnapshot route: dataSnapshot.getChildren()) {
+                            Vehicle v = route.getValue(Vehicle.class);
+                            vehicles.add(v);
+                        }
+
+                        setChanged(true);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
     }
 
     /**
      * Constructor that accepts a local collection of vehicles
      * @param vehicles The collection of vehicles
      */
-    public Vehicles(HashMap<String, Vehicle> vehicles){
-        this.vehicles.putAll(vehicles);
+    public Vehicles(ArrayList<Vehicle> vehicles){
+        super();
+        this.vehicles.addAll(vehicles);
     }
 
     public ArrayList<Vehicle> getVehicles() {
-        return new ArrayList<Vehicle>(this.vehicles.values());
+        return this.vehicles;
     }
 
     public void addVehicle(Vehicle vehicle){
-        this.vehicles.put(vehicle.getVehicleId(), vehicle);
+        this.vehicles.add(vehicle);
     }
 
-    public void removeVehicle(Vehicle vehicle){
-        this.vehicles.remove(vehicle.getVehicleId());
-    }
-
-    @Override
-    public int hashCode() {
-        return this.vehicles.hashCode();
+    public void removeVehicle(int index){
+        this.vehicles.remove(index);
     }
 
     @Override
     public void save() {
-        // TODO: sync with database
+        for(Vehicle vehicle: this.getVehicles()){
+            vehicle.save();
+        }
     }
 }

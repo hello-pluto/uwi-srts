@@ -14,18 +14,43 @@
 
 package edu.uwi.sta.srts.models;
 
+import android.support.annotation.NonNull;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class Stops implements Model {
+import edu.uwi.sta.srts.models.utils.DatabaseHelper;
 
-    private HashMap<String, Stop> stops =  new HashMap<>();
+public class Stops extends Model {
+
+    private ArrayList<Stop> stops =  new ArrayList<>();
 
     /**
      * Default constructor that fetches all stops from the database
      */
     public Stops() {
-        // TODO: Fetch data for all stops from the database.
+        DatabaseHelper.getInstance().getDatabaseReference("stops")
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        stops.clear();
+                        for (DataSnapshot stop: dataSnapshot.getChildren()) {
+                            Stop r = stop.getValue(Stop.class);
+                            stops.add(r);
+                        }
+
+                        setChanged(true);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
     }
 
     /**
@@ -33,36 +58,50 @@ public class Stops implements Model {
      * @param routeId The routeId of the stops to fetch from the database
      */
     public Stops(String routeId){
-        // TODO: Fetch data from database about all stops on this route
+        DatabaseHelper.getInstance().getDatabaseReference("stops").child("routeId").equalTo(routeId)
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        stops.clear();
+                        for (DataSnapshot stop: dataSnapshot.getChildren()) {
+                            Stop r = stop.getValue(Stop.class);
+                            stops.add(r);
+                        }
+
+                        setChanged(true);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
     }
 
     /**
      * Constructor that accepts a local collection of stops
      * @param stops The collection of local stops
      */
-    public Stops(HashMap<String, Stop> stops){
-        this.stops.putAll(stops);
+    public Stops(ArrayList<Stop> stops){
+        this.stops.addAll(stops);
     }
 
     public ArrayList<Stop> getStops() {
-        return new ArrayList<Stop>(this.stops.values());
+        return this.stops;
     }
 
     public void addStop(Stop stop){
-        this.stops.put(stop.getRouteId(), stop);
+        this.stops.add(stop);
     }
 
-    public void removeStop(Stop stop){
-        this.stops.remove(stop.getStopId());
-    }
-
-    @Override
-    public int hashCode() {
-        return this.stops.hashCode();
+    public void removeStop(int index){
+        this.stops.remove(index);
     }
 
     @Override
     public void save() {
-        // TODO: sync with database
+        for(Stop stop: this.getStops()){
+            stop.save();
+        }
     }
 }

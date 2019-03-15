@@ -14,11 +14,17 @@
 
 package edu.uwi.sta.srts.models;
 
+import android.support.annotation.NonNull;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
+
+import edu.uwi.sta.srts.models.utils.DatabaseHelper;
 import edu.uwi.sta.srts.models.utils.Location;
 
-public class Vehicle implements Model{
-
-    private String vehicleId;
+public class Vehicle extends Model{
 
     private int capacity;
 
@@ -34,7 +40,7 @@ public class Vehicle implements Model{
      * Default constructor for Firebase
      */
     public Vehicle() {
-
+        super();
     }
 
     /**
@@ -42,7 +48,28 @@ public class Vehicle implements Model{
      * @param vehicleId The vehicleId of the vehicle to fetch from the database
      */
     public Vehicle(String vehicleId){
-        // TODO: Fetch vehicle from database corresponding to vehicleId
+        super();
+        DatabaseHelper.getInstance().getDatabaseReference("vehicles").child(vehicleId)
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        Vehicle v = dataSnapshot.getValue(Vehicle.class);
+                        if(v != null) {
+                            Vehicle.this.setCapacity(v.getCapacity());
+                            Vehicle.this.setLicensePlateNo(v.getLicensePlateNo());
+                            Vehicle.this.setLocation(v.getLocation());
+                            Vehicle.this.setDriverId(v.getDriverId());
+                            Vehicle.this.setRouteId(v.getRouteId());
+
+                            Vehicle.this.changed = true;
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
     }
 
     /**
@@ -51,6 +78,7 @@ public class Vehicle implements Model{
      * @param licensePlateNo The licence plate number of the vehicle
      */
     public Vehicle(int capacity, String licensePlateNo) {
+        super();
         this.capacity = capacity;
         this.licensePlateNo = licensePlateNo;
         this.location = null;
@@ -67,19 +95,12 @@ public class Vehicle implements Model{
      * @param routeId The route that the vehicle is currently taking
      */
     public Vehicle(int capacity, String licensePlateNo, String driverId, String routeId) {
+        super();
         this.capacity = capacity;
         this.licensePlateNo = licensePlateNo;
         this.location = null;
         this.driverId = driverId;
         this.routeId = routeId;
-    }
-
-    public String getVehicleId() {
-        return vehicleId;
-    }
-
-    public void setVehicleId(String vehicleId) {
-        this.vehicleId = vehicleId;
     }
 
     public int getCapacity() {
@@ -123,12 +144,14 @@ public class Vehicle implements Model{
     }
 
     @Override
-    public int hashCode() {
-        return this.getVehicleId().hashCode();
-    }
-
-    @Override
     public void save() {
-        // TODO: sync with database
+        if(getId().equals("")){
+            DatabaseReference ref = DatabaseHelper.getInstance().getDatabaseReference("vehicles").push();
+            this.setId(ref.getKey());
+            ref.setValue(this);
+        }else{
+            DatabaseHelper.getInstance().getDatabaseReference("vehicles")
+                    .child(getId()).setValue(this);
+        }
     }
 }

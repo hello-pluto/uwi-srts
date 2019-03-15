@@ -18,11 +18,7 @@ import edu.uwi.sta.srts.models.Stop;
 import edu.uwi.sta.srts.models.utils.Location;
 import edu.uwi.sta.srts.views.View;
 
-public class StopController implements Controller{
-
-    private Stop model;
-
-    private View view;
+public class StopController extends Controller{
 
     /**
      * Constructor that requires the stop model and its corresponding view
@@ -30,41 +26,31 @@ public class StopController implements Controller{
      * @param view The corresponding view
      */
     public StopController(Stop model, View view) {
-        this.model = model;
-        this.view = view;
+        super(model, view);
     }
 
     public String getStopId() {
-        return this.model.getStopId();
+        return ((Stop)this.model).getId();
     }
 
     public void setStopId(String stopId) {
-        this.model.setStopId(stopId);
+        ((Stop)this.model).setId(stopId);
     }
 
     public String getStopRouteId() {
-        return this.model.getRouteId();
+        return ((Stop)this.model).getRouteId();
     }
 
     public void setStopRouteId(String routeId) {
-        this.model.setRouteId(routeId);
+        ((Stop)this.model).setRouteId(routeId);
     }
 
     public Location getStopLocation() {
-        return this.model.getLocation();
+        return ((Stop)this.model).getLocation();
     }
 
     public void setStopLocation(Location location) {
-        this.model.setLocation(location);
+        ((Stop)this.model).setLocation(location);
     }
 
-    @Override
-    public void saveModel() {
-        this.model.save();
-    }
-
-    @Override
-    public void updateView() {
-        this.view.update();
-    }
 }
