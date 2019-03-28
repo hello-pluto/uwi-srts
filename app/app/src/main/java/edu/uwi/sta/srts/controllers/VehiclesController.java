@@ -42,4 +42,13 @@ public class VehiclesController extends Controller{
     public void removeVehicle(int index){
         ((Vehicles)this.model).removeVehicle(index);
     }
+
+    public Vehicle filter(String vehicleId){
+        for(Vehicle vehicle: getModels()){
+            if(vehicle.getId().equals(vehicleId)){
+                return vehicle;
+            }
+        }
+        return null;
+    }
 }

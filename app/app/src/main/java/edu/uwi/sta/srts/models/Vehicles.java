@@ -44,7 +44,7 @@ public class Vehicles extends Model {
                             vehicles.add(v);
                         }
 
-                        setChanged(true);
+                        notifyObservers();
                     }
 
                     @Override
@@ -70,7 +70,7 @@ public class Vehicles extends Model {
                             vehicles.add(v);
                         }
 
-                        setChanged(true);
+                        notifyObservers();
                     }
 
                     @Override

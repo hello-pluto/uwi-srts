@@ -21,10 +21,12 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.Serializable;
+
 import edu.uwi.sta.srts.models.utils.DatabaseHelper;
 import edu.uwi.sta.srts.models.utils.UserType;
 
-public class User extends Model{
+public class User extends Model implements Serializable {
 
     private String email;
 
@@ -62,7 +64,7 @@ public class User extends Model{
                             User.this.setVerified(u.isVerified());
                             User.this.setId(u.getId());
 
-                            setChanged(true);
+                            notifyObservers();
                         }
                     }
 

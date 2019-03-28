@@ -30,15 +30,24 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".views.MapsActivity"
+            android:name=".views.driver.TrackVehicle"
+            android:label="@string/title_activity_track_vehicle"></activity>
+        <activity android:name=".views.LoginActivity" />
+
+        <uses-library
+            android:name="org.apache.http.legacy"
+            android:required="false" />
+
+        <activity
+            android:name=".views.ViewVehiclesList"
             android:label="@string/title_activity_maps">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".views.MainActivity">
-        </activity>
+        <activity android:name=".views.MainActivity" />
     </application>
 
 </manifest>

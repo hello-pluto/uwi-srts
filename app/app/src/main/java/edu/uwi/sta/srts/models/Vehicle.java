@@ -61,7 +61,7 @@ public class Vehicle extends Model{
                             Vehicle.this.setDriverId(v.getDriverId());
                             Vehicle.this.setRouteId(v.getRouteId());
 
-                            Vehicle.this.changed = true;
+                            notifyObservers();
                         }
                     }
 

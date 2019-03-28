@@ -22,7 +22,6 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.MenuCompat;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
@@ -37,25 +36,25 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MapStyleOptions;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.HashMap;
 
 import edu.uwi.sta.srts.R;
-import edu.uwi.sta.srts.controllers.RouteController;
 import edu.uwi.sta.srts.controllers.RoutesController;
 import edu.uwi.sta.srts.controllers.VehiclesController;
-import edu.uwi.sta.srts.models.Route;
+import edu.uwi.sta.srts.models.Model;
 import edu.uwi.sta.srts.models.Routes;
 import edu.uwi.sta.srts.models.Vehicle;
 import edu.uwi.sta.srts.models.Vehicles;
-import edu.uwi.sta.srts.models.utils.Location;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, View {
+public class ViewVehiclesList extends FragmentActivity implements OnMapReadyCallback, View {
 
     private GoogleMap mMap;
     private VehiclesController vehiclesController;
-    private RoutesController routeController;
+    private RoutesController routesController;
+    private HashMap<LatLng, Vehicle> latLngVehicleHashMap;
     private boolean mapReady = false;
     private boolean dataLoaded = false;
 
@@ -69,7 +68,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-
+        latLngVehicleHashMap = new HashMap<>();
 
         Vehicles vehicles = new Vehicles();
 
@@ -77,10 +76,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         Routes routes = new Routes();
 
-        routeController = new RoutesController(routes, this);
+        routesController = new RoutesController(routes, this);
 
-
-        //vehiclesController.saveModel();
     }
 
 
@@ -98,6 +95,26 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         mMap = googleMap;
 
+        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+
+                Vehicle vehicle = latLngVehicleHashMap.get(marker.getPosition());
+
+                android.view.View vehicleDetails = findViewById(R.id.vehicleDetails);
+                vehicleDetails.setVisibility(android.view.View.VISIBLE);
+
+                TextView routeNameText = findViewById(R.id.route);
+                TextView licenseText = findViewById(R.id.licence);
+
+
+                routeNameText.setText(routesController.filter(vehicle.getRouteId()).getName());
+                licenseText.setText(vehicle.getLicensePlateNo());
+
+                return false;
+            }
+        });
+
         mapReady = true;
 
         if (dataLoaded) {
@@ -106,8 +123,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     @Override
-    public void update() {
-        if(!routeController.getRoutes().isEmpty() && !vehiclesController.getModels().isEmpty()) {
+    public void update(Model model) {
+        if(!routesController.getRoutes().isEmpty() && !vehiclesController.getModels().isEmpty()) {
             dataLoaded = true;
 
             if (mapReady) {
@@ -134,17 +151,23 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         LatLngBounds.Builder builder = new LatLngBounds.Builder();
 
         final android.support.v7.widget.PopupMenu menu = new android.support.v7.widget.PopupMenu(this, vehiclesText);
+
         menu.getMenuInflater()
                 .inflate(R.menu.default_menu, menu.getMenu());
 
         for(Vehicle vehicle: vehiclesController.getModels()){
             menu.getMenu().add(R.id.default_group, vehicle.hashCode(), Menu.NONE, vehicle.getLicensePlateNo());
             LatLng latLng = new LatLng(vehicle.getLocation().getLatitude(), vehicle.getLocation().getLongitude());
-            mMap.addMarker(new MarkerOptions()
+            MarkerOptions marker = new MarkerOptions()
                     .position(latLng)
-                    .title(routeController.filter(vehicle.getRouteId()).getName())
-                    .icon(bitmapDescriptorFromVector(this, R.drawable.ic_placeholder))).showInfoWindow();
+                    .icon(bitmapDescriptorFromVector(this, R.drawable.ic_placeholder));
+
+            mMap.addMarker(marker);
+            latLngVehicleHashMap.put(latLng, vehicle);
+
             builder.include(latLng);
+
+
         }
 
         menu.getMenu().add(R.id.add_group, 0, Menu.NONE, "None");
@@ -379,4 +402,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         mMap.animateCamera(cu);
     }
+
+
 }

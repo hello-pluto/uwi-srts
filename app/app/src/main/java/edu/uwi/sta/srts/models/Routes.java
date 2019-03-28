@@ -43,7 +43,7 @@ public class Routes extends Model {
                             routes.add(r);
                         }
 
-                        setChanged(true);
+                        notifyObservers();
                     }
 
                     @Override

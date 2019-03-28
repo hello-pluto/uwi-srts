@@ -43,6 +43,15 @@ public class RoutesController extends Controller{
         ((Routes)this.model).removeRoute(index);
     }
 
+    public Route getRouteByName(String routeName){
+        for(Route route : getRoutes()){
+            if(route.getName().equals(routeName)){
+                return route;
+            }
+        }
+        return null;
+    }
+
     public Route filter(String routeId){
         for (Route route: ((Routes)this.model).getRoutes()) {
             if(route.getId().equals(routeId)){

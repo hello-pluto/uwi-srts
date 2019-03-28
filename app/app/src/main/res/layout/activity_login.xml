@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".views.LoginActivity"
+    android:background="@color/colorPrimary"
+    android:id="@+id/rl">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:elevation="0dp"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar">
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal"
+            android:indeterminateTint="@android:color/white"
+            android:layout_marginBottom="-7dp"
+            android:layout_marginTop="-6dp"
+            android:visibility="gone"/>
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:title=""
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+        </android.support.v7.widget.Toolbar>
+
+    </android.support.design.widget.AppBarLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:orientation="vertical"
+        android:clipToPadding="false">
+        <ImageView
+            android:id="@+id/icon"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:src="@drawable/splash_icon"
+            android:layout_gravity="center"
+            android:tint="@android:color/white"
+            android:layout_marginBottom="40dp"/>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/emailLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:boxBackgroundColor="#0D000000"
+            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+            app:hintTextAppearance="@style/Base.TextAppearance.AppCompat.Inverse"
+            app:backgroundTint="@android:color/white"
+            android:textColorHint="#77FFFFFF"
+            android:layout_marginTop="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginLeft="16dp">
+            <android.support.design.widget.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/email"
+                android:textColor="@android:color/white"
+                android:hint="Email"
+                style="@style/Widget.MaterialComponents.TextInputEditText.FilledBox"
+                app:backgroundTint="@android:color/white"
+                android:textCursorDrawable="@null"
+                app:hintTextAppearance="@style/Base.TextAppearance.AppCompat.Inverse"
+                android:inputType="textEmailAddress"/>
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/passwordLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:boxBackgroundColor="#0D000000"
+            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+            app:hintTextAppearance="@style/Base.TextAppearance.AppCompat.Inverse"
+            app:backgroundTint="@android:color/white"
+            android:textColorHint="#77FFFFFF"
+            android:layout_marginTop="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginLeft="16dp"
+            app:passwordToggleEnabled="true"
+            app:passwordToggleTint="@android:color/white">
+            <android.support.design.widget.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/password"
+                android:textColor="@android:color/white"
+                android:hint="Password"
+                style="@style/Widget.MaterialComponents.TextInputEditText.FilledBox"
+                app:backgroundTint="@android:color/white"
+                android:textCursorDrawable="@null"
+                app:hintTextAppearance="@style/Base.TextAppearance.AppCompat.Inverse"
+                android:inputType="textPassword"/>
+        </android.support.design.widget.TextInputLayout>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:text="Login"
+            android:layout_marginTop="16dp"
+            app:backgroundTint="@color/colorPrimaryDark"
+            android:textColor="@android:color/white"
+            android:layout_marginRight="12dp"
+            android:layout_marginLeft="12dp"
+            android:layout_marginBottom="16dp"
+            android:id="@+id/login"/>
+
+    </LinearLayout>
+
+</RelativeLayout>

@@ -52,7 +52,7 @@ public class Route extends Model {
                             Route.this.setFrequency(r.getFrequency());
                             Route.this.setId(r.getId());
 
-                            setChanged(true);
+                            notifyObservers();
                         }
                     }
 
