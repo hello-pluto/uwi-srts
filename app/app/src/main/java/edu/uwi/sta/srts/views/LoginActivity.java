@@ -117,7 +117,7 @@ public class LoginActivity extends AppCompatActivity implements Closable {
         switch (user.getUserType()){
             default:
             case STUDENT:
-                intent = new Intent(this, ViewVehiclesList.class);break;
+                intent = new Intent(this, ViewVehicles.class);break;
         }
         intent.putExtra("user", user);
         startActivity(intent);

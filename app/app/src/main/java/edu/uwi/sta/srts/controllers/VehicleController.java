@@ -33,10 +33,6 @@ public class VehicleController extends Controller{
         return ((Vehicle)this.model).getId();
     }
 
-    public void setVehicleId(String vehicleId) {
-        ((Vehicle)this.model).setId(vehicleId);
-    }
-
     public int getVehicleCapacity() {
         return ((Vehicle)this.model).getCapacity();
     }

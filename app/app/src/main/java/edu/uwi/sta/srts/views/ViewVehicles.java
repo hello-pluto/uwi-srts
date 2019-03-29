@@ -49,7 +49,7 @@ import edu.uwi.sta.srts.models.Routes;
 import edu.uwi.sta.srts.models.Vehicle;
 import edu.uwi.sta.srts.models.Vehicles;
 
-public class ViewVehiclesList extends FragmentActivity implements OnMapReadyCallback, View {
+public class ViewVehicles extends FragmentActivity implements OnMapReadyCallback, View {
 
     private GoogleMap mMap;
     private VehiclesController vehiclesController;

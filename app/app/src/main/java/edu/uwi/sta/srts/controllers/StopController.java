@@ -33,10 +33,6 @@ public class StopController extends Controller{
         return ((Stop)this.model).getId();
     }
 
-    public void setStopId(String stopId) {
-        ((Stop)this.model).setId(stopId);
-    }
-
     public String getStopRouteId() {
         return ((Stop)this.model).getRouteId();
     }

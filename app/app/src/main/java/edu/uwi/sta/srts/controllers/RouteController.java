@@ -32,10 +32,6 @@ public class RouteController extends Controller{
         return ((Route)this.model).getId();
     }
 
-    public void setRouteId(String routeId) {
-        ((Route)this.model).setId(routeId);
-    }
-
     public String getRouteName() {
         return ((Route)((Route)this.model)).getName();
     }
