@@ -53,7 +53,7 @@ public class Stop extends Model{
                             Stop.this.setLocation(s.getLocation());
                             Stop.this.setId(s.getId());
 
-                            setChanged(true);
+                            notifyObservers();
                         }
                     }
 

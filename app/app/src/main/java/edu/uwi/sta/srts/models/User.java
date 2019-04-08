@@ -21,16 +21,17 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.Serializable;
+
 import edu.uwi.sta.srts.models.utils.DatabaseHelper;
 import edu.uwi.sta.srts.models.utils.UserType;
+import edu.uwi.sta.srts.utils.Utils;
 
-public class User extends Model{
+public class User extends Model implements Serializable {
 
     private String email;
 
     private String fullName;
-
-    private String passHash;
 
     private UserType userType;
 
@@ -57,12 +58,11 @@ public class User extends Model{
                         if(u != null) {
                             User.this.setEmail(u.getEmail());
                             User.this.setFullName(u.getFullName());
-                            User.this.setPassHash(u.getPassHash());
                             User.this.setUserType(u.getUserType());
                             User.this.setVerified(u.isVerified());
                             User.this.setId(u.getId());
 
-                            setChanged(true);
+                            notifyObservers();
                         }
                     }
 
@@ -89,13 +89,11 @@ public class User extends Model{
      * Constructor that requires a user's email address and full name
      * @param email The user's email address
      * @param fullName The user's full name
-     * @param passHash The user's password hash
      * @param userType The user's account type i.e. Student, Driver or Administrator
      */
-    public User(String email, String fullName, String passHash, UserType userType) {
+    public User(String email, String fullName, UserType userType) {
         this.email = email;
         this.fullName = fullName;
-        this.passHash = passHash;
         this.userType = userType;
         this.verified = false;
     }
@@ -104,24 +102,24 @@ public class User extends Model{
         return email;
     }
 
-    public void setEmail(String email) {
+    public String setEmail(String email) {
+        if(!Utils.isValidEmail(email)){
+            return "Invalid email";
+        }
         this.email = email;
+        return null;
     }
 
     public String getFullName() {
         return fullName;
     }
 
-    public void setFullName(String fullName) {
+    public String setFullName(String fullName) {
+        if(fullName.split(" ").length < 2){
+            return "Invalid full name";
+        }
         this.fullName = fullName;
-    }
-
-    public String getPassHash() {
-        return passHash;
-    }
-
-    public void setPassHash(String passHash) {
-        this.passHash = passHash;
+        return null;
     }
 
     public UserType getUserType() {

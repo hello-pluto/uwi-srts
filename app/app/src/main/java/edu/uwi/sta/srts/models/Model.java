@@ -16,16 +16,14 @@ package edu.uwi.sta.srts.models;
 
 import com.google.firebase.database.Exclude;
 
-public abstract class Model {
+public abstract class Model extends Subject {
 
+    // The model identifier
     protected String id;
 
-    @Exclude
-    protected boolean changed;
-
     public Model(){
+        super();
         this.id = "";
-        this.changed = false;
     }
 
     public String getId() {
@@ -34,16 +32,6 @@ public abstract class Model {
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    @Exclude
-    public boolean isChanged() {
-        return changed;
-    }
-
-    @Exclude
-    public void setChanged(boolean changed) {
-        this.changed = changed;
     }
 
     @Override

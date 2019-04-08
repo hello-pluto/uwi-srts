@@ -31,7 +31,7 @@ public class VehiclesController extends Controller{
         super(model, view);
     }
 
-    public ArrayList<Vehicle> getModels() {
+    public ArrayList<Vehicle> getVehicles() {
         return ((Vehicles)this.model).getVehicles();
     }
 
@@ -41,5 +41,18 @@ public class VehiclesController extends Controller{
 
     public void removeVehicle(int index){
         ((Vehicles)this.model).removeVehicle(index);
+    }
+
+    public VehicleController getVehicleController(int index, View view){
+        return new VehicleController(getVehicles().get(index), view);
+    }
+
+    public Vehicle filter(String vehicleId){
+        for(Vehicle vehicle: getVehicles()){
+            if(vehicle.getId().equals(vehicleId)){
+                return vehicle;
+            }
+        }
+        return null;
     }
 }

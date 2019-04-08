@@ -43,7 +43,7 @@ public class Stops extends Model {
                             stops.add(r);
                         }
 
-                        setChanged(true);
+                        notifyObservers();
                     }
 
                     @Override
@@ -68,7 +68,7 @@ public class Stops extends Model {
                             stops.add(r);
                         }
 
-                        setChanged(true);
+                        notifyObservers();
                     }
 
                     @Override

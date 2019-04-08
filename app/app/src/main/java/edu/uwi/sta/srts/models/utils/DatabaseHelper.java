@@ -14,8 +14,14 @@
 
 package edu.uwi.sta.srts.models.utils;
 
+import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class DatabaseHelper {
 
@@ -40,4 +46,23 @@ public class DatabaseHelper {
     }
 
 
+
+    public static void attachIsOnlineListener(final Snackbar offlineSnackbar){
+        getInstance().getDatabaseReference(".info/connected").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                boolean online = dataSnapshot.getValue(Boolean.class);
+                if(online){
+                    offlineSnackbar.dismiss();
+                }else{
+                    offlineSnackbar.show();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
 }

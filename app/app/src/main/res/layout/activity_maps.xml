@@ -10,7 +10,7 @@
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".views.MapsActivity" />
+        tools:context=".views.ViewVehiclesList" />
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
@@ -33,5 +33,67 @@
             android:textSize="16sp"
             style="@android:style/TextAppearance.Material.Body1"
             android:textColor="@android:color/secondary_text_light"/>
+    </android.support.v7.widget.CardView>
+    <android.support.v7.widget.CardView
+        android:id="@+id/vehicleDetails"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardBackgroundColor="@android:color/white"
+        app:cardElevation="12dp"
+        app:cardCornerRadius="6dp"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="-20dp"
+        android:visibility="gone">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true"
+            android:paddingBottom="20dp">
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:src="@drawable/van"
+                android:layout_gravity="center_vertical"
+                android:layout_margin="20dp"
+                android:scaleType="centerCrop"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center_vertical"
+                android:layout_marginRight="20dp">
+                <TextView
+                    android:id="@+id/route"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="JFK-SAL"
+                    style="@style/TextAppearance.MaterialComponents.Body2"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:singleLine="true"
+                    android:ellipsize="marquee"/>
+                <TextView
+                    android:id="@+id/licence"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="TDD1001"
+                    style="@style/TextAppearance.MaterialComponents.Caption"
+                    android:textStyle="bold"
+                    android:textSize="14sp"/>
+                <TextView
+                    android:id="@+id/eta"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/holo_red_light"
+                    android:text="1 minute away"/>
+
+            </LinearLayout>
+        </LinearLayout>
+        
     </android.support.v7.widget.CardView>
 </android.support.design.widget.CoordinatorLayout>

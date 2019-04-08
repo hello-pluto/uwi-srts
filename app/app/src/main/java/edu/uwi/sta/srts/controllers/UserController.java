@@ -41,24 +41,16 @@ public class UserController extends Controller {
         return ((User)this.model).getEmail();
     }
 
-    public void setUserEmail(String email) {
-        ((User)this.model).setEmail(email);
+    public String setUserEmail(String email) {
+        return ((User)this.model).setEmail(email);
     }
 
     public String getUserFullName() {
         return ((User)this.model).getFullName();
     }
 
-    public void setUserFullName(String fullName) {
-        ((User)this.model).setFullName(fullName);
-    }
-
-    public String getUserPassHash() {
-        return ((User)this.model).getPassHash();
-    }
-
-    public void setUserPassHash(String passHash) {
-        ((User)this.model).setPassHash(passHash);
+    public String setUserFullName(String fullName) {
+        return ((User)this.model).setFullName(fullName);
     }
 
     public UserType getUserType() {

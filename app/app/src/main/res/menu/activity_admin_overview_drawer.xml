@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_routes"
+            android:icon="@drawable/ic_action_map"
+            android:title="Routes" />
+        <item
+            android:id="@+id/nav_drivers"
+            android:icon="@drawable/ic_action_people_outline"
+            android:title="Drivers" />
+        <item
+            android:id="@+id/nav_vehicles"
+            android:icon="@drawable/ic_action_directions_car"
+            android:title="Vehicles" />
+    </group>
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_log_out"
+            android:icon="@drawable/ic_action_exit_to_app"
+            android:title="Logout" />
+
+    </group>
+
+</menu>

@@ -14,10 +14,13 @@
 
 package edu.uwi.sta.srts.views;
 
+import edu.uwi.sta.srts.models.Model;
+
 public interface View {
 
     /**
      * Method that allows view objects to update their state based on fresh model data
+     * @param model The model to update the view with
      */
-    void update();
+    void update(Model model);
 }
