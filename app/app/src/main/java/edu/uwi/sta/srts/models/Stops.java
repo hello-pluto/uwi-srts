@@ -21,7 +21,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import edu.uwi.sta.srts.models.utils.DatabaseHelper;
 
@@ -58,7 +57,7 @@ public class Stops extends Model {
      * @param routeId The routeId of the stops to fetch from the database
      */
     public Stops(String routeId){
-        DatabaseHelper.getInstance().getDatabaseReference("stops").child("routeId").equalTo(routeId)
+        DatabaseHelper.getInstance().getDatabaseReference("routeStops").child("routeId").equalTo(routeId)
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
