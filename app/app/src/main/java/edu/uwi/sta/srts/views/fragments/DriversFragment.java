@@ -1,6 +1,7 @@
 package edu.uwi.sta.srts.views.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -11,10 +12,14 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import edu.uwi.sta.srts.R;
+import edu.uwi.sta.srts.models.Model;
+import edu.uwi.sta.srts.models.User;
 import edu.uwi.sta.srts.models.Users;
 import edu.uwi.sta.srts.models.utils.UserType;
 import edu.uwi.sta.srts.views.OnListFragmentInteractionListener;
 import edu.uwi.sta.srts.views.adapter.UsersAdapter;
+import edu.uwi.sta.srts.views.admin.AdminOverview;
+import edu.uwi.sta.srts.views.admin.EditUser;
 
 public class DriversFragment extends Fragment {
 
@@ -44,6 +49,15 @@ public class DriversFragment extends Fragment {
 
         Users drivers = new Users();
         drivers.filterSelf(UserType.DRIVER);
+
+        listener = new OnListFragmentInteractionListener() {
+            @Override
+            public void onListFragmentInteraction(Model model) {
+                Intent intent = new Intent(getContext(), EditUser.class);
+                intent.putExtra("user", (User)model);
+                startActivity(intent);
+            }
+        };
 
         UsersAdapter adapter = new UsersAdapter(drivers, listener, empty);
         recyclerView.setAdapter(adapter);
