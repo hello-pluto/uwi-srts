@@ -124,7 +124,7 @@ public class ViewVehicles extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     public void update(Model model) {
-        if(!routesController.getRoutes().isEmpty() && !vehiclesController.getModels().isEmpty()) {
+        if(!routesController.getRoutes().isEmpty() && !vehiclesController.getVehicles().isEmpty()) {
             dataLoaded = true;
 
             if (mapReady) {
@@ -155,7 +155,7 @@ public class ViewVehicles extends FragmentActivity implements OnMapReadyCallback
         menu.getMenuInflater()
                 .inflate(R.menu.default_menu, menu.getMenu());
 
-        for(Vehicle vehicle: vehiclesController.getModels()){
+        for(Vehicle vehicle: vehiclesController.getVehicles()){
             menu.getMenu().add(R.id.default_group, vehicle.hashCode(), Menu.NONE, vehicle.getLicensePlateNo());
             LatLng latLng = new LatLng(vehicle.getLocation().getLatitude(), vehicle.getLocation().getLongitude());
             MarkerOptions marker = new MarkerOptions()

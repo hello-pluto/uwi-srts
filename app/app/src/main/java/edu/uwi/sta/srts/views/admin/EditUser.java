@@ -95,6 +95,27 @@ public class EditUser extends AppCompatActivity implements View {
             }
         });
 
+        passwordTextInputLayout.getEditText().addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(s.length() < 8){
+                    passwordTextInputLayout.setError("Password is less than 8 characters");
+                }else{
+                    passwordTextInputLayout.setError(null);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
         fullNameTextInputLayout.getEditText().addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -123,7 +144,7 @@ public class EditUser extends AppCompatActivity implements View {
 
                 userController.saveModel();
 
-                if(!isEditMode){
+                if(!isEditMode && passwordTextInputLayout.getError() == null){
                     FirebaseAuth.getInstance().createUserWithEmailAndPassword(
                             userController.getUserEmail(), passwordTextInputLayout.getEditText().toString().trim());
                 }
@@ -132,15 +153,15 @@ public class EditUser extends AppCompatActivity implements View {
             }
         });
 
-        userTypeText.setOnClickListener(new android.view.View.OnClickListener() {
+        findViewById(R.id.rl).setOnClickListener(new android.view.View.OnClickListener() {
             @Override
             public void onClick(android.view.View v) {
-                final android.support.v7.widget.PopupMenu menu = new android.support.v7.widget.PopupMenu(EditUser.this, userTypeText);
+                final android.support.v7.widget.PopupMenu menu = new android.support.v7.widget.PopupMenu(EditUser.this, findViewById(R.id.rl));
                 menu.getMenuInflater()
                         .inflate(R.menu.default_menu, menu.getMenu());
 
                 menu.getMenu().add(R.id.add_group, 0, Menu.NONE, "Driver");
-                menu.getMenu().add(R.id.add_group, 0, Menu.NONE, "Administrator");
+                menu.getMenu().add(R.id.add_group, 1, Menu.NONE, "Administrator");
 
                 menu.setOnMenuItemClickListener(new android.support.v7.widget.PopupMenu.OnMenuItemClickListener() {
                     @Override
@@ -157,6 +178,8 @@ public class EditUser extends AppCompatActivity implements View {
                         return false;
                     }
                 });
+
+                menu.show();
             }
         });
     }
