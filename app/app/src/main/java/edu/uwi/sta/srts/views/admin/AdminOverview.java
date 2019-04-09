@@ -57,11 +57,16 @@ public class AdminOverview extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Intent intent = null;
                 if(fragment instanceof DriversFragment){
-                    Intent intent = new Intent(AdminOverview.this, EditUser.class);
-                    //intent.putExtra("user", getIntent().getSerializableExtra("user"));
-                    startActivity(intent);
+                    intent = new Intent(AdminOverview.this, EditUser.class);
+                }else if(fragment instanceof RoutesFragment){
+                    intent = new Intent(AdminOverview.this, EditRoute.class);
+                }else if(fragment instanceof VehiclesFragment){
+                    intent = new Intent(AdminOverview.this, EditVehicle.class);
                 }
+
+                startActivity(intent);
             }
         });
 

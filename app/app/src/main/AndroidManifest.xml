@@ -23,6 +23,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".views.admin.EditUser" />
+        <activity android:name=".views.admin.EditRoute" />
         <activity
             android:name=".views.admin.AdminOverview"
             android:label="@string/title_activity_admin_overview"

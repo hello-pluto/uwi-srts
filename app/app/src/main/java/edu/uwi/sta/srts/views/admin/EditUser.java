@@ -36,8 +36,6 @@ public class EditUser extends AppCompatActivity implements View {
     private TextView userTypeText;
     private Button resetPasswordButton;
 
-    private ScrollView scrollView;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,7 +53,7 @@ public class EditUser extends AppCompatActivity implements View {
         }
         userController = new UserController(user, this);
 
-        Button signUp = (Button) findViewById(R.id.signUp);
+        Button done = (Button) findViewById(R.id.done);
 
         emailTextInputLayout = (TextInputLayout)findViewById(R.id.emailLayout);
         passwordTextInputLayout = (TextInputLayout)findViewById(R.id.passwordLayout);
@@ -63,14 +61,12 @@ public class EditUser extends AppCompatActivity implements View {
         userTypeText = (TextView)findViewById(R.id.userType);
         resetPasswordButton = (Button)findViewById(R.id.reset);
 
-        scrollView = (ScrollView) findViewById(R.id.scrollView);
-
         if(isEditMode){
             update(user);
             getSupportActionBar().setTitle("Edit User");
         }else{
             userController.setUserType(UserType.DRIVER);
-            getSupportActionBar().setTitle("Add Driver");
+            getSupportActionBar().setTitle("Add User");
         }
 
         emailTextInputLayout.getEditText().addTextChangedListener(new TextWatcher() {
@@ -138,18 +134,21 @@ public class EditUser extends AppCompatActivity implements View {
             }
         });
 
-        signUp.setOnClickListener(new android.view.View.OnClickListener() {
+        done.setOnClickListener(new android.view.View.OnClickListener() {
             @Override
             public void onClick(android.view.View v) {
+                if(passwordTextInputLayout.getError() == null) {
+                    userController.saveModel();
+                    if (!isEditMode) {
 
-                userController.saveModel();
+                        FirebaseAuth.getInstance().createUserWithEmailAndPassword(
+                                userController.getUserEmail(), passwordTextInputLayout.getEditText().toString().trim());
 
-                if(!isEditMode && passwordTextInputLayout.getError() == null){
-                    FirebaseAuth.getInstance().createUserWithEmailAndPassword(
-                            userController.getUserEmail(), passwordTextInputLayout.getEditText().toString().trim());
+                    }
+
+                    finish();
                 }
 
-                finish();
             }
         });
 

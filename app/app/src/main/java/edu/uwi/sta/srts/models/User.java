@@ -27,7 +27,7 @@ import edu.uwi.sta.srts.models.utils.DatabaseHelper;
 import edu.uwi.sta.srts.models.utils.UserType;
 import edu.uwi.sta.srts.utils.Utils;
 
-public class User extends Model implements Serializable {
+public class User extends Model {
 
     private String email;
 

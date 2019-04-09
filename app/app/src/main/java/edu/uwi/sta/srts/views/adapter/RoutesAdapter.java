@@ -54,7 +54,7 @@ public class RoutesAdapter extends RecyclerView.Adapter<RoutesAdapter.ViewHolder
             @Override
             public void onClick(View v) {
                 if (null != mListener) {
-                    mListener.onListFragmentInteraction(null);
+                    mListener.onListFragmentInteraction(holder.routeController.getModel());
                 }
             }
         });

@@ -115,8 +115,17 @@ public class Vehicle extends Model{
         return licensePlateNo;
     }
 
-    public void setLicensePlateNo(String licensePlateNo) {
-        this.licensePlateNo = licensePlateNo;
+    public String setLicensePlateNo(String licensePlateNo) {
+        if(licensePlateNo.length() >= 4 && licensePlateNo.length() <= 7 && Character.isLetter(licensePlateNo.charAt(0)) &&
+                Character.isLetter(licensePlateNo.charAt(1)) &&
+                Character.isLetter(licensePlateNo.charAt(2)) &&
+                Character.isDigit(licensePlateNo.charAt(3))){
+            this.licensePlateNo = licensePlateNo;
+        }else {
+
+            return "Invalid Plate Number";
+        }
+        return null;
     }
 
     public Location getLocation() {

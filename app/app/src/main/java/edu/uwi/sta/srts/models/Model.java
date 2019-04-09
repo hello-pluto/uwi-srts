@@ -16,7 +16,9 @@ package edu.uwi.sta.srts.models;
 
 import com.google.firebase.database.Exclude;
 
-public abstract class Model extends Subject {
+import java.io.Serializable;
+
+public abstract class Model extends Subject implements Serializable {
 
     // The model identifier
     protected String id;

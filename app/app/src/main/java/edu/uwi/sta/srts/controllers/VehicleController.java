@@ -45,8 +45,8 @@ public class VehicleController extends Controller{
         return ((Vehicle)this.model).getLicensePlateNo();
     }
 
-    public void setVehicleLicensePlateNo(String licensePlateNo) {
-        ((Vehicle)this.model).setLicensePlateNo(licensePlateNo);
+    public String setVehicleLicensePlateNo(String licensePlateNo) {
+        return ((Vehicle)this.model).setLicensePlateNo(licensePlateNo);
     }
 
     public Location getVehicleLocation() {

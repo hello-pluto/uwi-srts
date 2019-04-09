@@ -1,8 +1,8 @@
 package edu.uwi.sta.srts.views.admin;
 
-import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -11,51 +11,50 @@ import android.widget.Button;
 
 import edu.uwi.sta.srts.R;
 import edu.uwi.sta.srts.controllers.RouteController;
-import edu.uwi.sta.srts.controllers.VehicleController;
+import edu.uwi.sta.srts.controllers.UserController;
 import edu.uwi.sta.srts.models.Model;
 import edu.uwi.sta.srts.models.Route;
-import edu.uwi.sta.srts.models.Vehicle;
 import edu.uwi.sta.srts.views.View;
 
-public class EditVehicle extends AppCompatActivity implements View {
+public class EditRoute extends AppCompatActivity implements View {
 
     private boolean isEditMode = true;
 
-    private VehicleController vehicleController;
+    private RouteController routeController;
 
-    private TextInputLayout plateNoTextInputLayout;
-    private TextInputLayout capacityTextInputLayout;
+    private TextInputLayout nameTextInputLayout;
+    private TextInputLayout frequencyTextInputLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_edit_vehicle);
+        setContentView(R.layout.activity_edit_route);
 
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        Vehicle vehicle = (Vehicle) getIntent().getSerializableExtra("vehicle");
+        Route route = (Route) getIntent().getSerializableExtra("route");
 
-        if(vehicle == null){
-            vehicle = new Vehicle();
+        if(route == null){
+            route = new Route();
             isEditMode = false;
         }
 
-        vehicleController = new VehicleController(vehicle, this);
+        routeController = new RouteController(route, this);
 
         Button done = (Button) findViewById(R.id.done);
-        plateNoTextInputLayout = (TextInputLayout)findViewById(R.id.plateNoLayout);
-        capacityTextInputLayout = (TextInputLayout)findViewById(R.id.vehicleCapacityLayout);
+        nameTextInputLayout = (TextInputLayout)findViewById(R.id.nameLayout);
+        frequencyTextInputLayout = (TextInputLayout)findViewById(R.id.frequencyLayout);
 
         if(isEditMode){
-            update(vehicle);
-            getSupportActionBar().setTitle("Edit Vehicle");
+            update(route);
+            getSupportActionBar().setTitle("Edit Route");
         }else{
-            getSupportActionBar().setTitle("Add Vehicle");
+            getSupportActionBar().setTitle("Add Route");
         }
 
-        plateNoTextInputLayout.getEditText().addTextChangedListener(new TextWatcher() {
+        nameTextInputLayout.getEditText().addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -63,11 +62,11 @@ public class EditVehicle extends AppCompatActivity implements View {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                String error = vehicleController.setVehicleLicensePlateNo(s.toString());
-                if(error == null){
-                    plateNoTextInputLayout.setError(null);
+                if(s.length() == 0){
+                    nameTextInputLayout.setError("Enter a route name");
                 }else{
-                    plateNoTextInputLayout.setError(error);
+                    nameTextInputLayout.setError(null);
+                    routeController.setRouteName(s.toString());
                 }
             }
 
@@ -77,7 +76,7 @@ public class EditVehicle extends AppCompatActivity implements View {
             }
         });
 
-        capacityTextInputLayout.getEditText().addTextChangedListener(new TextWatcher() {
+        frequencyTextInputLayout.getEditText().addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -86,9 +85,9 @@ public class EditVehicle extends AppCompatActivity implements View {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if(s.length() > 0) {
-                    vehicleController.setVehicleCapacity(Integer.valueOf(s.toString()));
+                    routeController.setRouteFrequency(Integer.valueOf(s.toString()));
                 }else{
-                    vehicleController.setVehicleCapacity(0);
+                    routeController.setRouteFrequency(0);
                 }
             }
 
@@ -101,13 +100,12 @@ public class EditVehicle extends AppCompatActivity implements View {
         done.setOnClickListener(new android.view.View.OnClickListener() {
             @Override
             public void onClick(android.view.View v) {
-                if(plateNoTextInputLayout.getError() == null){
-                    vehicleController.saveModel();
+                if(nameTextInputLayout.getError() == null){
+                    routeController.saveModel();
                     finish();
                 }
             }
         });
-
     }
 
     @Override
@@ -122,9 +120,9 @@ public class EditVehicle extends AppCompatActivity implements View {
 
     @Override
     public void update(Model model) {
-        if(model instanceof Vehicle){
-            plateNoTextInputLayout.getEditText().setText(((Vehicle)model).getLicensePlateNo());
-            capacityTextInputLayout.getEditText().setText(String.valueOf(((Vehicle)model).getCapacity()));
+        if(model instanceof Route){
+            nameTextInputLayout.getEditText().setText(((Route)model).getName());
+            frequencyTextInputLayout.getEditText().setText(String.valueOf(((Route)model).getFrequency()));
         }
     }
 }

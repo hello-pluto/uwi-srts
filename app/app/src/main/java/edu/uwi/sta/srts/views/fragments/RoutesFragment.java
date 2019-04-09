@@ -1,6 +1,7 @@
 package edu.uwi.sta.srts.views.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -11,10 +12,12 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import edu.uwi.sta.srts.R;
+import edu.uwi.sta.srts.models.Model;
 import edu.uwi.sta.srts.models.Route;
 import edu.uwi.sta.srts.models.Routes;
 import edu.uwi.sta.srts.views.OnListFragmentInteractionListener;
 import edu.uwi.sta.srts.views.adapter.RoutesAdapter;
+import edu.uwi.sta.srts.views.admin.EditRoute;
 
 public class RoutesFragment extends Fragment {
 
@@ -41,6 +44,15 @@ public class RoutesFragment extends Fragment {
 
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.list);
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
+
+        listener = new OnListFragmentInteractionListener() {
+            @Override
+            public void onListFragmentInteraction(Model model) {
+                Intent intent = new Intent(getContext(), EditRoute.class);
+                intent.putExtra("route", (Route)model);
+                startActivity(intent);
+            }
+        };
 
         RoutesAdapter adapter = new RoutesAdapter(new Routes(), listener, empty);
         recyclerView.setAdapter(adapter);
