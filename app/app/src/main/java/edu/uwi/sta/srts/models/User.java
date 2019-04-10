@@ -50,6 +50,9 @@ public class User extends Model {
      */
     public User(String userId){
         super();
+        if(userId.equals("")){
+            return;
+        }
         DatabaseHelper.getInstance().getDatabaseReference("users").child(userId)
                 .addValueEventListener(new ValueEventListener() {
                     @Override
@@ -147,6 +150,14 @@ public class User extends Model {
         }else{
             DatabaseHelper.getInstance().getDatabaseReference("users")
                     .child(getId()).setValue(this);
+        }
+    }
+
+    @Override
+    public void delete() {
+        if(!getId().equals("")) {
+            DatabaseHelper.getInstance().getDatabaseReference("users")
+                    .child(getId()).setValue(null);
         }
     }
 }

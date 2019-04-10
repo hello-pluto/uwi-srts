@@ -48,6 +48,8 @@ public class VehiclesAdapter extends RecyclerView.Adapter<VehiclesAdapter.ViewHo
 
         holder.meta.setText("No driver");
 
+        holder.subtitle.setText("No Route");
+
         new UserController(new User(holder.vehicleController.getVehicleDriverId()), new DriverView(holder.meta));
 
         new RouteController(new Route(holder.vehicleController.getVehicleRouteId()), new RouteView(holder.subtitle));

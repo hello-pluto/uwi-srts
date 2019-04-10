@@ -41,6 +41,9 @@ public class Vehicle extends Model{
      */
     public Vehicle() {
         super();
+        this.location = new Location();
+        this.driverId = "";
+        this.routeId = "";
     }
 
     /**
@@ -49,6 +52,9 @@ public class Vehicle extends Model{
      */
     public Vehicle(String vehicleId){
         super();
+        if(vehicleId.equals("")){
+            return;
+        }
         DatabaseHelper.getInstance().getDatabaseReference("vehicles").child(vehicleId)
                 .addValueEventListener(new ValueEventListener() {
                     @Override
@@ -81,9 +87,9 @@ public class Vehicle extends Model{
         super();
         this.capacity = capacity;
         this.licensePlateNo = licensePlateNo;
-        this.location = null;
-        this.driverId = null;
-        this.routeId = null;
+        this.location = new Location();
+        this.driverId = "";
+        this.routeId = "";
     }
 
     /**
@@ -98,7 +104,7 @@ public class Vehicle extends Model{
         super();
         this.capacity = capacity;
         this.licensePlateNo = licensePlateNo;
-        this.location = null;
+        this.location = new Location();
         this.driverId = driverId;
         this.routeId = routeId;
     }
@@ -161,6 +167,14 @@ public class Vehicle extends Model{
         }else{
             DatabaseHelper.getInstance().getDatabaseReference("vehicles")
                     .child(getId()).setValue(this);
+        }
+    }
+
+    @Override
+    public void delete() {
+        if(!getId().equals("")) {
+            DatabaseHelper.getInstance().getDatabaseReference("vehicles")
+                    .child(getId()).setValue(null);
         }
     }
 }

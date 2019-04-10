@@ -35,6 +35,7 @@ import edu.uwi.sta.srts.views.InfoDialogHelper;
 import edu.uwi.sta.srts.views.LoginActivity;
 import edu.uwi.sta.srts.views.fragments.DriversFragment;
 import edu.uwi.sta.srts.views.fragments.RoutesFragment;
+import edu.uwi.sta.srts.views.fragments.StopsFragment;
 import edu.uwi.sta.srts.views.fragments.VehiclesFragment;
 
 public class AdminOverview extends AppCompatActivity
@@ -64,6 +65,8 @@ public class AdminOverview extends AppCompatActivity
                     intent = new Intent(AdminOverview.this, EditRoute.class);
                 }else if(fragment instanceof VehiclesFragment){
                     intent = new Intent(AdminOverview.this, EditVehicle.class);
+                }else if(fragment instanceof StopsFragment){
+                    intent = new Intent(AdminOverview.this, EditStop.class);
                 }
 
                 startActivity(intent);
@@ -167,6 +170,10 @@ public class AdminOverview extends AppCompatActivity
             case R.id.nav_vehicles:
                 fragment = VehiclesFragment.newInstance();
                 getSupportActionBar().setTitle("Vehicles");
+                break;
+            case R.id.nav_stops:
+                fragment = StopsFragment.newInstance();
+                getSupportActionBar().setTitle("Stops");
                 break;
             case R.id.nav_log_out:
                 FirebaseAuth.getInstance().signOut();

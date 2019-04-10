@@ -11,8 +11,6 @@ import edu.uwi.sta.srts.models.utils.DatabaseHelper;
 
 public class RouteStop extends Model {
 
-    private String routeStopId;
-
     private String routeId;
 
     private String stopId;
@@ -30,7 +28,7 @@ public class RouteStop extends Model {
      */
     public RouteStop(String routeStopId){
         super();
-        DatabaseHelper.getInstance().getDatabaseReference("routeStop").child(routeId)
+        DatabaseHelper.getInstance().getDatabaseReference("routeStop").child(routeStopId)
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -50,6 +48,11 @@ public class RouteStop extends Model {
                 });
     }
 
+    public RouteStop(String routeId, String stopId) {
+        this.routeId = routeId;
+        this.stopId = stopId;
+    }
+
     public String getRouteId() {
         return routeId;
     }
@@ -59,11 +62,11 @@ public class RouteStop extends Model {
     }
 
     public String getRouteStopId() {
-        return routeStopId;
+        return id;
     }
 
     public void setRouteStopId(String routeStopId) {
-        this.routeStopId = routeStopId;
+        this.id = routeStopId;
     }
 
     public String getStopId() {
@@ -77,13 +80,20 @@ public class RouteStop extends Model {
     @Override
     public void save() {
         if(getId().equals("")){
-            DatabaseReference ref = DatabaseHelper.getInstance().getDatabaseReference("stops").push();
+            DatabaseReference ref = DatabaseHelper.getInstance().getDatabaseReference("routeStops").push();
             this.setId(ref.getKey());
             ref.setValue(this);
         }else{
-            DatabaseHelper.getInstance().getDatabaseReference("stops")
+            DatabaseHelper.getInstance().getDatabaseReference("routeStops")
                     .child(getId()).setValue(this);
         }
     }
 
+    @Override
+    public void delete() {
+        if(!getId().equals("")){
+            DatabaseHelper.getInstance().getDatabaseReference("routeStops")
+                    .child(getId()).setValue(null);
+        }
+    }
 }

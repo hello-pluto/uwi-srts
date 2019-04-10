@@ -15,6 +15,8 @@
 package edu.uwi.sta.srts.controllers;
 
 import edu.uwi.sta.srts.models.Route;
+import edu.uwi.sta.srts.models.RouteStop;
+import edu.uwi.sta.srts.models.RouteStops;
 import edu.uwi.sta.srts.views.View;
 
 public class RouteController extends Controller{

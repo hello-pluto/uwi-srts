@@ -87,4 +87,11 @@ public class Users extends Model {
             user.save();
         }
     }
+
+    @Override
+    public void delete() {
+        for(User user: this.getUsers()){
+            user.delete();
+        }
+    }
 }

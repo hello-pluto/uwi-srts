@@ -8,12 +8,24 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.LinearLayout;
+
+import java.util.HashMap;
 
 import edu.uwi.sta.srts.R;
 import edu.uwi.sta.srts.controllers.RouteController;
-import edu.uwi.sta.srts.controllers.UserController;
+import edu.uwi.sta.srts.controllers.RouteStopsController;
+import edu.uwi.sta.srts.controllers.RoutesController;
+import edu.uwi.sta.srts.controllers.StopsController;
 import edu.uwi.sta.srts.models.Model;
 import edu.uwi.sta.srts.models.Route;
+import edu.uwi.sta.srts.models.RouteStop;
+import edu.uwi.sta.srts.models.RouteStops;
+import edu.uwi.sta.srts.models.Routes;
+import edu.uwi.sta.srts.models.Stop;
+import edu.uwi.sta.srts.models.Stops;
 import edu.uwi.sta.srts.views.View;
 
 public class EditRoute extends AppCompatActivity implements View {
@@ -25,10 +37,16 @@ public class EditRoute extends AppCompatActivity implements View {
     private TextInputLayout nameTextInputLayout;
     private TextInputLayout frequencyTextInputLayout;
 
+    private static HashMap<String, RouteStop> routeStopHashMap = new HashMap<>();
+
+    private StopsView stopsView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_route);
+
+        routeStopHashMap.clear();
 
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -47,11 +65,19 @@ public class EditRoute extends AppCompatActivity implements View {
         nameTextInputLayout = (TextInputLayout)findViewById(R.id.nameLayout);
         frequencyTextInputLayout = (TextInputLayout)findViewById(R.id.frequencyLayout);
 
+        stopsView = new StopsView((LinearLayout) findViewById(R.id.stopsLayout));
+
         if(isEditMode){
             update(route);
             getSupportActionBar().setTitle("Edit Route");
+            new RouteStopsController(new RouteStops(), this);
+
+            new StopsController(new Stops(), stopsView);
         }else{
             getSupportActionBar().setTitle("Add Route");
+            findViewById(R.id.stopsLayout).setVisibility(android.view.View.GONE);
+            findViewById(R.id.stopsDivider).setVisibility(android.view.View.GONE);
+            findViewById(R.id.stopsText).setVisibility(android.view.View.GONE);
         }
 
         nameTextInputLayout.getEditText().addTextChangedListener(new TextWatcher() {
@@ -102,6 +128,9 @@ public class EditRoute extends AppCompatActivity implements View {
             public void onClick(android.view.View v) {
                 if(nameTextInputLayout.getError() == null){
                     routeController.saveModel();
+                    for(RouteStop routeStop : routeStopHashMap.values()){
+                        routeStop.save();
+                    }
                     finish();
                 }
             }
@@ -123,6 +152,47 @@ public class EditRoute extends AppCompatActivity implements View {
         if(model instanceof Route){
             nameTextInputLayout.getEditText().setText(((Route)model).getName());
             frequencyTextInputLayout.getEditText().setText(String.valueOf(((Route)model).getFrequency()));
+        }else if(model instanceof RouteStops){
+            ((RouteStops)model).filterSelf(routeController.getRouteId());
+            for(RouteStop routeStop : ((RouteStops)model).getRouteStops()){
+                routeStopHashMap.put(routeStop.getStopId(), routeStop);
+            }
+
+            stopsView.update(new Stops());
+        }
+    }
+
+    public class StopsView implements edu.uwi.sta.srts.views.View {
+
+        LinearLayout layout;
+
+        public StopsView(LinearLayout layout){
+            this.layout = layout;
+        }
+
+        @Override
+        public void update(Model model) {
+            if(model instanceof Stops && layout != null){
+                for(final Stop stop: ((Stops)model).getStops()) {
+                    CheckBox checkBox = (CheckBox) getLayoutInflater().inflate(R.layout.list_checkbox, null);
+                    checkBox.setText(stop.getName());
+                    if(routeStopHashMap.containsKey(stop.getId())){
+                        checkBox.setChecked(true);
+                    }
+                    checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                        @Override
+                        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                            if(isChecked){
+                                routeStopHashMap.put(stop.getId(), new RouteStop(routeController.getRouteId(), stop.getId()));
+                            }else{
+                                routeStopHashMap.get(stop.getId()).delete();
+                                routeStopHashMap.remove(stop.getId());
+                            }
+                        }
+                    });
+                    layout.addView(checkBox);
+                }
+            }
         }
     }
 }

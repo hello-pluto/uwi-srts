@@ -83,7 +83,7 @@ public class TrackVehicle extends FragmentActivity implements OnMapReadyCallback
                 mMap.moveCamera(center);
                 //mMap.animateCamera(zoom);
 
-                vehicleController.setVehicleLocation(new edu.uwi.sta.srts.models.utils.Location("", location.getLatitude(), location.getLongitude()));
+                vehicleController.setVehicleLocation(new edu.uwi.sta.srts.models.utils.Location(location.getLatitude(), location.getLongitude()));
                 vehicleController.saveModel();
             }
         });

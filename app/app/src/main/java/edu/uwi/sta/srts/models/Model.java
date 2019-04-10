@@ -46,4 +46,10 @@ public abstract class Model extends Subject implements Serializable {
      */
     @Exclude
     public abstract void save();
+
+    /**
+     * Method that deletes the model from the database
+     */
+    @Exclude
+    public abstract void delete();
 }

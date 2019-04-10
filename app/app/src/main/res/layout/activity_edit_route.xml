@@ -82,7 +82,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Additional"
+                android:text="Optional"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"/>
 
@@ -95,7 +95,7 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
-                app:helperText="Average time (in minutes) between each shuttle arrival.">
+                app:helperText="Average time (in minutes) between each shuttle arrival">
 
                 <android.support.design.widget.TextInputEditText
                     android:id="@+id/frequency"
@@ -104,6 +104,34 @@
                     android:inputType="number"/>
 
             </android.support.design.widget.TextInputLayout>
+
+            <View
+                android:id="@+id/stopsDivider"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#eee"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"/>
+
+            <TextView
+                android:id="@+id/stopsText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Stops"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"/>
+
+            <LinearLayout
+                android:id="@+id/stopsLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="16dp"
+                android:orientation="vertical">
+
+            </LinearLayout>
+
 
 
             <Button

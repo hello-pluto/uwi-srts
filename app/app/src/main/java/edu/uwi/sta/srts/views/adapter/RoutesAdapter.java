@@ -10,10 +10,12 @@ import edu.uwi.sta.srts.R;
 import edu.uwi.sta.srts.controllers.RouteController;
 import edu.uwi.sta.srts.controllers.RoutesController;
 import edu.uwi.sta.srts.controllers.StopsController;
+import edu.uwi.sta.srts.controllers.VehiclesController;
 import edu.uwi.sta.srts.models.Model;
 import edu.uwi.sta.srts.models.Routes;
 import edu.uwi.sta.srts.models.Stop;
 import edu.uwi.sta.srts.models.Stops;
+import edu.uwi.sta.srts.models.Vehicles;
 import edu.uwi.sta.srts.views.OnListFragmentInteractionListener;
 import edu.uwi.sta.srts.views.fragments.RoutesFragment;
 
@@ -46,9 +48,9 @@ public class RoutesAdapter extends RecyclerView.Adapter<RoutesAdapter.ViewHolder
 
         holder.title.setText(holder.routeController.getRouteName());
 
-        holder.subtitle.setText("Every " + String.valueOf(holder.routeController.getRouteFrequency()) + " minutes");
+        holder.meta.setText(String.valueOf(holder.routeController.getRouteFrequency()) + " mins");
 
-        new StopsController(new Stops(holder.routeController.getRouteId()), new StopView(holder.meta));
+        new VehiclesController(new Vehicles(holder.routeController.getRouteId()), new VehiclesView(holder.subtitle));
 
         holder.view.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -98,18 +100,18 @@ public class RoutesAdapter extends RecyclerView.Adapter<RoutesAdapter.ViewHolder
         }
     }
 
-    public class StopView implements edu.uwi.sta.srts.views.View {
+    public class VehiclesView implements edu.uwi.sta.srts.views.View {
 
         TextView textView;
 
-        public StopView(TextView textView){
+        public VehiclesView(TextView textView){
             this.textView = textView;
         }
 
         @Override
         public void update(Model model) {
-            if(model instanceof Stops && textView != null){
-                this.textView.setText(((Stops)model).getStops().size() + " stops");
+            if(model instanceof Vehicles && textView != null){
+                this.textView.setText(((Vehicles)model).getVehicles().size() + " shuttles");
             }
         }
     }

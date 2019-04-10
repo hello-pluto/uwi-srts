@@ -62,7 +62,6 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
         public final View view;
         public final TextView title;
         public final TextView meta;
-        public final ImageView avatar;
         public UserController userController;
 
         public ViewHolder(View view) {
@@ -70,7 +69,6 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
             this.view = view;
             this.userController = null;
             title = (TextView) view.findViewById(R.id.title);
-            avatar = (ImageView) view.findViewById(R.id.avatar);
             meta = (TextView) view.findViewById(R.id.meta);
         }
 

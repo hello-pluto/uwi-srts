@@ -58,9 +58,9 @@ public class Vehicles extends Model {
      * Constructor that fetches all vehicles with the corresponding routeId
      * @param routeId The routeId of the vehicles to fetch from the database
      */
-    public Vehicles(String routeId){
+    public Vehicles(final String routeId){
         super();
-        DatabaseHelper.getInstance().getDatabaseReference("vehicles").child("routeId").equalTo(routeId)
+        DatabaseHelper.getInstance().getDatabaseReference("vehicles")
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -69,6 +69,8 @@ public class Vehicles extends Model {
                             Vehicle v = route.getValue(Vehicle.class);
                             vehicles.add(v);
                         }
+
+                        filterSelf(routeId);
 
                         notifyObservers();
                     }
@@ -101,10 +103,31 @@ public class Vehicles extends Model {
         this.vehicles.remove(index);
     }
 
+    public void filterSelf(String routeId){
+
+        ArrayList<Vehicle> vehicles = new ArrayList<>();
+
+        for(Vehicle vehicle : getVehicles()){
+            if(vehicle.getRouteId().equals(routeId)){
+                vehicles.add(vehicle);
+            }
+        }
+
+        this.getVehicles().clear();
+        this.getVehicles().addAll(vehicles);
+    }
+
     @Override
     public void save() {
         for(Vehicle vehicle: this.getVehicles()){
             vehicle.save();
+        }
+    }
+
+    @Override
+    public void delete() {
+        for(Vehicle vehicle: this.getVehicles()){
+            vehicle.delete();
         }
     }
 }

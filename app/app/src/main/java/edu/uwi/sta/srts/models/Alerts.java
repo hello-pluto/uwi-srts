@@ -53,6 +53,15 @@ public class Alerts extends Model {
 
     @Override
     public void save() {
+        for(Alert alert: this.getAlerts()){
+            alert.save();
+        }
+    }
 
+    @Override
+    public void delete() {
+        for(Alert alert: this.getAlerts()){
+            alert.delete();
+        }
     }
 }

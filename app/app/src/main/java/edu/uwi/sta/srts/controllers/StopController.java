@@ -29,6 +29,14 @@ public class StopController extends Controller{
         super(model, view);
     }
 
+    public String getStopName() {
+        return ((Stop)this.model).getName();
+    }
+
+    public void setStopName(String name) {
+        ((Stop)this.model).setName(name);
+    }
+
     public String getStopId() {
         return ((Stop)this.model).getId();
     }

@@ -18,7 +18,7 @@ import java.io.Serializable;
 
 public class Location implements Serializable {
 
-    private String name;
+
 
     private double latitude;
 
@@ -32,23 +32,13 @@ public class Location implements Serializable {
     }
 
     /**
-     * Constructor that requires a location's name, latitude and longitude
-     * @param name The location's name e.g. SAC
+     * Constructor that requires a location's latitude and longitude
      * @param latitude The latitude coordinate of the location
      * @param longitude The longitude coordinate of the location
      */
-    public Location(String name, double latitude, double longitude) {
-        this.name = name;
+    public Location(double latitude, double longitude) {
         this.latitude = latitude;
         this.longitude = longitude;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public double getLatitude() {

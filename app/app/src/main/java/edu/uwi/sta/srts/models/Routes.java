@@ -80,4 +80,11 @@ public class Routes extends Model {
             route.save();
         }
     }
+
+    @Override
+    public void delete() {
+        for(Route route: this.getRoutes()){
+            route.delete();
+        }
+    }
 }

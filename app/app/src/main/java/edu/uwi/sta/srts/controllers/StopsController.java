@@ -42,4 +42,8 @@ public class StopsController extends Controller{
     public void removeStop(int index){
         ((Stops)this.model).removeStop(index);
     }
+
+    public StopController getStopController(int index, View view){
+        return new StopController(getStops().get(index), view);
+    }
 }

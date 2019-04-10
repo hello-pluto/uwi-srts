@@ -42,6 +42,9 @@ public class Route extends Model {
      */
     public Route(String routeId){
         super();
+        if(routeId.equals("")){
+            return;
+        }
         DatabaseHelper.getInstance().getDatabaseReference("routes").child(routeId)
                 .addValueEventListener(new ValueEventListener() {
                     @Override
@@ -99,6 +102,14 @@ public class Route extends Model {
         }else{
             DatabaseHelper.getInstance().getDatabaseReference("routes")
                     .child(getId()).setValue(this);
+        }
+    }
+
+    @Override
+    public void delete() {
+        if(!getId().equals("")) {
+            DatabaseHelper.getInstance().getDatabaseReference("routes")
+                    .child(getId()).setValue(null);
         }
     }
 }

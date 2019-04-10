@@ -28,6 +28,8 @@ public class Stop extends Model{
 
     private String routeId;
 
+    private String name;
+
     private Location location;
 
     /**
@@ -35,6 +37,8 @@ public class Stop extends Model{
      */
     public Stop(){
         super();
+        this.name = "";
+        this.location = new Location();
     }
 
     /**
@@ -75,6 +79,14 @@ public class Stop extends Model{
         this.location = location;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public String getRouteId() {
         return routeId;
     }
@@ -100,6 +112,14 @@ public class Stop extends Model{
         }else{
             DatabaseHelper.getInstance().getDatabaseReference("stops")
                     .child(getId()).setValue(this);
+        }
+    }
+
+    @Override
+    public void delete() {
+        if(!getId().equals("")) {
+            DatabaseHelper.getInstance().getDatabaseReference("stops")
+                    .child(getId()).setValue(null);
         }
     }
 }

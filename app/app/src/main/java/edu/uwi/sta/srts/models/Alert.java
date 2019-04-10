@@ -4,13 +4,12 @@ import android.support.annotation.NonNull;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
 import edu.uwi.sta.srts.models.utils.DatabaseHelper;
 
 public class Alert extends Model {
-
-    private String alertId;
 
     private String message;
 
@@ -47,23 +46,6 @@ public class Alert extends Model {
                 });
     }
 
-
-    /**
-     * Constructor that create a new route object and requires a route name and frequency
-     * @param alertId The id of the alert
-     * @param message The message alert displayed to the user
-     */
-    public Alert(String alertId, String message) {
-        this.alertId = alertId;
-        this.message = message;
-    }
-
-
-    public String getAlertId() {
-        return alertId;
-    }
-
-
     public String getMessage() {
         return message;
     }
@@ -74,6 +56,21 @@ public class Alert extends Model {
 
     @Override
     public void save() {
+        if(getId().equals("")){
+            DatabaseReference ref = DatabaseHelper.getInstance().getDatabaseReference("alerts").push();
+            this.setId(ref.getKey());
+            ref.setValue(this);
+        }else{
+            DatabaseHelper.getInstance().getDatabaseReference("alerts")
+                    .child(getId()).setValue(this);
+        }
+    }
 
+    @Override
+    public void delete() {
+        if(!getId().equals("")) {
+            DatabaseHelper.getInstance().getDatabaseReference("alerts")
+                    .child(getId()).setValue(null);
+        }
     }
 }

@@ -1,29 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:showIn="navigation_view">
-
-    <group android:checkableBehavior="single">
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:id="@+id/nav_routes_group" android:checkableBehavior="single">
         <item
             android:id="@+id/nav_routes"
-            android:icon="@drawable/ic_action_map"
+            android:icon="@drawable/round_map_24"
             android:title="Routes" />
+
+        <item
+            android:id="@+id/nav_stops"
+            android:icon="@drawable/round_place_24"
+            android:title="Stops" />
+    </group>
+    <group android:id="@+id/nav_vehicles_group" android:checkableBehavior="single">
         <item
             android:id="@+id/nav_drivers"
-            android:icon="@drawable/ic_action_people_outline"
+            android:icon="@drawable/round_supervised_user_circle_24"
             android:title="Drivers" />
         <item
             android:id="@+id/nav_vehicles"
-            android:icon="@drawable/ic_action_directions_car"
-            android:title="Vehicles" />
+            android:icon="@drawable/round_directions_bus_24"
+            android:title="Shuttles" />
     </group>
-
+    <group android:id="@+id/nav_alerts_group" android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_alerts"
+            android:icon="@drawable/round_notification_important_24"
+            android:title="Alerts" />
+    </group>
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_log_out"
-            android:icon="@drawable/ic_action_exit_to_app"
+            android:icon="@drawable/round_power_settings_new_24"
             android:title="Logout" />
-
     </group>
-
 </menu>

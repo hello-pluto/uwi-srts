@@ -103,4 +103,11 @@ public class Stops extends Model {
             stop.save();
         }
     }
+
+    @Override
+    public void delete() {
+        for(Stop stop: this.getStops()){
+            stop.delete();
+        }
+    }
 }
