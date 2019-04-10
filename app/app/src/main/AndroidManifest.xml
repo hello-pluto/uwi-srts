@@ -14,7 +14,8 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".views.admin.EditStop"></activity>
+        <activity android:name=".views.admin.EditAlert"></activity>
+        <activity android:name=".views.admin.EditStop" />
         <activity android:name=".views.admin.EditVehicle" />
         <activity android:name=".views.SplashActivity">
             <intent-filter>

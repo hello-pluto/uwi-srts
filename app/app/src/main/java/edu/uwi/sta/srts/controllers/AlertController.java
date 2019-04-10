@@ -19,11 +19,19 @@ public class AlertController extends Controller {
         return ((Alert)this.model).getId();
     }
 
-    public String getMessage() {
+    public String getAlertTitle() {
+        return ((Alert)this.model).getTitle();
+    }
+
+    public void setAlertTitle(String title) {
+        ((Alert)this.model).setTitle(title);
+    }
+
+    public String getAlertMessage() {
         return ((Alert)((Alert)this.model)).getMessage();
     }
 
-    public void setMessage(String name) {
+    public void setAlertMessage(String name) {
         ((Alert)this.model).setMessage(name);
     }
 

@@ -33,6 +33,7 @@ import edu.uwi.sta.srts.models.utils.DatabaseHelper;
 import edu.uwi.sta.srts.models.utils.UserType;
 import edu.uwi.sta.srts.views.InfoDialogHelper;
 import edu.uwi.sta.srts.views.LoginActivity;
+import edu.uwi.sta.srts.views.fragments.AlertsFragment;
 import edu.uwi.sta.srts.views.fragments.DriversFragment;
 import edu.uwi.sta.srts.views.fragments.RoutesFragment;
 import edu.uwi.sta.srts.views.fragments.StopsFragment;
@@ -67,6 +68,8 @@ public class AdminOverview extends AppCompatActivity
                     intent = new Intent(AdminOverview.this, EditVehicle.class);
                 }else if(fragment instanceof StopsFragment){
                     intent = new Intent(AdminOverview.this, EditStop.class);
+                }else if(fragment instanceof AlertsFragment) {
+                    intent = new Intent(AdminOverview.this, EditAlert.class);
                 }
 
                 startActivity(intent);
@@ -175,6 +178,10 @@ public class AdminOverview extends AppCompatActivity
                 fragment = StopsFragment.newInstance();
                 getSupportActionBar().setTitle("Stops");
                 break;
+            case R.id.nav_alerts:
+                fragment = AlertsFragment.newInstance();
+                getSupportActionBar().setTitle("Alerts");
+                break;
             case R.id.nav_log_out:
                 FirebaseAuth.getInstance().signOut();
                 startActivity(new Intent(this, LoginActivity.class));
@@ -209,21 +216,7 @@ public class AdminOverview extends AppCompatActivity
                 if(fragment instanceof RoutesFragment) {
                     InfoDialogHelper.showInfoDialog(this,
                             "Routes",
-                            "This screen shows you your automatically calculated cumulative " +
-                                    "and degree GPAs. It also compares them to your target GPAs " +
-                                    "(if any)." + "<br><br>" +
-                                    "<b>Yearly GPA Histogram</b>" + "<br>" +
-                                    "A histogram of your yearly GPAs will be displayed if you have " +
-                                    "GPA data for two or more years. A list of clickable links to " +
-                                    "each year will be under the graph." + "<br><br>" +
-                                    "<b>Semesterly GPA Histogram</b>" + "<br>" +
-                                    "A histogram of your semesterly GPAs will be displayed if you have " +
-                                    "GPA data for two or more semesters. A list of clickable links to " +
-                                    "each semester will be under the graph." + "<br><br>" +
-                                    "<b>Adding information</b>" + "<br>" +
-                                    "You can add information for years, semesters, courses, " +
-                                    "assignments and exams by clicking the green button on the " +
-                                    "bottom right.");
+                            "");
                 }
                 return true;
             default:

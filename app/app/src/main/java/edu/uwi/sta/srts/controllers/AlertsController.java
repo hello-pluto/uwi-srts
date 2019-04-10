@@ -31,6 +31,10 @@ public class AlertsController extends Controller {
         ((Alerts)this.model).removeAlert(index);
     }
 
+    public AlertController getAlertController(int position, View view){
+        return new AlertController(((Alerts)model).getAlerts().get(position), view);
+    }
+
 
     public Alert filter(String alertId){
         for (Alert alert: ((Alerts)this.model).getAlerts()) {

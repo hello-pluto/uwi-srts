@@ -11,6 +11,8 @@ import edu.uwi.sta.srts.models.utils.DatabaseHelper;
 
 public class Alert extends Model {
 
+    private String title;
+
     private String message;
 
     /**
@@ -32,6 +34,7 @@ public class Alert extends Model {
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         Alert a = dataSnapshot.getValue(Alert.class);
                         if(a != null) {
+                            Alert.this.setTitle(a.getTitle());
                             Alert.this.setMessage(a.getMessage());
                             Alert.this.setId(a.getId());
 
@@ -44,6 +47,14 @@ public class Alert extends Model {
 
                     }
                 });
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getMessage() {
