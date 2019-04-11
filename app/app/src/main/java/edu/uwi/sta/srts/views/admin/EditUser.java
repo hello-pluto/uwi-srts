@@ -1,5 +1,6 @@
 package edu.uwi.sta.srts.views.admin;
 
+import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -13,7 +14,11 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import org.w3c.dom.Text;
 
@@ -138,15 +143,27 @@ public class EditUser extends AppCompatActivity implements View {
             @Override
             public void onClick(android.view.View v) {
                 if(passwordTextInputLayout.getError() == null) {
-                    userController.saveModel();
+
                     if (!isEditMode) {
 
                         FirebaseAuth.getInstance().createUserWithEmailAndPassword(
-                                userController.getUserEmail(), passwordTextInputLayout.getEditText().toString().trim());
+                                userController.getUserEmail(), passwordTextInputLayout.getEditText().getText().toString().trim())
+                                .addOnCompleteListener(EditUser.this, new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                if (task.isSuccessful()) {
+                                    FirebaseUser user = task.getResult().getUser();
+                                    userController.setUserId(user.getUid());
+                                    userController.saveModel();
+                                    finish();
+                                }
+                            }
+                        });;
 
+                    }else{
+                        userController.saveModel();
+                        finish();
                     }
-
-                    finish();
                 }
 
             }

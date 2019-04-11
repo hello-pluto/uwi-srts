@@ -11,6 +11,7 @@ import edu.uwi.sta.srts.controllers.UserController;
 import edu.uwi.sta.srts.models.Model;
 import edu.uwi.sta.srts.models.User;
 import edu.uwi.sta.srts.views.admin.AdminOverview;
+import edu.uwi.sta.srts.views.driver.DriverOverview;
 
 public class SplashActivity extends AppCompatActivity implements View  {
 
@@ -37,6 +38,9 @@ public class SplashActivity extends AppCompatActivity implements View  {
                 default:
                 case ADMINISTRATOR:
                     intent = new Intent(this, AdminOverview.class);
+                    break;
+                case DRIVER:
+                    intent = new Intent(this, DriverOverview.class);
                     break;
             }
             intent.putExtra("user", (User)model);

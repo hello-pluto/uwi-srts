@@ -48,6 +48,7 @@ import edu.uwi.sta.srts.models.Model;
 import edu.uwi.sta.srts.models.Routes;
 import edu.uwi.sta.srts.models.Vehicle;
 import edu.uwi.sta.srts.models.Vehicles;
+import edu.uwi.sta.srts.utils.Utils;
 
 public class ViewVehiclesList extends FragmentActivity implements OnMapReadyCallback, View {
 
@@ -133,15 +134,6 @@ public class ViewVehiclesList extends FragmentActivity implements OnMapReadyCall
         }
     }
 
-    private BitmapDescriptor bitmapDescriptorFromVector(Context context, int vectorResId) {
-        Drawable vectorDrawable = ContextCompat.getDrawable(context, vectorResId);
-        vectorDrawable.setBounds(0, 0, vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight());
-        Bitmap bitmap = Bitmap.createBitmap(vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(bitmap);
-        vectorDrawable.draw(canvas);
-        return BitmapDescriptorFactory.fromBitmap(bitmap);
-    }
-
     private void populateMap(){
 
         mMap.clear();
@@ -160,7 +152,7 @@ public class ViewVehiclesList extends FragmentActivity implements OnMapReadyCall
             LatLng latLng = new LatLng(vehicle.getLocation().getLatitude(), vehicle.getLocation().getLongitude());
             MarkerOptions marker = new MarkerOptions()
                     .position(latLng)
-                    .icon(bitmapDescriptorFromVector(this, R.drawable.ic_placeholder));
+                    .icon(Utils.bitmapDescriptorFromVector(this, R.drawable.ic_placeholder));
 
             mMap.addMarker(marker);
             latLngVehicleHashMap.put(latLng, vehicle);

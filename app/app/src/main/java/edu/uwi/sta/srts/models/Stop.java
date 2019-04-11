@@ -53,6 +53,7 @@ public class Stop extends Model{
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         Stop s = dataSnapshot.getValue(Stop.class);
                         if(s != null) {
+                            Stop.this.setName(s.getName());
                             Stop.this.setRouteId(s.getRouteId());
                             Stop.this.setLocation(s.getLocation());
                             Stop.this.setId(s.getId());

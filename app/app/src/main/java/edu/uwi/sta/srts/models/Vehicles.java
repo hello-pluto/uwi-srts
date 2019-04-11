@@ -117,6 +117,15 @@ public class Vehicles extends Model {
         this.getVehicles().addAll(vehicles);
     }
 
+    public Vehicle filter(String driverId){
+        for(Vehicle vehicle:getVehicles()){
+            if(vehicle.getDriverId().equals(driverId)){
+                return vehicle;
+            }
+        }
+        return null;
+    }
+
     @Override
     public void save() {
         for(Vehicle vehicle: this.getVehicles()){

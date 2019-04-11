@@ -26,6 +26,7 @@ import edu.uwi.sta.srts.models.utils.UserType;
 import edu.uwi.sta.srts.utils.Closable;
 import edu.uwi.sta.srts.utils.Utils;
 import edu.uwi.sta.srts.views.admin.AdminOverview;
+import edu.uwi.sta.srts.views.driver.DriverOverview;
 
 public class LoginActivity extends AppCompatActivity implements Closable {
 
@@ -84,11 +85,7 @@ public class LoginActivity extends AppCompatActivity implements Closable {
                                                     @Override
                                                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                                         User user = dataSnapshot.getValue(User.class);
-                                                        if(user != null && user.getUserType() == UserType.ADMINISTRATOR){
-                                                            /*Intent intent =
-                                                            intent.putExtra("user", user);
-                                                            startActivity(intent);
-                                                            finish();*/
+                                                        if(user != null){
                                                             close(user);
                                                         }
                                                     }
@@ -128,8 +125,10 @@ public class LoginActivity extends AppCompatActivity implements Closable {
             default:
             case STUDENT:
                 intent = new Intent(this, ViewVehiclesList.class);break;
+            case DRIVER:
+                intent = new Intent(this, DriverOverview.class);break;
             case ADMINISTRATOR:
-                intent = new Intent(LoginActivity.this, AdminOverview.class);
+                intent = new Intent(this, AdminOverview.class);break;
         }
         intent.putExtra("user", user);
         startActivity(intent);
