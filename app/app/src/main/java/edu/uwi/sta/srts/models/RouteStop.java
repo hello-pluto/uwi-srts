@@ -11,6 +11,8 @@ import edu.uwi.sta.srts.models.utils.DatabaseHelper;
 
 public class RouteStop extends Model {
 
+    private int order;
+
     private String routeId;
 
     private String stopId;
@@ -36,6 +38,7 @@ public class RouteStop extends Model {
                         if(s != null) {
                             RouteStop.this.setRouteId(s.getRouteId());
                             RouteStop.this.setStopId(s.getStopId());
+                            RouteStop.this.setOrder(s.getOrder());
 
                             notifyObservers();
                         }
@@ -51,6 +54,14 @@ public class RouteStop extends Model {
     public RouteStop(String routeId, String stopId) {
         this.routeId = routeId;
         this.stopId = stopId;
+    }
+
+    public int getOrder() {
+        return order;
+    }
+
+    public void setOrder(int order) {
+        this.order = order;
     }
 
     public String getRouteId() {

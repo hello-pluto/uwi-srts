@@ -11,13 +11,13 @@
             android:icon="@drawable/round_place_24"
             android:title="Stops" />
     </group>
-    <group android:id="@+id/nav_vehicles_group" android:checkableBehavior="single">
+    <group android:id="@+id/nav_shuttles_group" android:checkableBehavior="single">
         <item
             android:id="@+id/nav_drivers"
             android:icon="@drawable/round_supervised_user_circle_24"
             android:title="Drivers" />
         <item
-            android:id="@+id/nav_vehicles"
+            android:id="@+id/nav_shuttles"
             android:icon="@drawable/round_directions_bus_24"
             android:title="Shuttles" />
     </group>

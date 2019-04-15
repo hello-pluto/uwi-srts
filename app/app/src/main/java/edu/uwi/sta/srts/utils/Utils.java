@@ -4,14 +4,21 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.graphics.ColorUtils;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+
+import edu.uwi.sta.srts.R;
 
 public class Utils {
     /**
@@ -48,6 +55,19 @@ public class Utils {
         return !TextUtils.isEmpty(email) && android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
 
+    public static void setUpActivations(final Context c, EditText editText, final View view){
+        editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(hasFocus){
+                    view.setBackgroundColor(ContextCompat.getColor(c, R.color.colorPrimary));
+                }else{
+                    view.setBackgroundColor(Color.parseColor("#efefef"));
+                }
+            }
+        });
+    }
+
     public static int getEta(double lat1, double long1, double lat2, double long2){
         Location location1 = new Location("");
         location1.setLatitude(lat1);
@@ -60,6 +80,10 @@ public class Utils {
         float distanceInMeters = location1.distanceTo(location2);
         int speedIs10MetersPerMinute = 100;
         return (int) distanceInMeters / speedIs10MetersPerMinute;
+    }
+
+    public static int getColorBetweenRedAndYellow(float ratio){
+        return ColorUtils.blendARGB(Color.parseColor("#d32f2f"), Color.parseColor("#FBC02D"), ratio);
     }
 
     public static BitmapDescriptor bitmapDescriptorFromVector(Context context, int vectorResId) {

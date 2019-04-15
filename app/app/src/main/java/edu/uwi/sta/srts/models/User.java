@@ -50,7 +50,7 @@ public class User extends Model {
      */
     public User(String userId){
         super();
-        if(userId.equals("")){
+        if(userId==null || userId.equals("")){
             return;
         }
         DatabaseHelper.getInstance().getDatabaseReference("users").child(userId)
@@ -118,7 +118,7 @@ public class User extends Model {
     }
 
     public String setFullName(String fullName) {
-        if(fullName.split(" ").length < 2){
+        if(fullName != null && fullName.split(" ").length < 2){
             return "Invalid full name";
         }
         this.fullName = fullName;

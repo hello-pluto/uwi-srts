@@ -17,7 +17,7 @@ import edu.uwi.sta.srts.models.Route;
 import edu.uwi.sta.srts.models.Routes;
 import edu.uwi.sta.srts.views.OnListFragmentInteractionListener;
 import edu.uwi.sta.srts.views.adapter.RoutesAdapter;
-import edu.uwi.sta.srts.views.admin.EditRoute;
+import edu.uwi.sta.srts.views.ViewRoute;
 
 public class RoutesFragment extends Fragment {
 
@@ -48,7 +48,7 @@ public class RoutesFragment extends Fragment {
         listener = new OnListFragmentInteractionListener() {
             @Override
             public void onListFragmentInteraction(Model model) {
-                Intent intent = new Intent(getContext(), EditRoute.class);
+                Intent intent = new Intent(getContext(), ViewRoute.class);
                 intent.putExtra("route", (Route)model);
                 startActivity(intent);
             }

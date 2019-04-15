@@ -37,6 +37,7 @@ public class DatabaseHelper {
         if(instance == null){
             instance = new DatabaseHelper();
             database = FirebaseDatabase.getInstance();
+            database.setPersistenceEnabled(true);
         }
         return instance;
     }

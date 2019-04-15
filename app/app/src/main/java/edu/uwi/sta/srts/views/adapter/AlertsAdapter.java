@@ -1,11 +1,14 @@
 package edu.uwi.sta.srts.views.adapter;
 
+import android.graphics.Color;
+import android.support.v4.graphics.ColorUtils;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import edu.uwi.sta.srts.R;
 import edu.uwi.sta.srts.controllers.AlertController;
 import edu.uwi.sta.srts.controllers.AlertsController;
@@ -13,6 +16,7 @@ import edu.uwi.sta.srts.models.Alert;
 import edu.uwi.sta.srts.models.Alerts;
 import edu.uwi.sta.srts.models.Model;
 import edu.uwi.sta.srts.models.Users;
+import edu.uwi.sta.srts.utils.Utils;
 import edu.uwi.sta.srts.views.OnListFragmentInteractionListener;
 
 public class AlertsAdapter extends RecyclerView.Adapter<AlertsAdapter.ViewHolder> implements edu.uwi.sta.srts.views.View {
@@ -44,6 +48,9 @@ public class AlertsAdapter extends RecyclerView.Adapter<AlertsAdapter.ViewHolder
 
         holder.title.setText(holder.alertController.getAlertTitle());
 
+        holder.img.setBorderColor(Utils.getColorBetweenRedAndYellow(holder.alertController.getAlertUrgency()/5f));
+        holder.img.setCircleBackgroundColor(Utils.getColorBetweenRedAndYellow(holder.alertController.getAlertUrgency()/5f));
+
         holder.view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -63,12 +70,14 @@ public class AlertsAdapter extends RecyclerView.Adapter<AlertsAdapter.ViewHolder
         public final View view;
         public final TextView title;
         public final TextView meta;
+        public final CircleImageView img;
         public AlertController alertController;
 
         public ViewHolder(View view) {
             super(view);
             this.view = view;
             this.alertController = null;
+            img = (CircleImageView) view.findViewById(R.id.img);
             title = (TextView) view.findViewById(R.id.title);
             meta = (TextView) view.findViewById(R.id.meta);
         }

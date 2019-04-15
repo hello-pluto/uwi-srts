@@ -11,7 +11,7 @@
         <ImageView
             android:layout_width="64dp"
             android:layout_height="64dp"
-            android:src="@drawable/ic_action_help_outline"
+            android:src="@drawable/round_help_24"
             android:layout_gravity="center"
             android:tint="@android:color/white"/>
     </LinearLayout>

@@ -16,8 +16,8 @@ import edu.uwi.sta.srts.models.Alert;
 import edu.uwi.sta.srts.models.Alerts;
 import edu.uwi.sta.srts.models.Model;
 import edu.uwi.sta.srts.views.OnListFragmentInteractionListener;
+import edu.uwi.sta.srts.views.ViewAlert;
 import edu.uwi.sta.srts.views.adapter.AlertsAdapter;
-import edu.uwi.sta.srts.views.admin.EditAlert;
 
 public class AlertsFragment extends Fragment {
 
@@ -48,7 +48,7 @@ public class AlertsFragment extends Fragment {
         listener = new OnListFragmentInteractionListener() {
             @Override
             public void onListFragmentInteraction(Model model) {
-                Intent intent = new Intent(getContext(), EditAlert.class);
+                Intent intent = new Intent(getContext(), ViewAlert.class);
                 intent.putExtra("alert", (Alert)model);
                 startActivity(intent);
             }

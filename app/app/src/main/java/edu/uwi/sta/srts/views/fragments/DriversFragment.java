@@ -18,8 +18,7 @@ import edu.uwi.sta.srts.models.Users;
 import edu.uwi.sta.srts.models.utils.UserType;
 import edu.uwi.sta.srts.views.OnListFragmentInteractionListener;
 import edu.uwi.sta.srts.views.adapter.UsersAdapter;
-import edu.uwi.sta.srts.views.admin.AdminOverview;
-import edu.uwi.sta.srts.views.admin.EditUser;
+import edu.uwi.sta.srts.views.EditUser;
 
 public class DriversFragment extends Fragment {
 

@@ -55,7 +55,7 @@ public class Stop extends Model{
                         if(s != null) {
                             Stop.this.setName(s.getName());
                             Stop.this.setRouteId(s.getRouteId());
-                            Stop.this.setLocation(s.getLocation());
+                            Stop.this.setLocation(new Location(s.getLocation().getLatitude(), s.getLocation().getLongitude()));
                             Stop.this.setId(s.getId());
 
                             notifyObservers();

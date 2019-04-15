@@ -71,6 +71,7 @@ public class StopsAdapter extends RecyclerView.Adapter<StopsAdapter.ViewHolder> 
             this.stopController = null;
             title = (TextView) view.findViewById(R.id.title);
             meta = (TextView) view.findViewById(R.id.meta);
+            view.findViewById(R.id.img).setVisibility(View.GONE);
         }
 
         @Override

@@ -10,12 +10,13 @@ import edu.uwi.sta.srts.R;
 import edu.uwi.sta.srts.controllers.RouteController;
 import edu.uwi.sta.srts.controllers.RoutesController;
 import edu.uwi.sta.srts.controllers.StopsController;
-import edu.uwi.sta.srts.controllers.VehiclesController;
+import edu.uwi.sta.srts.controllers.ShuttlesController;
 import edu.uwi.sta.srts.models.Model;
 import edu.uwi.sta.srts.models.Routes;
+import edu.uwi.sta.srts.models.Shuttle;
 import edu.uwi.sta.srts.models.Stop;
 import edu.uwi.sta.srts.models.Stops;
-import edu.uwi.sta.srts.models.Vehicles;
+import edu.uwi.sta.srts.models.Shuttles;
 import edu.uwi.sta.srts.views.OnListFragmentInteractionListener;
 import edu.uwi.sta.srts.views.fragments.RoutesFragment;
 
@@ -50,7 +51,7 @@ public class RoutesAdapter extends RecyclerView.Adapter<RoutesAdapter.ViewHolder
 
         holder.meta.setText(String.valueOf(holder.routeController.getRouteFrequency()) + " mins");
 
-        new VehiclesController(new Vehicles(holder.routeController.getRouteId()), new VehiclesView(holder.subtitle));
+        new ShuttlesController(new Shuttles(holder.routeController.getRouteId()), new ShuttlesView(holder.subtitle));
 
         holder.view.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -100,18 +101,30 @@ public class RoutesAdapter extends RecyclerView.Adapter<RoutesAdapter.ViewHolder
         }
     }
 
-    public class VehiclesView implements edu.uwi.sta.srts.views.View {
+    public class ShuttlesView implements edu.uwi.sta.srts.views.View {
 
         TextView textView;
 
-        public VehiclesView(TextView textView){
+        public ShuttlesView(TextView textView){
             this.textView = textView;
         }
 
         @Override
         public void update(Model model) {
-            if(model instanceof Vehicles && textView != null){
-                this.textView.setText(((Vehicles)model).getVehicles().size() + " shuttles");
+            if(model instanceof Shuttles && textView != null){
+                int numOnDutyShuttles = 0;
+                for(Shuttle shuttle: ((Shuttles)model).getShuttles() ){
+                    if(shuttle.isOnDuty()){
+                        numOnDutyShuttles++;
+                    }
+                }
+                if(numOnDutyShuttles == 0){
+                    this.textView.setText("No on duty shuttles");
+                }else if(numOnDutyShuttles == 1){
+                    this.textView.setText("1 on duty shuttle");
+                }else{
+                    this.textView.setText(numOnDutyShuttles + " on duty shuttles");
+                }
             }
         }
     }

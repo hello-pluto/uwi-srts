@@ -70,6 +70,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
             this.userController = null;
             title = (TextView) view.findViewById(R.id.title);
             meta = (TextView) view.findViewById(R.id.meta);
+            view.findViewById(R.id.img).setVisibility(View.GONE);
         }
 
         @Override

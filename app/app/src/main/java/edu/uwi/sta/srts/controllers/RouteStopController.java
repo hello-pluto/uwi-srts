@@ -31,4 +31,12 @@ public class RouteStopController extends Controller {
     public void setRouteStopStopId(String stopId) {
         ((RouteStop)model).setStopId(stopId);
     }
+
+    public int getRouteStopOrder() {
+        return ((RouteStop)model).getOrder();
+    }
+
+    public void setRouteStopOrder(int order) {
+        ((RouteStop)model).setOrder(order);
+    }
 }

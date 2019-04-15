@@ -35,7 +35,6 @@ public class AlertsController extends Controller {
         return new AlertController(((Alerts)model).getAlerts().get(position), view);
     }
 
-
     public Alert filter(String alertId){
         for (Alert alert: ((Alerts)this.model).getAlerts()) {
             if(alert.getId().equals(alertId)){

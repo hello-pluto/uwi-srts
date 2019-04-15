@@ -14,56 +14,57 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".views.admin.EditAlert"></activity>
-        <activity android:name=".views.admin.EditStop" />
-        <activity android:name=".views.admin.EditVehicle" />
+        <activity android:name=".views.ViewStop"></activity>
+        <activity android:name=".views.StudentOverview" />
+        <activity android:name=".views.EditAlert" />
+        <activity android:name=".views.EditStop" />
+        <activity android:name=".views.EditShuttle" />
         <activity android:name=".views.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="srts.page.link"
+                    android:scheme="http" />
+                <data
+                    android:host="srts.page.link"
+                    android:scheme="https" />
+            </intent-filter>
         </activity>
-        <activity android:name=".views.admin.EditUser" />
-        <activity android:name=".views.admin.EditRoute" />
+        <activity android:name=".views.EditUser" />
+        <activity android:name=".views.EditRoute" />
         <activity
-            android:name=".views.admin.AdminOverview"
+            android:name=".views.AdminOverview"
             android:label="@string/title_activity_admin_overview"
             android:theme="@style/AppTheme.NoActionBar" />
-        <!--
-             The API key for Google Maps-based APIs is defined as a string resource.
-             (See the file "res/values/google_maps_api.xml").
-             Note that the API key is linked to the encryption key used to sign the APK.
-             You need a different API key for each encryption key, including the release key that is used to
-             sign the APK for publishing.
-             You can define the keys for the debug and release targets in src/debug/ and src/release/.
-        -->
+
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".views.driver.DriverOverview"
-            android:label="@string/title_activity_track_vehicle" />
+            android:name=".views.DriverOverview"
+            android:label="@string/title_activity_track_shuttle" />
         <activity
             android:name=".views.LoginActivity"
-            android:label="@string/app_name"
-            android:theme="@style/Theme.Design.Light.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            android:label="@string/app_name" />
 
         <uses-library
             android:name="org.apache.http.legacy"
             android:required="false" />
 
-        <activity
-            android:name=".views.ViewVehiclesList"
-            android:label="@string/title_activity_maps" />
-        <activity android:name=".views.MainActivity" />
+        <activity android:name=".views.ViewShuttle" />
+        <activity android:name=".views.ViewAlerts" />
+        <activity android:name=".views.ViewAlert" />
+        <activity android:name=".views.ViewRoute" />
     </application>
 
 </manifest>

@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">UWI SRTS</string>
     <string name="title_activity_maps">Map</string>
-    <string name="title_activity_track_vehicle">Map</string>
+    <string name="title_activity_track_shuttle">Map</string>
     <string name="title_activity_admin_overview">AdminOverview</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>

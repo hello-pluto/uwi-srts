@@ -5,8 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".views.LoginActivity"
+    android:id="@+id/rl"
     android:background="@color/colorPrimary"
-    android:id="@+id/rl">
+    android:animateLayoutChanges="true">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appBarLayout"
@@ -15,108 +16,236 @@
         app:elevation="0dp"
         android:theme="@style/ThemeOverlay.MaterialComponents.ActionBar"
         android:background="@color/colorPrimary">
-        <ProgressBar
-            android:id="@+id/progressBar"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:indeterminate="true"
-            style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal"
-            android:indeterminateTint="@android:color/white"
-            android:layout_marginBottom="-7dp"
-            android:layout_marginTop="-6dp"
-            android:visibility="gone"/>
+            android:orientation="vertical"
+            android:paddingLeft="30dp"
+            android:paddingRight="30dp"
+            android:paddingTop="50dp"
+            android:paddingBottom="50dp">
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            app:title=""
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-            >
-
-        </android.support.v7.widget.Toolbar>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Welcome"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                android:alpha="0.5"
+                android:fontFamily="sans-serif"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Sign In"
+                android:textColor="@android:color/white"
+                android:fontFamily="@font/raleway"
+                android:textSize="32sp"
+                android:layout_marginTop="4dp"/>
+        </LinearLayout>
 
     </android.support.design.widget.AppBarLayout>
 
-    <LinearLayout
+    <android.support.v7.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:orientation="vertical"
-        android:clipToPadding="false">
-        <ImageView
-            android:id="@+id/icon"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:src="@drawable/ic_launcher"
-            android:layout_gravity="center"
-            android:layout_marginBottom="40dp"/>
-
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/emailLayout"
+        android:layout_height="match_parent"
+        app:cardCornerRadius="30dp"
+        android:layout_marginBottom="-30dp"
+        android:layout_below="@id/appBarLayout">
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:boxBackgroundColor="#0D000000"
-            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
-            app:hintTextAppearance="@style/Base.TextAppearance.AppCompat.Inverse"
-            app:backgroundTint="@android:color/white"
-            android:textColorHint="#77FFFFFF"
-            android:layout_marginTop="16dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginLeft="16dp">
-            <android.support.design.widget.TextInputEditText
+            android:orientation="vertical"
+            android:layout_below="@+id/appBarLayout"
+            android:padding="30dp"
+            android:layout_marginTop="20dp">
+
+            <LinearLayout
+                android:id="@+id/emailLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/email"
-                android:textColor="@android:color/white"
-                android:hint="Email"
-                style="@style/Widget.MaterialComponents.TextInputEditText.FilledBox"
-                app:backgroundTint="@android:color/white"
-                android:textCursorDrawable="@null"
-                app:hintTextAppearance="@style/Base.TextAppearance.AppCompat.Inverse"
-                android:inputType="textEmailAddress"/>
-        </android.support.design.widget.TextInputLayout>
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Email"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:fontFamily="@font/raleway"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="42dp"
+                    android:layout_marginTop="12dp">
+                    <EditText
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:id="@+id/email"
+                        android:textCursorDrawable="@null"
+                        android:fontFamily="@font/raleway"
+                        android:inputType="textEmailAddress"
+                        android:background="@null"
+                        android:hint="Enter email"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:layout_weight="1"/>
+                    <TextView
+                        android:id="@+id/uwiEmailPlaceholder"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:fontFamily="@font/raleway"
+                        android:text="&#64;my.uwi.edu"
+                        android:gravity="center"/>
+                    <ImageView
+                        android:id="@+id/emailDone"
+                        android:layout_width="wrap_content"
+                        android:layout_height="48dp"
+                        android:src="@drawable/round_done_24"
+                        android:tint="@color/colorPrimary"
+                        android:visibility="gone"
+                        android:paddingLeft="8dp"
+                        android:layout_marginTop="-4dp"/>
+                </LinearLayout>
+                <View
+                    android:id="@+id/emailUnderline"
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:background="#efefef"/>
 
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/passwordLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:boxBackgroundColor="#0D000000"
-            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
-            app:hintTextAppearance="@style/Base.TextAppearance.AppCompat.Inverse"
-            app:backgroundTint="@android:color/white"
-            android:textColorHint="#77FFFFFF"
-            android:layout_marginTop="16dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginLeft="16dp"
-            app:passwordToggleEnabled="true"
-            app:passwordToggleTint="@android:color/white">
-            <android.support.design.widget.TextInputEditText
+                <TextView
+                    android:id="@+id/emailError"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="12sp"
+                    android:text="You must enter a valid email"
+                    android:fontFamily="@font/raleway"
+                    android:textColor="@android:color/holo_red_light"
+                    android:paddingTop="4dp"
+                    android:visibility="invisible"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/passwordLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/password"
-                android:textColor="@android:color/white"
-                android:hint="Password"
-                style="@style/Widget.MaterialComponents.TextInputEditText.FilledBox"
-                app:backgroundTint="@android:color/white"
-                android:textCursorDrawable="@null"
-                app:hintTextAppearance="@style/Base.TextAppearance.AppCompat.Inverse"
-                android:inputType="textPassword"/>
-        </android.support.design.widget.TextInputLayout>
+                android:orientation="vertical"
+                android:layout_marginTop="24dp"
+                android:visibility="gone">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Password"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:fontFamily="@font/raleway"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="42dp"
+                    android:layout_marginTop="12dp">
+                    <EditText
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:id="@+id/password"
+                        android:textCursorDrawable="@null"
+                        android:fontFamily="@font/raleway"
+                        android:inputType="textPassword"
+                        android:background="@null"
+                        android:hint="Enter password"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:layout_weight="1"/>
+                    <ImageButton
+                        android:id="@+id/passwordToggle"
+                        android:background="@null"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/round_visibility_24"/>
+                    <ImageView
+                        android:id="@+id/passwordDone"
+                        android:layout_width="wrap_content"
+                        android:layout_height="48dp"
+                        android:src="@drawable/round_done_24"
+                        android:tint="@color/colorPrimary"
+                        android:visibility="gone"
+                        android:layout_marginTop="-4dp"
+                        android:paddingLeft="8dp"/>
+                </LinearLayout>
+                <View
+                    android:id="@+id/passwordUnderline"
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:background="#efefef"/>
 
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:text="Login"
-            android:layout_marginTop="16dp"
-            app:backgroundTint="@color/colorPrimaryDark"
-            android:textColor="@android:color/white"
-            android:layout_marginRight="12dp"
-            android:layout_marginLeft="12dp"
-            android:layout_marginBottom="16dp"
-            android:id="@+id/login"/>
+                <TextView
+                    android:id="@+id/passwordError"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="12sp"
+                    android:text="You must enter a valid email"
+                    android:fontFamily="@font/raleway"
+                    android:textColor="@android:color/holo_red_light"
+                    android:paddingTop="4dp"
+                    android:visibility="invisible"/>
 
-    </LinearLayout>
+                <TextView
+                    android:id="@+id/resetPassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Forgot password?"
+                    android:gravity="center"
+                    android:padding="12dp"
+                    android:textColor="#ddd"/>
+            </LinearLayout>
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_marginTop="16dp"
+                app:cardBackgroundColor="@color/colorPrimary"
+                app:cardCornerRadius="30dp"
+                app:cardElevation="2dp"
+                android:layout_marginBottom="18dp">
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="Sign In"
+                        android:id="@+id/login"
+                        android:background="?attr/selectableItemBackground"
+                        android:textColor="@android:color/white"
+                        android:gravity="center"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:fontFamily="@font/raleway"/>
+
+                    <ProgressBar
+                        android:id="@+id/progressBar"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:indeterminate="true"
+                        android:indeterminateTint="@android:color/white"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="12dp"
+                        android:visibility="gone"/>
+
+                </RelativeLayout>
+
+            </android.support.v7.widget.CardView>
+
+            <TextView
+                android:id="@+id/switchMode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Are you a driver? Login"
+                android:gravity="center"
+                android:padding="12dp"
+                android:textColor="#ddd"/>
+
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
 
 </RelativeLayout>

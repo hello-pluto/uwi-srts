@@ -35,4 +35,12 @@ public class AlertController extends Controller {
         ((Alert)this.model).setMessage(name);
     }
 
+    public int getAlertUrgency() {
+        return ((Alert)this.model).getUrgency();
+    }
+
+    public void setAlertUrgency(int urgency) {
+        ((Alert)this.model).setUrgency(urgency);
+    }
+
 }

@@ -20,7 +20,7 @@ public class RouteStops extends Model {
      */
     public RouteStops() {
         super();
-        DatabaseHelper.getInstance().getDatabaseReference("routeStops")
+        DatabaseHelper.getInstance().getDatabaseReference("routeStops").orderByChild("order")
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

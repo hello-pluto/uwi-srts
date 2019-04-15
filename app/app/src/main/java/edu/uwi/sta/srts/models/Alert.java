@@ -1,6 +1,8 @@
 package edu.uwi.sta.srts.models;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -14,6 +16,8 @@ public class Alert extends Model {
     private String title;
 
     private String message;
+
+    private int urgency;
 
     /**
      * Default constructor for Firebase
@@ -37,6 +41,7 @@ public class Alert extends Model {
                             Alert.this.setTitle(a.getTitle());
                             Alert.this.setMessage(a.getMessage());
                             Alert.this.setId(a.getId());
+                            Alert.this.setUrgency(a.getUrgency());
 
                             notifyObservers();
                         }
@@ -63,6 +68,14 @@ public class Alert extends Model {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public int getUrgency() {
+        return urgency;
+    }
+
+    public void setUrgency(int urgency) {
+        this.urgency = urgency;
     }
 
     @Override

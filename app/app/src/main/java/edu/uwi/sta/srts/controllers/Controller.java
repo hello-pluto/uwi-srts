@@ -50,7 +50,9 @@ public abstract class Controller implements Observer{
      * Method that updates the view i.e. update view elements with fresh model data
      */
     public void updateView(){
-        this.view.update(model);
+        if(this.view!=null) {
+            this.view.update(model);
+        }
     }
 
     public Model getModel() {

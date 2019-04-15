@@ -16,7 +16,7 @@
             android:name="com.google.android.gms.maps.SupportMapFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:context=".views.driver.DriverOverview" />
+            tools:context=".views.DriverOverview" />
     </FrameLayout>
 
     <RelativeLayout
@@ -35,17 +35,28 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 app:layout_collapseMode="pin">
+                <TextView
+                    android:id="@+id/toolbarText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/raleway"
+                    android:text=""
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:layout_margin="0dp"
+                    android:singleLine="true"
+                    android:ellipsize="marquee"/>
 
             </android.support.v7.widget.Toolbar>
         </android.support.v7.widget.CardView>
 
         <android.support.v7.widget.CardView
-            android:id="@+id/vehicleDetails"
+            android:id="@+id/shuttleDetails"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:cardBackgroundColor="@android:color/white"
             app:cardElevation="12dp"
-            app:cardCornerRadius="6dp"
+            app:cardCornerRadius="20dp"
             android:layout_gravity="bottom"
             android:layout_marginBottom="-20dp"
             android:layout_alignParentBottom="true">
@@ -53,9 +64,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="120dp"
                 android:orientation="horizontal"
-                android:background="?attr/selectableItemBackground"
-                android:clickable="true"
-                android:focusable="true"
                 android:paddingBottom="20dp">
 
                 <LinearLayout
@@ -76,11 +84,7 @@
                         android:singleLine="true"
                         android:ellipsize="marquee"
                         android:paddingRight="64dp"/>
-                    <TextView
-                        android:id="@+id/driver"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text=""/>
+
                     <TextView
                         android:id="@+id/plateNo"
                         android:layout_width="match_parent"
@@ -89,6 +93,11 @@
                         style="@style/TextAppearance.MaterialComponents.Caption"
                         android:textStyle="bold"
                         android:textSize="14sp"/>
+                    <TextView
+                        android:id="@+id/numStops"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text=""/>
 
                 </LinearLayout>
             </LinearLayout>
@@ -108,7 +117,7 @@
         app:miniFabDrawableTint="?attr/colorPrimaryDark"
         app:miniFabTitleTextColor="?attr/colorPrimaryDark"
         android:id="@+id/speedDial"
-        app:layout_anchor="@id/vehicleDetails"
+        app:layout_anchor="@id/shuttleDetails"
         app:layout_anchorGravity="top|end"
         android:layout_marginBottom="55dp"/>
 

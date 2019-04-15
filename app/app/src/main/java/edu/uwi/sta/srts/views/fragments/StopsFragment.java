@@ -17,7 +17,7 @@ import edu.uwi.sta.srts.models.Stop;
 import edu.uwi.sta.srts.models.Stops;
 import edu.uwi.sta.srts.views.OnListFragmentInteractionListener;
 import edu.uwi.sta.srts.views.adapter.StopsAdapter;
-import edu.uwi.sta.srts.views.admin.EditStop;
+import edu.uwi.sta.srts.views.ViewStop;
 
 public class StopsFragment extends Fragment {
 
@@ -47,7 +47,7 @@ public class StopsFragment extends Fragment {
         listener = new OnListFragmentInteractionListener() {
             @Override
             public void onListFragmentInteraction(Model model) {
-                Intent intent = new Intent(getContext(), EditStop.class);
+                Intent intent = new Intent(getContext(), ViewStop.class);
                 intent.putExtra("stop", (Stop)model);
                 startActivity(intent);
             }

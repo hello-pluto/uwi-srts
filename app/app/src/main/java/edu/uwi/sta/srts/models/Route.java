@@ -42,7 +42,7 @@ public class Route extends Model {
      */
     public Route(String routeId){
         super();
-        if(routeId.equals("")){
+        if(routeId == null || routeId.equals("")){
             return;
         }
         DatabaseHelper.getInstance().getDatabaseReference("routes").child(routeId)
