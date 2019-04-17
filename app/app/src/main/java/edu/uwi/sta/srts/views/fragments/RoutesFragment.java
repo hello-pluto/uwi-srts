@@ -23,10 +23,13 @@ public class RoutesFragment extends Fragment {
 
     private OnListFragmentInteractionListener listener;
 
+    private boolean isAdmin;
+
     public RoutesFragment() {}
 
-    public static RoutesFragment newInstance() {
+    public static RoutesFragment newInstance(boolean isAdmin) {
         RoutesFragment fragment = new RoutesFragment();
+        fragment.isAdmin = isAdmin;
         return fragment;
     }
 
@@ -50,6 +53,7 @@ public class RoutesFragment extends Fragment {
             public void onListFragmentInteraction(Model model) {
                 Intent intent = new Intent(getContext(), ViewRoute.class);
                 intent.putExtra("route", (Route)model);
+                intent.putExtra("isAdmin", isAdmin);
                 startActivity(intent);
             }
         };

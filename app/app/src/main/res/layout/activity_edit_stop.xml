@@ -81,7 +81,7 @@
                             android:id="@+id/name"
                             android:textCursorDrawable="@null"
                             android:fontFamily="@font/raleway"
-                            android:inputType="textCapSentences"
+                            android:inputType="textCapWords"
                             android:background="@null"
                             android:hint="Enter name"
                             android:textSize="14sp"

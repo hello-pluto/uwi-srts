@@ -17,17 +17,20 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.animation.AccelerateInterpolator;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.GroundOverlay;
 import com.google.android.gms.maps.model.GroundOverlayOptions;
 import com.google.android.gms.maps.model.LatLng;
@@ -35,6 +38,7 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import edu.uwi.sta.srts.R;
@@ -76,6 +80,9 @@ public class StudentOverview extends AppCompatActivity implements NavigationView
     private FloatingActionButton filter;
 
     private boolean shuttleDetailsVisible = false;
+
+    private float previousZoomLevel = -1.0f;
+    private ArrayList<GroundOverlay> groundOverlays = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -246,6 +253,22 @@ public class StudentOverview extends AppCompatActivity implements NavigationView
             }
         });
 
+        googleMap.setOnCameraMoveListener(new GoogleMap.OnCameraMoveListener() {
+            @Override
+            public void onCameraMove() {
+                CameraPosition cameraPosition = googleMap.getCameraPosition();
+
+                if(previousZoomLevel != cameraPosition.zoom) {
+                    for(GroundOverlay groundOverlay : groundOverlays){
+                        double metersPerPx = 156543.03392 * Math.cos(groundOverlay.getPosition().latitude * Math.PI / 180) / Math.pow(2, cameraPosition.zoom);
+                        groundOverlay.setDimensions(20 + (int)metersPerPx * 25);
+                    }
+                }
+
+                previousZoomLevel = cameraPosition.zoom;
+            }
+        });
+
         this.googleMap.setOnGroundOverlayClickListener(new GoogleMap.OnGroundOverlayClickListener() {
             @Override
             public void onGroundOverlayClick(GroundOverlay groundOverlay) {
@@ -267,9 +290,15 @@ public class StudentOverview extends AppCompatActivity implements NavigationView
                 licenseText.setText(shuttleController.getShuttleLicensePlateNo());
 
                 if(location != null) {
-                    eta.setText(Utils.getEta(location.getLatitude(), location.getLongitude(),
-                            shuttleController.getShuttleLocation().getLatitude(), shuttleController.getShuttleLocation().getLongitude())
-                            + " mins away");
+                    int etaInt = Utils.getEta(location.getLatitude(), location.getLongitude(),
+                            shuttleController.getShuttleLocation().getLatitude(), shuttleController.getShuttleLocation().getLongitude());
+                    if(etaInt == 0){
+                        eta.setText("a few seconds away");
+                    }else if(etaInt == 1){
+                        eta.setText("1 min away");
+                    }else{
+                        eta.setText(etaInt+ " mins away");
+                    }
                 }
 
                 googleMap.animateCamera(CameraUpdateFactory.newLatLng(groundOverlay.getPosition()));
@@ -297,6 +326,7 @@ public class StudentOverview extends AppCompatActivity implements NavigationView
     private void populateMap(){
 
         googleMap.clear();
+        groundOverlays.clear();
 
         LatLngBounds.Builder builder = new LatLngBounds.Builder();
 
@@ -309,12 +339,11 @@ public class StudentOverview extends AppCompatActivity implements NavigationView
 
                 LatLng latLng = new LatLng(shuttle.getLocation().getLatitude(), shuttle.getLocation().getLongitude());
 
-
-                googleMap.addGroundOverlay(new GroundOverlayOptions()
-                        .image(Utils.bitmapDescriptorFromVector(this, R.drawable.ic_car))
+                groundOverlays.add(googleMap.addGroundOverlay(new GroundOverlayOptions()
+                        .image(Utils.bitmapDescriptorFromVector(this, R.drawable.shuttle))
                         .bearing(shuttle.getRotation())
-                        .position(latLng,50)
-                        .clickable(true));
+                        .position(latLng,20)
+                        .clickable(true)));
 
                 latLngShuttleHashMap.put(latLng, shuttle);
 
@@ -371,6 +400,12 @@ public class StudentOverview extends AppCompatActivity implements NavigationView
         int id = item.getItemId();
 
         switch (id) {
+            case R.id.nav_routes:
+                startActivity(new Intent(this, ViewRoutes.class));
+                break;
+            case R.id.nav_alerts:
+                startActivity(new Intent(this, ViewAlerts.class));
+                break;
             case R.id.nav_log_out:
                 FirebaseAuth.getInstance().signOut();
                 startActivity(new Intent(this, LoginActivity.class));
@@ -401,8 +436,6 @@ public class StudentOverview extends AppCompatActivity implements NavigationView
         switch (item.getItemId()) {
             default:
                 toggle.onOptionsItemSelected(item);
-            case R.id.nav_alerts:
-                startActivity(new Intent(this, ViewAlerts.class));
         }
         return super.onOptionsItemSelected(item);
     }

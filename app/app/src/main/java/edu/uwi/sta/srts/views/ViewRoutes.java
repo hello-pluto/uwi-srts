@@ -9,26 +9,26 @@ import android.view.MenuItem;
 
 import edu.uwi.sta.srts.R;
 import edu.uwi.sta.srts.models.Model;
-import edu.uwi.sta.srts.views.View;
 import edu.uwi.sta.srts.views.fragments.AlertsFragment;
 import edu.uwi.sta.srts.views.fragments.RoutesFragment;
 
-public class ViewAlerts extends AppCompatActivity implements View {
+public class ViewRoutes extends AppCompatActivity implements View{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_view_alerts);
+        setContentView(R.layout.activity_view_routes);
 
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        Fragment fragment = AlertsFragment.newInstance(false);
+        Fragment fragment = RoutesFragment.newInstance(false);
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
     }
+
 
     @Override
     public void update(Model model) {

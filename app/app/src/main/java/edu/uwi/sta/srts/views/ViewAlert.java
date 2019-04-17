@@ -101,7 +101,9 @@ public class ViewAlert extends AppCompatActivity implements View {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.model_menu, menu);
+        if(getIntent().getBooleanExtra("isAdmin", false)) {
+            getMenuInflater().inflate(R.menu.model_menu, menu);
+        }
         return true;
     }
 

@@ -82,7 +82,7 @@ public class AdminOverview extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        fragment = RoutesFragment.newInstance();
+        fragment = RoutesFragment.newInstance(true);
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
@@ -164,7 +164,7 @@ public class AdminOverview extends AppCompatActivity
 
         switch (id) {
             case R.id.nav_routes:
-                fragment = RoutesFragment.newInstance();
+                fragment = RoutesFragment.newInstance(true);
                 toolbarText.setText("Routes");
                 break;
             case R.id.nav_drivers:
@@ -181,7 +181,7 @@ public class AdminOverview extends AppCompatActivity
                 toolbarText.setText("Stops");
                 break;
             case R.id.nav_alerts:
-                fragment = AlertsFragment.newInstance();
+                fragment = AlertsFragment.newInstance(true);
                 toolbarText.setText("Alerts");
                 break;
             case R.id.nav_log_out:

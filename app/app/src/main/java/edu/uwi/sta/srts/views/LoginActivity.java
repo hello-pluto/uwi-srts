@@ -281,7 +281,7 @@ public class LoginActivity extends AppCompatActivity implements Closable {
             case STUDENT:
                 intent = new Intent(this, StudentOverview.class);break;
             case DRIVER:
-                intent = new Intent(this, DriverOverview.class);break;
+                intent = new Intent(this, DriverSetup.class);break;
             case ADMINISTRATOR:
                 intent = new Intent(this, AdminOverview.class);break;
         }

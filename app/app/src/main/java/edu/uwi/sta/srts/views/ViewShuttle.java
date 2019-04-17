@@ -142,12 +142,12 @@ public class ViewShuttle extends AppCompatActivity implements View, OnMapReadyCa
                         shuttleController.getShuttleLocation().getLongitude());
 
                 googleMap.addGroundOverlay(new GroundOverlayOptions()
-                        .image(Utils.bitmapDescriptorFromVector(this, R.drawable.ic_car))
+                        .image(Utils.bitmapDescriptorFromVector(this, R.drawable.shuttle))
                         .bearing(shuttleController.getShuttleRotation())
-                        .position(latLng,50)
+                        .position(latLng,20)
                         .clickable(true));
 
-                CameraUpdate center = CameraUpdateFactory.newLatLngZoom(latLng, 17f);
+                CameraUpdate center = CameraUpdateFactory.newLatLngZoom(latLng, 18f);
 
                 this.googleMap.animateCamera(center);
             }
@@ -222,8 +222,6 @@ public class ViewShuttle extends AppCompatActivity implements View, OnMapReadyCa
         User user = (User)getIntent().getSerializableExtra("user");
         if(user != null && user.getUserType() == UserType.ADMINISTRATOR){
             getMenuInflater().inflate(R.menu.model_menu, menu);
-        }else{
-            getMenuInflater().inflate(R.menu.student_menu, menu);
         }
 
         return true;

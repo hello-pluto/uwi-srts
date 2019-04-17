@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -42,7 +43,6 @@ public class SplashActivity extends AppCompatActivity implements View {
                 if (email == null) {
                     return;
                 }
-
                 firebaseAuth.signInWithEmailLink(email, emailLink)
                         .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                             @Override
@@ -53,7 +53,9 @@ public class SplashActivity extends AppCompatActivity implements View {
                                     if(user != null){
                                         UserController userController = new UserController(new User(), SplashActivity.this);
                                         userController.setUserId(user.getUid());
-                                        userController.setUserFullName(email.replace("@my.uwi.edu",""));
+                                        userController.setUserFullName(
+                                                email.split("\\.")[0].substring(0,1).toUpperCase() + email.split("\\.")[0].substring(1).toLowerCase() + " "+
+                                                email.split("\\.")[1].substring(0,1).toUpperCase() + email.split("\\.")[1].replace("@my", "").substring(1).toLowerCase());
                                         userController.setUserVerified(true);
                                         userController.setUserType(UserType.STUDENT);
                                         userController.setUserEmail(email);
@@ -62,32 +64,6 @@ public class SplashActivity extends AppCompatActivity implements View {
                                     }
                                 } else {
                                     Log.e("", "Error signing in with email link", task.getException());
-                                }
-                            }
-                        });
-            }else {
-
-                AuthCredential credential =
-                        EmailAuthProvider.getCredentialWithLink(email, emailLink);
-
-                firebaseAuth.getCurrentUser().reauthenticateAndRetrieveData(credential)
-                        .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                if (task.isSuccessful()) {
-                                    AuthResult result = task.getResult();
-                                    FirebaseUser user = result.getUser();
-                                    if(user != null){
-                                        UserController userController = new UserController(new User(), SplashActivity.this);
-                                        userController.setUserId(user.getUid());
-                                        userController.setUserVerified(true);
-                                        userController.setUserType(UserType.STUDENT);
-                                        userController.setUserEmail(email);
-                                        userController.saveModel();
-                                        userController.updateView();
-                                    }
-                                } else {
-                                    Log.e("", "Error reauthenticating", task.getException());
                                 }
                             }
                         });
@@ -112,7 +88,7 @@ public class SplashActivity extends AppCompatActivity implements View {
                     intent = new Intent(this, AdminOverview.class);
                     break;
                 case DRIVER:
-                    intent = new Intent(this, DriverOverview.class);
+                    intent = new Intent(this, DriverSetup.class);
                     break;
                 default:
                 case STUDENT:

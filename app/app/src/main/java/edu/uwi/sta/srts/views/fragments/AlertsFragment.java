@@ -23,10 +23,13 @@ public class AlertsFragment extends Fragment {
 
     private OnListFragmentInteractionListener listener;
 
+    private boolean isAdmin;
+
     public AlertsFragment() {}
 
-    public static AlertsFragment newInstance() {
+    public static AlertsFragment newInstance(boolean isAdmin) {
         AlertsFragment fragment = new AlertsFragment();
+        fragment.isAdmin = isAdmin;
         return fragment;
     }
 
@@ -36,7 +39,7 @@ public class AlertsFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(final LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.recycler_view_layout, container, false);
 
@@ -50,6 +53,7 @@ public class AlertsFragment extends Fragment {
             public void onListFragmentInteraction(Model model) {
                 Intent intent = new Intent(getContext(), ViewAlert.class);
                 intent.putExtra("alert", (Alert)model);
+                intent.putExtra("isAdmin", isAdmin);
                 startActivity(intent);
             }
         };

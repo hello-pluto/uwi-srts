@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:ripple="http://schemas.android.com/tools"
     android:fitsSystemWindows="true">
 
     <FrameLayout
@@ -55,7 +56,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:cardBackgroundColor="@android:color/white"
-            app:cardElevation="12dp"
             app:cardCornerRadius="20dp"
             android:layout_gravity="bottom"
             android:layout_marginBottom="-20dp"
@@ -103,22 +103,36 @@
             </LinearLayout>
 
         </android.support.v7.widget.CardView>
+        <pl.bclogic.pulsator4droid.library.PulsatorLayout
+            android:id="@+id/pulsator"
+            android:layout_width="88dp"
+            android:layout_height="88dp"
+            app:pulse_count="2"
+            app:pulse_duration="1000"
+            app:pulse_repeat="0"
+            app:pulse_color="@color/colorAccent"
+            app:pulse_startFromScratch="false"
+            app:pulse_interpolator="Linear"
+            android:layout_alignTop="@+id/shuttleDetails"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="-44dp"
+            android:elevation="2dp">
+        </pl.bclogic.pulsator4droid.library.PulsatorLayout>
+
+        <android.support.design.widget.FloatingActionButton
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:src="@drawable/round_timer_off_24"
+            android:id="@+id/onDuty"
+            android:layout_alignTop="@+id/shuttleDetails"
+            android:layout_alignParentRight="true"
+            android:tint="@android:color/white"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="-28dp"/>
     </RelativeLayout>
 
-    <io.github.yavski.fabspeeddial.FabSpeedDial
 
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        app:fabDrawable="@drawable/round_swap_vert_24"
-        app:fabGravity="bottom_end"
-        app:fabMenu="@menu/driver_fab_menu"
-        app:miniFabBackgroundTint="@android:color/white"
-        app:miniFabDrawableTint="?attr/colorPrimaryDark"
-        app:miniFabTitleTextColor="?attr/colorPrimaryDark"
-        android:id="@+id/speedDial"
-        app:layout_anchor="@id/shuttleDetails"
-        app:layout_anchorGravity="top|end"
-        android:layout_marginBottom="55dp"/>
 
 </android.support.design.widget.CoordinatorLayout>

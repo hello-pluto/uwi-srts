@@ -1,20 +1,25 @@
 package edu.uwi.sta.srts.views;
 
 import android.Manifest;
+import android.animation.ObjectAnimator;
+import android.animation.PropertyValuesHolder;
+import android.animation.ValueAnimator;
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.location.Location;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
-import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.animation.FastOutSlowInInterpolator;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
@@ -30,6 +35,7 @@ import com.akexorcist.googledirection.GoogleDirection;
 import com.akexorcist.googledirection.constant.TransportMode;
 import com.akexorcist.googledirection.model.Direction;
 import com.akexorcist.googledirection.model.Info;
+import com.akexorcist.googledirection.model.Leg;
 import com.akexorcist.googledirection.model.Step;
 import com.akexorcist.googledirection.util.DirectionConverter;
 import com.google.android.gms.maps.CameraUpdate;
@@ -42,6 +48,7 @@ import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.android.gms.maps.model.RoundCap;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
@@ -53,23 +60,22 @@ import edu.uwi.sta.srts.R;
 import edu.uwi.sta.srts.controllers.RouteController;
 import edu.uwi.sta.srts.controllers.RouteStopsController;
 import edu.uwi.sta.srts.controllers.RoutesController;
-import edu.uwi.sta.srts.controllers.StopController;
-import edu.uwi.sta.srts.controllers.UserController;
 import edu.uwi.sta.srts.controllers.ShuttleController;
 import edu.uwi.sta.srts.controllers.ShuttlesController;
+import edu.uwi.sta.srts.controllers.StopController;
+import edu.uwi.sta.srts.controllers.UserController;
 import edu.uwi.sta.srts.models.Model;
 import edu.uwi.sta.srts.models.Route;
 import edu.uwi.sta.srts.models.RouteStop;
 import edu.uwi.sta.srts.models.RouteStops;
 import edu.uwi.sta.srts.models.Routes;
-import edu.uwi.sta.srts.models.Stop;
-import edu.uwi.sta.srts.models.User;
 import edu.uwi.sta.srts.models.Shuttle;
 import edu.uwi.sta.srts.models.Shuttles;
+import edu.uwi.sta.srts.models.Stop;
+import edu.uwi.sta.srts.models.User;
 import edu.uwi.sta.srts.models.utils.DatabaseHelper;
 import edu.uwi.sta.srts.utils.Utils;
-import io.github.yavski.fabspeeddial.FabSpeedDial;
-import io.github.yavski.fabspeeddial.SimpleMenuListenerAdapter;
+import pl.bclogic.pulsator4droid.library.PulsatorLayout;
 
 public class DriverOverview extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback, View {
 
@@ -92,6 +98,10 @@ public class DriverOverview extends AppCompatActivity implements NavigationView.
     private int routeIndex = -1;
 
     private TextView toolbarText;
+
+    private FloatingActionButton fab;
+    private ObjectAnimator scaleDown;
+    private PulsatorLayout pulsator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -146,24 +156,79 @@ public class DriverOverview extends AppCompatActivity implements NavigationView.
 
         driverController.getModel().notifyObservers();
 
-        new ShuttlesController(new Shuttles(), this);
-        new RoutesController(new Routes(), this);
+        fab = (FloatingActionButton) findViewById(R.id.onDuty);
 
-        FabSpeedDial fabSpeedDial = (FabSpeedDial) findViewById(R.id.speedDial);
-        fabSpeedDial.setMenuListener(new SimpleMenuListenerAdapter() {
+        scaleDown = ObjectAnimator.ofPropertyValuesHolder(
+                fab,
+                PropertyValuesHolder.ofFloat("scaleX", 1.1f),
+                PropertyValuesHolder.ofFloat("scaleY", 1.1f));
+        scaleDown.setDuration(500)
+                .setStartDelay(200);
+
+        scaleDown.setRepeatCount(ObjectAnimator.INFINITE);
+        scaleDown.setRepeatMode(ObjectAnimator.REVERSE);
+        scaleDown.setInterpolator(new FastOutSlowInInterpolator());
+
+        pulsator = (PulsatorLayout) findViewById(R.id.pulsator);
+
+        fab.setOnClickListener(new android.view.View.OnClickListener() {
             @Override
-            public boolean onMenuItemSelected(MenuItem menuItem) {
-                switch (menuItem.getItemId()){
-                    case R.id.nav_choose_route:
-                        selectRoute();
-                        break;
-                    case R.id.nav_choose_shuttle:
-                        selectShuttle();
-                        break;
+            public void onClick(android.view.View v) {
+                if (shuttleController != null){
+                    if(shuttleController.isShuttleOnDuty()) {
+                        setOnDuty(false);
+                    }else{
+                        setOnDuty(true);
+                    }
                 }
-                return false;
             }
         });
+
+        shuttleController = new ShuttleController((Shuttle)getIntent().getSerializableExtra("shuttle"), this);
+        routeController = new RouteController((Route)getIntent().getSerializableExtra("route"), this);
+
+        TextView routeText = findViewById(R.id.route);
+        routeText.setText(routeController.getRouteName());
+
+        toolbarText.setText(routeController.getRouteName());
+
+        TextView shuttleText = findViewById(R.id.plateNo);
+        shuttleText.setText(shuttleController.getShuttleLicensePlateNo());
+
+        RouteStops routeStops = new RouteStops();
+        routeStops.filterSelf(routeController.getRouteId());
+        new RouteStopsController(routeStops, this).updateView();
+
+
+        setOnDuty(getIntent().getBooleanExtra("onDuty", false));
+    }
+
+    public void setOnDuty(boolean onDuty){
+        if(onDuty) {
+            if(shuttleController != null) {
+                shuttleController.setShuttleOnDuty(true);
+                shuttleController.setShuttleDriverId(driverController.getUserId());
+                shuttleController.saveModel();
+            }
+            pulsator.start();
+            scaleDown.start();
+            scaleDown.setRepeatCount(ValueAnimator.INFINITE);
+            pulsator.setVisibility(android.view.View.VISIBLE);
+            fab.setImageDrawable(getDrawable(R.drawable.round_timer_24));
+            fab.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorPrimary, null)));
+            Snackbar.make(findViewById(R.id.content_frame), "You are now on duty", Snackbar.LENGTH_SHORT).show();
+        }else{
+            if(shuttleController != null) {
+                shuttleController.setShuttleOnDuty(false);
+                shuttleController.setShuttleDriverId("");
+                shuttleController.saveModel();
+            }
+            pulsator.setVisibility(android.view.View.INVISIBLE);
+            scaleDown.setRepeatCount(1);
+            fab.setImageDrawable(getDrawable(R.drawable.round_timer_off_24));
+            fab.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#f44336")));
+            Snackbar.make(findViewById(R.id.content_frame), "You are now off duty", Snackbar.LENGTH_SHORT).show();
+        }
     }
 
     @Override
@@ -186,10 +251,23 @@ public class DriverOverview extends AppCompatActivity implements NavigationView.
         this.googleMap.setBuildingsEnabled(true);
         this.googleMap.setTrafficEnabled(false);
         this.googleMap.setMyLocationEnabled(true);
-        this.googleMap.moveCamera(CameraUpdateFactory.zoomTo(17f));
+        this.googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(10.642830, -61.399385), 15f));
 
         this.googleMap.setMapStyle(new MapStyleOptions(Utils.getMapStyle()));
         this.googleMap.setInfoWindowAdapter(new MyInfoWindowAdapter());
+
+        this.googleMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+            @Override
+            public void onInfoWindowClick(Marker marker) {
+
+                Stop stop = stopsHashMap.get(marker.getTitle());
+
+                Intent intent = new Intent(DriverOverview.this, ViewStop.class);
+                intent.putExtra("stop", stop);
+                startActivity(intent);
+
+            }
+        });
 
         this.googleMap.setOnMyLocationChangeListener(new GoogleMap.OnMyLocationChangeListener() {
             @Override
@@ -208,35 +286,61 @@ public class DriverOverview extends AppCompatActivity implements NavigationView.
                     }
 
                     LatLng start = waypoints.remove(0);
+                    LatLng end = start;
+                    if(waypoints.size() != 0) {
+                        end = waypoints.remove(waypoints.size() - 1);
+                    }
 
                     waypoints.sort(new Comparator<LatLng>() {
                         @Override
                         public int compare(LatLng o1, LatLng o2) {
-                            return Utils.getEta(location.getLatitude(), location.getLongitude(), o1.latitude, o1.latitude) -
-                                    Utils.getEta(location.getLatitude(), location.getLongitude(), o2.latitude, o2.latitude);
+                            Location l1 = new Location("");
+                            l1.setLatitude(o1.latitude);
+                            l1.setLongitude(o1.longitude);
+
+                            Location l2 = new Location("");
+                            l2.setLatitude(o2.latitude);
+                            l2.setLongitude(o2.longitude);
+                            return (int)(location.distanceTo(l1) - location.distanceTo(l2));
                         }
                     });
 
                     GoogleDirection.withServerKey(getResources().getString(R.string.google_maps_key))
                             .from(start)
                             .and(waypoints)
-                            .to(start)
+                            .to(end)
                             .transportMode(TransportMode.DRIVING)
                             .execute(new DirectionCallback() {
                                 @Override
                                 public void onDirectionSuccess(Direction direction, String rawBody) {
                                     if(direction.isOK()) {
-                                        List<Step> stepList = direction.getRouteList().get(0).getLegList().get(0).getStepList();
+                                        int i = 0;
+                                        for(Leg leg : direction.getRouteList().get(0).getLegList()) {
+                                            List<Step> stepList = leg.getStepList();
+                                            if(i != 0) {
+                                                ArrayList<PolylineOptions> polylineOptionList =
+                                                        DirectionConverter.createTransitPolyline(DriverOverview.this,
+                                                                stepList, 5, Color.parseColor("#B2DFDB"), 3, Color.BLUE);
+                                                for (PolylineOptions polylineOption : polylineOptionList) {
+                                                    polylineOption.startCap(new RoundCap());
+                                                    polylineOption.endCap(new RoundCap());
+                                                    googleMap.addPolyline(polylineOption);
+                                                }
+                                            }
+                                            i++;
+                                        }
+
                                         ArrayList<PolylineOptions> polylineOptionList =
                                                 DirectionConverter.createTransitPolyline(DriverOverview.this,
-                                                        stepList, 5, getResources().getColor(R.color.colorPrimary, null), 3, Color.BLUE);
+                                                        direction.getRouteList().get(0).getLegList().get(0).getStepList(),
+                                                        5, Color.parseColor("#4DB6AC")
+                                                        , 3, Color.BLUE);
                                         for (PolylineOptions polylineOption : polylineOptionList) {
+                                            polylineOption.startCap(new RoundCap());
+                                            polylineOption.endCap(new RoundCap());
                                             googleMap.addPolyline(polylineOption);
                                         }
                                         Info info = direction.getRouteList().get(0).getLegList().get(0).getDuration();
-                                        Toast.makeText(DriverOverview.this, info.getText(), Toast.LENGTH_LONG).show();
-                                    } else {
-                                        // Do something
                                     }
                                 }
 
@@ -249,8 +353,11 @@ public class DriverOverview extends AppCompatActivity implements NavigationView.
                     redraw = false;
                 }
 
-                if(oldLoc == null || location.distanceTo(oldLoc) > 5) {
-                    oldLoc = location;
+                if(oldLoc == null || location.distanceTo(oldLoc) > 1) {
+
+                    if(oldLoc==null){
+                        oldLoc = location;
+                    }
 
                     CameraUpdate center = CameraUpdateFactory.newLatLng(new LatLng(location.getLatitude(), location.getLongitude()));
 
@@ -261,6 +368,8 @@ public class DriverOverview extends AppCompatActivity implements NavigationView.
                         shuttleController.setShuttleRotation(oldLoc.bearingTo(location));
                         shuttleController.saveModel();
                     }
+
+                    oldLoc = location;
                 }
             }
         });
@@ -290,149 +399,17 @@ public class DriverOverview extends AppCompatActivity implements NavigationView.
 
     @Override
     public void update(final Model model) {
-        if(model instanceof Routes){
-            if(showRoutesDialog) {
-                showRoutesDialog = false;
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setTitle("Choose a Route");
-
-                final CharSequence[] routes = new CharSequence[((Routes) model).getRoutes().size() + 1];
-                for (int i = 0; i < ((Routes) model).getRoutes().size(); i++) {
-                    Route route = ((Routes) model).getRoutes().get(i);
-                    routes[i] = route.getName();
-                }
-                routes[((Routes) model).getRoutes().size()] = "None";
-                builder.setSingleChoiceItems(routes, routeIndex, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        if(which < routes.length - 1) {
-                            routeController = new RouteController(((Routes) model).getRoutes().get(which), null);
-
-                            if (shuttleController != null) {
-                                shuttleController.setShuttleRouteId(routeController.getRouteId());
-                                shuttleController.saveModel();
-                            }
-
-                            TextView routeText = findViewById(R.id.route);
-                            routeText.setText(routeController.getRouteName());
-
-                            toolbarText.setText(routeController.getRouteName());
-
-                            RouteStops routeStops = new RouteStops();
-                            routeStops.filterSelf(routeController.getRouteId());
-
-                            new RouteStopsController(routeStops, DriverOverview.this);
-                        }else{
-                            TextView routeText = findViewById(R.id.route);
-                            routeText.setText("No route selected");
-                        }
-                    }
-                });
-                builder.setPositiveButton("OK", null);
-                AlertDialog dialog = builder.create();
-                dialog.show();
-            }else{
-                for (int i = 0; i < ((Routes) model).getRoutes().size(); i++) {
-                    Route route = ((Routes) model).getRoutes().get(i);
-                    if(shuttleController != null && shuttleController.getShuttleRouteId().equals(route.getId())){
-                        routeIndex = i;
-                        routeController = new RouteController(((Routes) model).getRoutes().get(routeIndex), null);
-
-                        if (shuttleController != null) {
-                            shuttleController.setShuttleRouteId(routeController.getRouteId());
-                        }
-
-                        TextView routeText = findViewById(R.id.route);
-                        routeText.setText(routeController.getRouteName());
-
-                        toolbarText.setText(routeController.getRouteName());
-
-                        RouteStops routeStops = new RouteStops();
-                        routeStops.filterSelf(routeController.getRouteId());
-
-                        new RouteStopsController(routeStops, DriverOverview.this);
-                    }
-                }
-            }
-        }else if(model instanceof Shuttles){
-            if(showShuttlesDialog){
-                showShuttlesDialog = false;
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setTitle("Choose a Shuttle");
-
-                final CharSequence[] shuttles = new CharSequence[((Shuttles)model).getShuttles().size()+1];
-                for(int i = 0; i < ((Shuttles)model).getShuttles().size(); i++){
-                    Shuttle shuttle = ((Shuttles)model).getShuttles().get(i);
-                    shuttles[i] = shuttle.getLicensePlateNo();
-                }
-                shuttles[((Shuttles)model).getShuttles().size()] = "None";
-                builder.setSingleChoiceItems(shuttles, shuttleIndex, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        if(which < shuttles.length-1) {
-                            shuttleIndex = which;
-                            boolean wasOnDuty = false;
-                            if(shuttleController!=null && shuttleController.isShuttleOnDuty()){
-                                shuttleController.setShuttleOnDuty(false);
-                                shuttleController.saveModel();
-                                wasOnDuty = true;
-                            }
-
-                            shuttleController = new ShuttleController(((Shuttles) model).getShuttles().get(which), null);
-                            shuttleController.setShuttleDriverId(driverController.getUserId());
-                            if(wasOnDuty) {
-                                shuttleController.setShuttleOnDuty(true);
-                            }
-                            shuttleController.saveModel();
-
-                            if (routeController != null) {
-                                shuttleController.setShuttleRouteId(routeController.getRouteId());
-                                shuttleController.saveModel();
-                            }
-
-                            TextView shuttleText = findViewById(R.id.plateNo);
-                            shuttleText.setText(shuttleController.getShuttleLicensePlateNo());
-                        }else{
-                            if(shuttleIndex != -1){
-                                ShuttleController vc = new ShuttleController(((Shuttles) model).getShuttles().get(shuttleIndex), null);
-                                shuttleIndex = -1;
-                                vc.setShuttleDriverId("");
-                                vc.saveModel();
-                            }
-                            TextView shuttleText = findViewById(R.id.plateNo);
-                            shuttleText.setText("No shuttle selected");
-                        }
-                    }
-                });
-                builder.setPositiveButton("OK", null);
-                AlertDialog dialog = builder.create();
-                dialog.show();
-            }else{
-                for(int i = 0; i < ((Shuttles)model).getShuttles().size(); i++){
-                    Shuttle shuttle = ((Shuttles)model).getShuttles().get(i);
-                    if(shuttle.getDriverId().equals(driverController.getUserId())){
-                        shuttleIndex = i;
-                        shuttleController = new ShuttleController(((Shuttles) model).getShuttles().get(i), null);
-                        shuttleController.setShuttleDriverId(driverController.getUserId());
-
-                        if (routeController != null) {
-                            shuttleController.setShuttleRouteId(routeController.getRouteId());
-                        }
-
-                        TextView shuttleText = findViewById(R.id.plateNo);
-                        shuttleText.setText(shuttleController.getShuttleLicensePlateNo());
-                    }
-                }
-            }
-
-        }else if(model instanceof RouteStops){
+        if(model instanceof RouteStops){
+            stopsHashMap.clear();
+            redraw = true;
             for(RouteStop routeStop : ((RouteStops)model).getRouteStops()){
                 new StopController(new Stop(routeStop.getStopId()), this);
             }
             TextView numStops = (TextView) findViewById(R.id.numStops);
             numStops.setText(((RouteStops)model).getRouteStops().size() + " stops");
+
         }else if(model instanceof Stop){
-            stopsHashMap.put(((Stop) model).getId(), (Stop) model);
+            stopsHashMap.put(((Stop) model).getName(), (Stop) model);
             redraw = true;
         }
     }
@@ -458,6 +435,12 @@ public class DriverOverview extends AppCompatActivity implements NavigationView.
         int id = item.getItemId();
 
         switch (id) {
+            case R.id.nav_routes:
+                startActivity(new Intent(this, ViewRoutes.class));
+                break;
+            case R.id.nav_alerts:
+                startActivity(new Intent(this, ViewAlerts.class));
+                break;
             case R.id.nav_log_out:
                 FirebaseAuth.getInstance().signOut();
                 startActivity(new Intent(this, LoginActivity.class));
@@ -482,57 +465,19 @@ public class DriverOverview extends AppCompatActivity implements NavigationView.
         toggle.onConfigurationChanged(newConfig);
     }
 
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.nav_change_shuttle_and_route:
+                Intent intent = new Intent(this, DriverSetup.class);
+                intent.putExtra("user", driverController.getModel());
+                startActivityForResult(intent, 1);
+                break;
             default:
                 toggle.onOptionsItemSelected(item);
                 break;
-            case R.id.nav_on_duty:
-                if(shuttleController!= null){
-                    if(shuttleController.isShuttleOnDuty()){
-                        Drawable drawable = ContextCompat.getDrawable(getApplicationContext(),R.drawable.round_timer_24);
-                        item.setIcon(drawable);
-                        item.setTitle("Go on duty");
-                        shuttleController.setShuttleOnDuty(false);
-                        Toast.makeText(this, "You are now off duty.", Toast.LENGTH_LONG).show();
-                    }else{
-                        Drawable drawable = ContextCompat.getDrawable(getApplicationContext(),R.drawable.round_timer_off_24);
-                        item.setIcon(drawable);
-                        item.setTitle("Go off duty");
-                        shuttleController.setShuttleOnDuty(true);
-                        Toast.makeText(this, "You are now on duty.", Toast.LENGTH_LONG).show();
-                    }
-                    shuttleController.saveModel();
-                }
-                break;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    private void selectRoute(){
-        if(shuttleIndex == -1){
-            new AlertDialog.Builder(this)
-                    .setTitle("Cannot change route")
-                    .setMessage("You cannot change the route unless you have selected a shuttle.")
-                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    })
-                    .show();
-        }else {
-            showRoutesDialog = true;
-            redraw = true;
-            stopsHashMap.clear();
-            new RoutesController(new Routes(), this);
-        }
-    }
-
-    private void selectShuttle(){
-        showShuttlesDialog = true;
-        new ShuttlesController(new Shuttles(), this);
     }
 
     private class MyInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
@@ -572,6 +517,48 @@ public class DriverOverview extends AppCompatActivity implements NavigationView.
                 } else {
                     Snackbar.make(findViewById(R.id.content_frame), "Cannot use app without location permission", Snackbar.LENGTH_INDEFINITE).show();
                 }
+            }
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(shuttleController!=null) {
+            shuttleController.setShuttleOnDuty(false);
+            shuttleController.setShuttleDriverId("");
+            shuttleController.saveModel();
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if (requestCode == 1) {
+            if(resultCode == Activity.RESULT_OK){
+
+                if(shuttleController!=null) {
+                    shuttleController.setShuttleOnDuty(false);
+                    shuttleController.setShuttleDriverId("");
+                    shuttleController.saveModel();
+                }
+
+                shuttleController = new ShuttleController((Shuttle)data.getSerializableExtra("shuttle"), this);
+                routeController = new RouteController((Route)data.getSerializableExtra("route"), this);
+
+                TextView routeText = findViewById(R.id.route);
+                routeText.setText(routeController.getRouteName());
+
+                toolbarText.setText(routeController.getRouteName());
+
+                TextView shuttleText = findViewById(R.id.plateNo);
+                shuttleText.setText(shuttleController.getShuttleLicensePlateNo());
+
+                RouteStops routeStops = new RouteStops();
+                routeStops.filterSelf(routeController.getRouteId());
+                new RouteStopsController(routeStops, this).updateView();
+
+                setOnDuty(data.getBooleanExtra("onDuty", false));
             }
         }
     }
