@@ -1,6 +1,6 @@
 # Meeting 2
 
-# Medium
+## Medium
 Discord
 
 ## Start
