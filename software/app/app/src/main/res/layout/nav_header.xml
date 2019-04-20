@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2019. Razor Sharp Software Solutions
+  ~
+  ~ Azel Daniel (816002285)
+  ~ Amanda Seenath (816002935)
+  ~ Michael Bristol (816003612)
+  ~
+  ~ INFO 3604
+  ~ Project
+  ~
+  ~ UWI Shuttle Routing and Tracking System
+  -->
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/colorPrimary">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="25dp"
+        android:background="?attr/selectableItemBackground">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:layout_weight="1">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textAppearance="@android:style/TextAppearance.Medium.Inverse"
+                android:textStyle="bold"
+                android:id="@+id/navName"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textAppearance="@android:style/TextAppearance.Small.Inverse"
+                android:id="@+id/navType"
+                android:layout_marginTop="6dp"
+                android:textSize="11sp"
+                android:textAllCaps="true"
+                android:textStyle="bold"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textAppearance="@android:style/TextAppearance.Small.Inverse"
+                android:gravity="top"
+                android:textSize="12sp"
+                android:id="@+id/navEmail"
+                android:layout_marginTop="5dp"/>
+        </LinearLayout>
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/edit_user"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:fabSize="mini"
+            android:src="@drawable/round_edit_24"
+            app:backgroundTint="@color/colorPrimaryDark"
+            android:layout_marginRight="16dp"
+            android:layout_gravity="center_vertical"
+            app:elevation="0dp"
+            android:tint="@android:color/white"/>
+    </LinearLayout>
+</RelativeLayout>

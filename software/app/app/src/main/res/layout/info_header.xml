@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2019. Razor Sharp Software Solutions
+  ~
+  ~ Azel Daniel (816002285)
+  ~ Amanda Seenath (816002935)
+  ~ Michael Bristol (816003612)
+  ~
+  ~ INFO 3604
+  ~ Project
+  ~
+  ~ UWI Shuttle Routing and Tracking System
+  -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="54dp"
+        android:background="@color/colorPrimary"
+        android:orientation="vertical">
+        <ImageView
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:src="@drawable/round_help_24"
+            android:layout_gravity="center"
+            android:tint="@android:color/white"/>
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="24dp"
+        android:paddingLeft="24dp"
+        android:paddingRight="24dp"
+        android:paddingBottom="16dp"
+        android:gravity="bottom"
+        style="@style/TextAppearance.MaterialComponents.Headline6"
+        android:id="@+id/title"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="24dp"
+        android:paddingRight="24dp"
+        android:gravity="bottom"
+        style="@style/TextAppearance.MaterialComponents.Body1"
+        android:id="@+id/message"
+        android:scrollbars = "vertical"/>
+</LinearLayout>

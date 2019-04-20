@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2019. Razor Sharp Software Solutions
+  ~
+  ~ Azel Daniel (816002285)
+  ~ Amanda Seenath (816002935)
+  ~ Michael Bristol (816003612)
+  ~
+  ~ INFO 3604
+  ~ Project
+  ~
+  ~ UWI Shuttle Routing and Tracking System
+  -->
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".views.SplashActivity"
+    android:background="@color/colorPrimary">
+    <pl.bclogic.pulsator4droid.library.PulsatorLayout
+        android:id="@+id/pulsator"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        app:pulse_count="2"
+        app:pulse_duration="800"
+        app:pulse_repeat="0"
+        app:pulse_color="@android:color/white"
+        app:pulse_startFromScratch="false"
+        app:pulse_interpolator="Linear"
+        android:layout_centerInParent="true">
+    </pl.bclogic.pulsator4droid.library.PulsatorLayout>
+    <ImageView
+        android:id="@+id/icon"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:src="@drawable/ic_launcher"
+        android:layout_centerInParent="true"/>
+
+</RelativeLayout>
