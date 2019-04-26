@@ -2,8 +2,8 @@
  * Copyright (c) 2019. Razor Sharp Software Solutions
  *
  * Azel Daniel (816002285)
- * Amanda Seenath (816002935)
  * Michael Bristol (816003612)
+ * Amanda Seenath (816002935)
  *
  * INFO 3604
  * Project
@@ -17,12 +17,13 @@ import java.util.ArrayList;
 
 import edu.uwi.sta.srts.models.Stop;
 import edu.uwi.sta.srts.models.Stops;
-import edu.uwi.sta.srts.views.View;
+import edu.uwi.sta.srts.utils.Controller;
+import edu.uwi.sta.srts.utils.View;
 
-public class StopsController extends Controller{
+public class StopsController extends Controller {
 
     /**
-     * Constructor that requires the route model and its corresponding view
+     * Constructor that requires the stops model and its corresponding view
      * @param model The list of stop models
      * @param view The corresponding view
      */
@@ -34,7 +35,13 @@ public class StopsController extends Controller{
         return ((Stops)this.model).getStops();
     }
 
-    public StopController getStopController(int index, View view){
-        return new StopController(getStops().get(index), view);
+    /**
+     * Method that returns the stop controller for a given stop
+     * @param position The index of the stop
+     * @param view The view to link the controller to
+     * @return A newly created StopController object
+     */
+    public StopController getStopController(int position, View view){
+        return new StopController(getStops().get(position), view);
     }
 }

@@ -2,8 +2,8 @@
  * Copyright (c) 2019. Razor Sharp Software Solutions
  *
  * Azel Daniel (816002285)
- * Amanda Seenath (816002935)
  * Michael Bristol (816003612)
+ * Amanda Seenath (816002935)
  *
  * INFO 3604
  * Project
@@ -26,16 +26,16 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import edu.uwi.sta.srts.R;
 import edu.uwi.sta.srts.controllers.StopController;
-import edu.uwi.sta.srts.models.Model;
+import edu.uwi.sta.srts.utils.Model;
 import edu.uwi.sta.srts.models.Stop;
 import edu.uwi.sta.srts.utils.Utils;
+import edu.uwi.sta.srts.utils.View;
 
 public class ViewStop extends AppCompatActivity implements View, OnMapReadyCallback {
 

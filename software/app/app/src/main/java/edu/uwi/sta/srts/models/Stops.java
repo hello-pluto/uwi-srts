@@ -2,8 +2,8 @@
  * Copyright (c) 2019. Razor Sharp Software Solutions
  *
  * Azel Daniel (816002285)
- * Amanda Seenath (816002935)
  * Michael Bristol (816003612)
+ * Amanda Seenath (816002935)
  *
  * INFO 3604
  * Project
@@ -22,6 +22,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 import edu.uwi.sta.srts.utils.DatabaseHelper;
+import edu.uwi.sta.srts.utils.Model;
 
 public class Stops extends Model {
 

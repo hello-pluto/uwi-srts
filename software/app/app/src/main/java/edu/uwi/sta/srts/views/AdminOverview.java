@@ -35,7 +35,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import edu.uwi.sta.srts.R;
 import edu.uwi.sta.srts.controllers.UserController;
-import edu.uwi.sta.srts.models.Model;
+import edu.uwi.sta.srts.utils.Model;
 import edu.uwi.sta.srts.models.User;
 import edu.uwi.sta.srts.utils.InfoDialogHelper;
 import edu.uwi.sta.srts.utils.Utils;
@@ -49,9 +49,7 @@ public class AdminOverview extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private ActionBarDrawerToggle toggle;
-
     private Fragment fragment;
-
     private TextView toolbarText;
 
     @Override
@@ -103,10 +101,10 @@ public class AdminOverview extends AppCompatActivity
 
         View headerLayout = navigationView.getHeaderView(0);
 
-        TextView navName = (TextView) headerLayout.findViewById(R.id.navName);
-        TextView navEmail = (TextView) headerLayout.findViewById(R.id.navEmail);
-        TextView navType = (TextView)headerLayout.findViewById(R.id.navType);
-        FloatingActionButton navEditUser = (FloatingActionButton)headerLayout.findViewById(R.id.edit_user);
+        TextView navName = headerLayout.findViewById(R.id.navName);
+        TextView navEmail = headerLayout.findViewById(R.id.navEmail);
+        TextView navType = headerLayout.findViewById(R.id.navType);
+        FloatingActionButton navEditUser = headerLayout.findViewById(R.id.edit_user);
         navEditUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -130,28 +128,6 @@ public class AdminOverview extends AppCompatActivity
             new UserController(new User(FirebaseAuth.getInstance().getCurrentUser().getUid()), new UserView(navName, navType, navEmail));
         }catch (NullPointerException e){
             e.printStackTrace();
-        }
-    }
-
-    public class UserView implements edu.uwi.sta.srts.views.View {
-
-        TextView name;
-        TextView type;
-        TextView email;
-
-        private UserView(TextView name, TextView type, TextView email){
-            this.name = name;
-            this.type = type;
-            this.email = email;
-        }
-
-        @Override
-        public void update(Model model) {
-            if(model instanceof User && name != null && email != null){
-                this.name.setText(((User)model).getFullName());
-                this.email.setText(((User)model).getEmail());
-                this.type.setText("Administrator");
-            }
         }
     }
 
@@ -230,15 +206,57 @@ public class AdminOverview extends AppCompatActivity
         switch (item.getItemId()) {
             case R.id.help:
                 if(fragment instanceof RoutesFragment) {
-                    // TODO
                     InfoDialogHelper.showInfoDialog(this,
                             "Routes",
-                            "");
+                            "Click on the green button on the bottom right to add a new " +
+                                    "route or click on a route item in the list to view it in more detail.");
+                }else if(fragment instanceof DriversFragment){
+                    InfoDialogHelper.showInfoDialog(this,
+                            "Drivers",
+                            "Click on the green button on the bottom right to add a new " +
+                                    "driver or click on a driver item in the list to view it in more detail.");
+                }else if(fragment instanceof ShuttlesFragment){
+                    InfoDialogHelper.showInfoDialog(this,
+                            "Shuttles",
+                            "Click on the green button on the bottom right to add a new " +
+                                    "shuttle or click on a shuttle item in the list to view it in more detail.");
+                }else if(fragment instanceof StopsFragment){
+                    InfoDialogHelper.showInfoDialog(this,
+                            "Stops",
+                            "Click on the green button on the bottom right to add a new " +
+                                    "stop or click on a stop item in the list to view it in more detail.");
+                }else if(fragment instanceof AlertsFragment){
+                    InfoDialogHelper.showInfoDialog(this,
+                            "Alerts",
+                            "Click on the green button on the bottom right to add a new " +
+                                    "alert or click on a alert item in the list to view it in more detail.");
                 }
                 return true;
             default:
                 toggle.onOptionsItemSelected(item);
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public class UserView implements edu.uwi.sta.srts.utils.View {
+
+        TextView name;
+        TextView type;
+        TextView email;
+
+        private UserView(TextView name, TextView type, TextView email){
+            this.name = name;
+            this.type = type;
+            this.email = email;
+        }
+
+        @Override
+        public void update(Model model) {
+            if(model instanceof User && name != null && email != null){
+                this.name.setText(((User)model).getFullName());
+                this.email.setText(((User)model).getEmail());
+                this.type.setText("Administrator");
+            }
+        }
     }
 }

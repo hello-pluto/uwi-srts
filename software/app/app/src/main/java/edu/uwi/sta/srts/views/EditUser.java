@@ -37,10 +37,11 @@ import com.google.firebase.auth.FirebaseUser;
 
 import edu.uwi.sta.srts.R;
 import edu.uwi.sta.srts.controllers.UserController;
-import edu.uwi.sta.srts.models.Model;
+import edu.uwi.sta.srts.utils.Model;
 import edu.uwi.sta.srts.models.User;
 import edu.uwi.sta.srts.utils.UserType;
 import edu.uwi.sta.srts.utils.Utils;
+import edu.uwi.sta.srts.utils.View;
 
 public class EditUser extends AppCompatActivity implements View {
 
@@ -97,7 +98,7 @@ public class EditUser extends AppCompatActivity implements View {
         Utils.setUpActivations(this, passwordEditText, findViewById(R.id.passwordUnderline));
         Utils.setUpActivations(this, fullNameEditText, findViewById(R.id.fullnameUnderline));
 
-        TextView toolbarText = (TextView)findViewById(R.id.toolbarText);
+        TextView toolbarText = findViewById(R.id.toolbarText);
 
         if(isEditMode){
             update(user);
@@ -299,7 +300,6 @@ public class EditUser extends AppCompatActivity implements View {
             findViewById(R.id.emailDone).setVisibility(android.view.View.VISIBLE);
             findViewById(R.id.fullnameDone).setVisibility(android.view.View.VISIBLE);
             findViewById(R.id.userTypeDone).setVisibility(android.view.View.VISIBLE);
-
             findViewById(R.id.passwordLayout).setVisibility(android.view.View.GONE);
 
             emailEditText.setEnabled(false);

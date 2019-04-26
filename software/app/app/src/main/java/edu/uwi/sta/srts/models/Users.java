@@ -2,8 +2,8 @@
  * Copyright (c) 2019. Razor Sharp Software Solutions
  *
  * Azel Daniel (816002285)
- * Amanda Seenath (816002935)
  * Michael Bristol (816003612)
+ * Amanda Seenath (816002935)
  *
  * INFO 3604
  * Project
@@ -22,12 +22,12 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 import edu.uwi.sta.srts.utils.DatabaseHelper;
+import edu.uwi.sta.srts.utils.Model;
 import edu.uwi.sta.srts.utils.UserType;
 
 public class Users extends Model {
 
     private ArrayList<User> users =  new ArrayList<>();
-
     private UserType filter = null;
 
     /**
@@ -57,23 +57,6 @@ public class Users extends Model {
                 });
     }
 
-    public ArrayList<User> filter(UserType userType){
-
-        filter = userType;
-
-        ArrayList<User> users = new ArrayList<>();
-        for(User user: getUsers()){
-            if(user.getUserType() == userType){
-                users.add(user);
-            }
-        }
-
-        this.users.clear();
-        this.users.addAll(users);
-
-        return users;
-    }
-
     public ArrayList<User> getUsers() {
         return this.users;
     }
@@ -90,5 +73,26 @@ public class Users extends Model {
         for(User user: this.getUsers()){
             user.delete();
         }
+    }
+
+    /**
+     * Method that filters the list of users by a given user type
+     * @param userType The type of user to filter the users by
+     */
+    public ArrayList<User> filter(UserType userType){
+
+        filter = userType;
+
+        ArrayList<User> users = new ArrayList<>();
+        for(User user: getUsers()){
+            if(user.getUserType() == userType){
+                users.add(user);
+            }
+        }
+
+        this.users.clear();
+        this.users.addAll(users);
+
+        return users;
     }
 }

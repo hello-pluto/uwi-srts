@@ -1,3 +1,16 @@
+/*
+ * Copyright (c) 2019. Razor Sharp Software Solutions
+ *
+ * Azel Daniel (816002285)
+ * Michael Bristol (816003612)
+ * Amanda Seenath (816002935)
+ *
+ * INFO 3604
+ * Project
+ *
+ * UWI Shuttle Routing and Tracking System
+ */
+
 package edu.uwi.sta.srts.views;
 
 import android.Manifest;
@@ -30,7 +43,6 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.GroundOverlay;
 import com.google.android.gms.maps.model.GroundOverlayOptions;
@@ -47,14 +59,14 @@ import edu.uwi.sta.srts.controllers.RoutesController;
 import edu.uwi.sta.srts.controllers.UserController;
 import edu.uwi.sta.srts.controllers.ShuttleController;
 import edu.uwi.sta.srts.controllers.ShuttlesController;
-import edu.uwi.sta.srts.models.Model;
+import edu.uwi.sta.srts.utils.Model;
 import edu.uwi.sta.srts.models.Route;
 import edu.uwi.sta.srts.models.Routes;
 import edu.uwi.sta.srts.models.User;
 import edu.uwi.sta.srts.models.Shuttle;
 import edu.uwi.sta.srts.models.Shuttles;
-import edu.uwi.sta.srts.utils.DatabaseHelper;
 import edu.uwi.sta.srts.utils.Utils;
+import edu.uwi.sta.srts.utils.View;
 
 public class StudentOverview extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback, View {
 
@@ -100,7 +112,7 @@ public class StudentOverview extends AppCompatActivity implements NavigationView
             e.printStackTrace();
         }
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbarText = findViewById(R.id.toolbarText);
 
@@ -227,32 +239,6 @@ public class StudentOverview extends AppCompatActivity implements NavigationView
         hideShuttleDetails();
     }
 
-    public void updateEta(){
-        final TextView eta = findViewById(R.id.eta);
-        if(location != null && shuttleController!=null) {
-            int etaInMinutes = Utils.getEta(location.getLatitude(), location.getLongitude(),
-                    shuttleController.getShuttleLocation().getLatitude(), shuttleController.getShuttleLocation().getLongitude());
-
-            if(etaTimer != null){
-                etaTimer.cancel();
-            }
-
-            etaTimer = new CountDownTimer(etaInMinutes*60*1000, 60*1000) {
-                @Override
-                public void onTick(long millisUntilFinished) {
-                    etaText = Utils.formatEta((int)millisUntilFinished/60/1000);
-                    eta.setText(etaText);
-                }
-
-                @Override
-                public void onFinish() {
-                    eta.setText("a few seconds away");
-                }
-            };
-            etaTimer.start();
-        }
-    }
-
     @Override
     public void onMapReady(final GoogleMap googleMap) {
 
@@ -344,67 +330,6 @@ public class StudentOverview extends AppCompatActivity implements NavigationView
         }
     }
 
-    private void populateMap(){
-
-        googleMap.clear();
-        groundOverlays.clear();
-
-        LatLngBounds.Builder builder = new LatLngBounds.Builder();
-
-        boolean hasShuttles = false;
-
-        for(Shuttle shuttle: shuttlesController.getShuttles()){
-
-            if((shuttle.isOnDuty() && routeIndex == -1) ||
-                    (shuttle.isOnDuty() && shuttle.getRouteId().equals(routesController.getRoutes().get(routeIndex).getId()))) {
-
-                LatLng latLng = new LatLng(shuttle.getLocation().getLatitude(), shuttle.getLocation().getLongitude());
-
-                groundOverlays.add(googleMap.addGroundOverlay(new GroundOverlayOptions()
-                        .image(Utils.bitmapDescriptorFromVector(this, R.drawable.shuttle))
-                        .bearing(shuttle.getRotation())
-                        .position(latLng,20)
-                        .clickable(true)));
-
-                latLngShuttleHashMap.put(latLng, shuttle);
-
-                builder.include(latLng);
-
-                hasShuttles = true;
-
-                if(shuttleController != null && shuttleController.getModel().getId().equals(shuttle.getId())){
-                    shuttleController = new ShuttleController(shuttle, null);
-                    updateEta();
-                }
-            }
-        }
-
-        if(hasShuttles) {
-
-            LatLngBounds bounds = builder.build();
-
-            int width = getResources().getDisplayMetrics().widthPixels;
-            int height = getResources().getDisplayMetrics().heightPixels;
-            int padding = (int) (width * 0.30); // offset from edges of the map 10% of screen
-
-            CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, width, height, padding);
-
-            this.googleMap.animateCamera(cu);
-        }else{
-            final Snackbar snackbar = Snackbar.make(findViewById(R.id.content_frame),
-                    "No shuttles are available for this route.", Snackbar.LENGTH_INDEFINITE);
-            snackbar.setAction("Dismiss", new android.view.View.OnClickListener() {
-                @Override
-                public void onClick(android.view.View v) {
-                    snackbar.dismiss();
-                }
-            });
-            snackbar.show();
-            hideShuttleDetails();
-        }
-
-    }
-
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -468,28 +393,6 @@ public class StudentOverview extends AppCompatActivity implements NavigationView
         return super.onOptionsItemSelected(item);
     }
 
-    public class UserView implements edu.uwi.sta.srts.views.View {
-
-        TextView name;
-        TextView type;
-        TextView email;
-
-        private UserView(TextView name, TextView type, TextView email){
-            this.name = name;
-            this.type = type;
-            this.email = email;
-        }
-
-        @Override
-        public void update(Model model) {
-            if(model instanceof User && name != null && email != null){
-                this.name.setText(((User)model).getFullName());
-                this.email.setText(((User)model).getEmail());
-                this.type.setText("Student");
-            }
-        }
-    }
-
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[],
                                            @NonNull int[] grantResults) {
@@ -511,6 +414,101 @@ public class StudentOverview extends AppCompatActivity implements NavigationView
         }
     }
 
+    /**
+     * Method that updates the ETA ui for a given shuttle
+     */
+    public void updateEta(){
+        final TextView eta = findViewById(R.id.eta);
+        if(location != null && shuttleController!=null) {
+            int etaInMinutes = Utils.getEta(location.getLatitude(), location.getLongitude(),
+                    shuttleController.getShuttleLocation().getLatitude(), shuttleController.getShuttleLocation().getLongitude());
+
+            if(etaTimer != null){
+                etaTimer.cancel();
+            }
+
+            etaTimer = new CountDownTimer(etaInMinutes*60*1000, 60*1000) {
+                @Override
+                public void onTick(long millisUntilFinished) {
+                    etaText = Utils.formatEta((int)millisUntilFinished/60/1000);
+                    eta.setText(etaText);
+                }
+
+                @Override
+                public void onFinish() {
+                    eta.setText("a few seconds away");
+                }
+            };
+            etaTimer.start();
+        }
+    }
+
+    /**
+     * Method that populates the map with shuttles and other information
+     */
+    private void populateMap(){
+
+        googleMap.clear();
+        groundOverlays.clear();
+
+        LatLngBounds.Builder builder = new LatLngBounds.Builder();
+
+        boolean hasShuttles = false;
+
+        for(Shuttle shuttle: shuttlesController.getShuttles()){
+
+            if((shuttle.isOnDuty() && routeIndex == -1) ||
+                    (shuttle.isOnDuty() && shuttle.getRouteId().equals(routesController.getRoutes().get(routeIndex).getId()))) {
+
+                LatLng latLng = new LatLng(shuttle.getLocation().getLatitude(), shuttle.getLocation().getLongitude());
+
+                groundOverlays.add(googleMap.addGroundOverlay(new GroundOverlayOptions()
+                        .image(Utils.bitmapDescriptorFromVector(this, R.drawable.shuttle))
+                        .bearing(shuttle.getRotation())
+                        .position(latLng,20)
+                        .clickable(true)));
+
+                latLngShuttleHashMap.put(latLng, shuttle);
+
+                builder.include(latLng);
+
+                hasShuttles = true;
+
+                if(shuttleController != null && shuttleController.getModel().getId().equals(shuttle.getId())){
+                    shuttleController = new ShuttleController(shuttle, null);
+                    updateEta();
+                }
+            }
+        }
+
+        if(hasShuttles) {
+
+            LatLngBounds bounds = builder.build();
+
+            int width = getResources().getDisplayMetrics().widthPixels;
+            int height = getResources().getDisplayMetrics().heightPixels;
+            int padding = (int) (width * 0.30); // offset from edges of the map 10% of screen
+
+            CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, width, height, padding);
+
+            this.googleMap.animateCamera(cu);
+        }else{
+            final Snackbar snackbar = Snackbar.make(findViewById(R.id.content_frame),
+                    "No shuttles are available for this route.", Snackbar.LENGTH_INDEFINITE);
+            snackbar.setAction("Dismiss", new android.view.View.OnClickListener() {
+                @Override
+                public void onClick(android.view.View v) {
+                    snackbar.dismiss();
+                }
+            });
+            snackbar.show();
+            hideShuttleDetails();
+        }
+    }
+
+    /**
+     * Method that hides the shuttle information UI
+     */
     public void hideShuttleDetails(){
         etaTimer = null;
         shuttleDetails.animate().translationY(Utils.convertDpToPixel(40, getApplicationContext()))
@@ -524,11 +522,36 @@ public class StudentOverview extends AppCompatActivity implements NavigationView
         shuttleDetailsVisible = false;
     }
 
+    /**
+     * Method that shows the shuttle information UI
+     */
     public void showShuttleDetails(){
         shuttleDetails.animate().translationY(0).setInterpolator(new AccelerateInterpolator());;
         filter.animate().translationY(0).setInterpolator(new AccelerateInterpolator());
         shuttleDetailsVisible =true;
 
         updateEta();
+    }
+
+    public class UserView implements View {
+
+        TextView name;
+        TextView type;
+        TextView email;
+
+        private UserView(TextView name, TextView type, TextView email){
+            this.name = name;
+            this.type = type;
+            this.email = email;
+        }
+
+        @Override
+        public void update(Model model) {
+            if(model instanceof User && name != null && email != null){
+                this.name.setText(((User)model).getFullName());
+                this.email.setText(((User)model).getEmail());
+                this.type.setText("Student");
+            }
+        }
     }
 }

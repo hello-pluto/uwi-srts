@@ -2,8 +2,8 @@
  * Copyright (c) 2019. Razor Sharp Software Solutions
  *
  * Azel Daniel (816002285)
- * Amanda Seenath (816002935)
  * Michael Bristol (816003612)
+ * Amanda Seenath (816002935)
  *
  * INFO 3604
  * Project
@@ -32,13 +32,14 @@ import edu.uwi.sta.srts.controllers.RouteController;
 import edu.uwi.sta.srts.controllers.RouteStopsController;
 import edu.uwi.sta.srts.controllers.StopController;
 import edu.uwi.sta.srts.controllers.StopsController;
-import edu.uwi.sta.srts.models.Model;
+import edu.uwi.sta.srts.utils.Model;
 import edu.uwi.sta.srts.models.Route;
 import edu.uwi.sta.srts.models.RouteStop;
 import edu.uwi.sta.srts.models.RouteStops;
 import edu.uwi.sta.srts.models.Stop;
 import edu.uwi.sta.srts.models.Stops;
 import edu.uwi.sta.srts.utils.Utils;
+import edu.uwi.sta.srts.utils.View;
 
 public class EditRoute extends AppCompatActivity implements View {
 
@@ -59,7 +60,7 @@ public class EditRoute extends AppCompatActivity implements View {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_route);
 
-        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        final Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         try {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -235,6 +236,7 @@ public class EditRoute extends AppCompatActivity implements View {
     }
 
     public void redrawStops(final RouteStops model){
+
         LinearLayout ll = findViewById(R.id.stopsLayoutAdd);
         ll.removeAllViews();
 
@@ -281,7 +283,7 @@ public class EditRoute extends AppCompatActivity implements View {
         }
     }
 
-    public class StopView implements edu.uwi.sta.srts.views.View {
+    public class StopView implements View {
 
         TextView textView;
 

@@ -26,7 +26,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import edu.uwi.sta.srts.R;
-import edu.uwi.sta.srts.models.Model;
+import edu.uwi.sta.srts.utils.Model;
 import edu.uwi.sta.srts.models.Users;
 import edu.uwi.sta.srts.utils.OnListFragmentInteractionListener;
 import edu.uwi.sta.srts.utils.UserType;
@@ -55,7 +55,7 @@ public class DriversFragment extends Fragment {
 
         View empty = view.findViewById(R.id.empty);
 
-        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.list);
+        RecyclerView recyclerView = view.findViewById(R.id.list);
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
 
         Users drivers = new Users();

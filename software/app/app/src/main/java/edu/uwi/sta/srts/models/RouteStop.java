@@ -2,8 +2,8 @@
  * Copyright (c) 2019. Razor Sharp Software Solutions
  *
  * Azel Daniel (816002285)
- * Amanda Seenath (816002935)
  * Michael Bristol (816003612)
+ * Amanda Seenath (816002935)
  *
  * INFO 3604
  * Project
@@ -21,6 +21,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
 import edu.uwi.sta.srts.utils.DatabaseHelper;
+import edu.uwi.sta.srts.utils.Model;
 
 public class RouteStop extends Model {
 
@@ -38,7 +39,7 @@ public class RouteStop extends Model {
     }
 
     /**
-     * Constructor that fetches the route stop corresponding to the given routeStopId
+     * Constructor that fetches the route stop corresponding to the given route stop id
      * @param routeStopId The id of the route stop to fetch
      */
     public RouteStop(String routeStopId){
@@ -65,18 +66,6 @@ public class RouteStop extends Model {
 
                     }
                 });
-    }
-
-    /**
-     * Constructor that creates a new route stop given its order and corresponding route and stop ids
-     * @param order The order of the stop on the route
-     * @param routeId The corresponding route's id
-     * @param stopId The corresponding stop's id
-     */
-    public RouteStop(int order, String routeId, String stopId) {
-        this.order = order;
-        this.routeId = routeId;
-        this.stopId = stopId;
     }
 
     public int getOrder() {

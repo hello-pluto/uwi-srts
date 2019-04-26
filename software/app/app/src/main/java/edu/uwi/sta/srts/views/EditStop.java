@@ -2,8 +2,8 @@
  * Copyright (c) 2019. Razor Sharp Software Solutions
  *
  * Azel Daniel (816002285)
- * Amanda Seenath (816002935)
  * Michael Bristol (816003612)
+ * Amanda Seenath (816002935)
  *
  * INFO 3604
  * Project
@@ -33,9 +33,10 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import edu.uwi.sta.srts.R;
 import edu.uwi.sta.srts.controllers.StopController;
-import edu.uwi.sta.srts.models.Model;
+import edu.uwi.sta.srts.utils.Model;
 import edu.uwi.sta.srts.models.Stop;
 import edu.uwi.sta.srts.utils.Utils;
+import edu.uwi.sta.srts.utils.View;
 
 public class EditStop extends AppCompatActivity implements View, OnMapReadyCallback {
 
@@ -175,13 +176,11 @@ public class EditStop extends AppCompatActivity implements View, OnMapReadyCallb
         this.isReady = true;
 
         this.googleMap = googleMap;
-
         this.googleMap.setBuildingsEnabled(true);
         this.googleMap.getUiSettings().setZoomControlsEnabled(true);
         this.googleMap.getUiSettings().setCompassEnabled(true);
         this.googleMap.getUiSettings().setMapToolbarEnabled(true);
         this.googleMap.setMapStyle(new MapStyleOptions(Utils.getMapStyle()));
-
         this.googleMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
             @Override
             public void onMapLongClick(LatLng latLng) {

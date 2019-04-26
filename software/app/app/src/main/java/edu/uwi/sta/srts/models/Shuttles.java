@@ -2,8 +2,8 @@
  * Copyright (c) 2019. Razor Sharp Software Solutions
  *
  * Azel Daniel (816002285)
- * Amanda Seenath (816002935)
  * Michael Bristol (816003612)
+ * Amanda Seenath (816002935)
  *
  * INFO 3604
  * Project
@@ -22,6 +22,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 import edu.uwi.sta.srts.utils.DatabaseHelper;
+import edu.uwi.sta.srts.utils.Model;
 
 public class Shuttles extends Model {
 
@@ -80,25 +81,16 @@ public class Shuttles extends Model {
                 });
     }
 
+    /**
+     * Method that filters the list of shuttles for a given route id
+     * @param routeId The id of the route to get shuttles for
+     */
     public void filter(String routeId){
 
         ArrayList<Shuttle> shuttles = new ArrayList<>();
 
         for(Shuttle shuttle : getShuttles()){
             if(shuttle.getRouteId().equals(routeId)){
-                shuttles.add(shuttle);
-            }
-        }
-
-        this.getShuttles().clear();
-        this.getShuttles().addAll(shuttles);
-    }
-
-    public void filter(boolean onDuty){
-        ArrayList<Shuttle> shuttles = new ArrayList<>();
-
-        for(Shuttle shuttle : getShuttles()){
-            if(shuttle.isOnDuty() == onDuty){
                 shuttles.add(shuttle);
             }
         }
@@ -123,5 +115,22 @@ public class Shuttles extends Model {
         for(Shuttle shuttle: this.getShuttles()){
             shuttle.delete();
         }
+    }
+
+    /**
+     * Method that filters the list of shuttles for a given on duty status
+     * @param onDuty Whether to filter by shuttles that are on duty or not
+     */
+    public void filter(boolean onDuty){
+        ArrayList<Shuttle> shuttles = new ArrayList<>();
+
+        for(Shuttle shuttle : getShuttles()){
+            if(shuttle.isOnDuty() == onDuty){
+                shuttles.add(shuttle);
+            }
+        }
+
+        this.getShuttles().clear();
+        this.getShuttles().addAll(shuttles);
     }
 }

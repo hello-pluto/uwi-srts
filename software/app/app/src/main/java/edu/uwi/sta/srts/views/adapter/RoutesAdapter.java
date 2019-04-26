@@ -2,8 +2,8 @@
  * Copyright (c) 2019. Razor Sharp Software Solutions
  *
  * Azel Daniel (816002285)
- * Amanda Seenath (816002935)
  * Michael Bristol (816003612)
+ * Amanda Seenath (816002935)
  *
  * INFO 3604
  * Project
@@ -24,13 +24,13 @@ import edu.uwi.sta.srts.R;
 import edu.uwi.sta.srts.controllers.RouteController;
 import edu.uwi.sta.srts.controllers.RoutesController;
 import edu.uwi.sta.srts.controllers.ShuttlesController;
-import edu.uwi.sta.srts.models.Model;
+import edu.uwi.sta.srts.utils.Model;
 import edu.uwi.sta.srts.models.Routes;
 import edu.uwi.sta.srts.models.Shuttle;
 import edu.uwi.sta.srts.models.Shuttles;
 import edu.uwi.sta.srts.utils.OnListFragmentInteractionListener;
 
-public class RoutesAdapter extends RecyclerView.Adapter<RoutesAdapter.ViewHolder> implements edu.uwi.sta.srts.views.View {
+public class RoutesAdapter extends RecyclerView.Adapter<RoutesAdapter.ViewHolder> implements edu.uwi.sta.srts.utils.View {
 
     private final RoutesController routesController;
     private final OnListFragmentInteractionListener mListener;
@@ -111,7 +111,7 @@ public class RoutesAdapter extends RecyclerView.Adapter<RoutesAdapter.ViewHolder
         }
     }
 
-    public class ShuttlesView implements edu.uwi.sta.srts.views.View {
+    public class ShuttlesView implements edu.uwi.sta.srts.utils.View {
 
         TextView textView;
 

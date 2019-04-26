@@ -2,8 +2,8 @@
  * Copyright (c) 2019. Razor Sharp Software Solutions
  *
  * Azel Daniel (816002285)
- * Amanda Seenath (816002935)
  * Michael Bristol (816003612)
+ * Amanda Seenath (816002935)
  *
  * INFO 3604
  * Project
@@ -21,15 +21,14 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
 import edu.uwi.sta.srts.utils.DatabaseHelper;
+import edu.uwi.sta.srts.utils.Model;
 import edu.uwi.sta.srts.utils.UserType;
 import edu.uwi.sta.srts.utils.Utils;
 
 public class User extends Model {
 
     private String email;
-
     private String fullName;
-
     private UserType userType;
 
     /**
@@ -40,8 +39,8 @@ public class User extends Model {
     }
 
     /**
-     * Constructor that fetches the user corresponding to the given userId
-     * @param userId The userId of the user to fetch
+     * Constructor that fetches the user corresponding to the given user id
+     * @param userId The user id of the user to fetch
      */
     public User(String userId){
         super();

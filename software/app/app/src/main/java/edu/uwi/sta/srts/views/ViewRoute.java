@@ -2,8 +2,8 @@
  * Copyright (c) 2019. Razor Sharp Software Solutions
  *
  * Azel Daniel (816002285)
- * Amanda Seenath (816002935)
  * Michael Bristol (816003612)
+ * Amanda Seenath (816002935)
  *
  * INFO 3604
  * Project
@@ -28,18 +28,18 @@ import edu.uwi.sta.srts.controllers.RouteController;
 import edu.uwi.sta.srts.controllers.RouteStopsController;
 import edu.uwi.sta.srts.controllers.ShuttlesController;
 import edu.uwi.sta.srts.controllers.StopController;
-import edu.uwi.sta.srts.models.Model;
+import edu.uwi.sta.srts.utils.Model;
 import edu.uwi.sta.srts.models.Route;
 import edu.uwi.sta.srts.models.RouteStop;
 import edu.uwi.sta.srts.models.RouteStops;
 import edu.uwi.sta.srts.models.Shuttles;
 import edu.uwi.sta.srts.models.Stop;
+import edu.uwi.sta.srts.utils.View;
 
 public class ViewRoute extends AppCompatActivity implements View {
 
     private RouteController routeController;
     private LinearLayout ll;
-
     private boolean loaded = false;
 
     @Override
@@ -108,7 +108,7 @@ public class ViewRoute extends AppCompatActivity implements View {
         }
     }
 
-    public class StopView implements edu.uwi.sta.srts.views.View {
+    public class StopView implements View {
 
         TextView textView;
 
@@ -123,7 +123,7 @@ public class ViewRoute extends AppCompatActivity implements View {
             }
         }
     }
-    public class ShuttlesView implements edu.uwi.sta.srts.views.View {
+    public class ShuttlesView implements View {
 
         TextView textView;
 

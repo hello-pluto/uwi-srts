@@ -2,8 +2,8 @@
  * Copyright (c) 2019. Razor Sharp Software Solutions
  *
  * Azel Daniel (816002285)
- * Amanda Seenath (816002935)
  * Michael Bristol (816003612)
+ * Amanda Seenath (816002935)
  *
  * INFO 3604
  * Project
@@ -26,7 +26,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import edu.uwi.sta.srts.R;
-import edu.uwi.sta.srts.models.Model;
+import edu.uwi.sta.srts.utils.Model;
 import edu.uwi.sta.srts.models.Shuttles;
 import edu.uwi.sta.srts.utils.OnListFragmentInteractionListener;
 import edu.uwi.sta.srts.views.adapter.ShuttlesAdapter;
@@ -35,7 +35,6 @@ import edu.uwi.sta.srts.views.ViewShuttle;
 public class ShuttlesFragment extends Fragment {
 
     private OnListFragmentInteractionListener listener;
-
     private boolean isAdmin;
 
     public ShuttlesFragment() {}

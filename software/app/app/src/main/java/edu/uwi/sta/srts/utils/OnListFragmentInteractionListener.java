@@ -2,8 +2,8 @@
  * Copyright (c) 2019. Razor Sharp Software Solutions
  *
  * Azel Daniel (816002285)
- * Amanda Seenath (816002935)
  * Michael Bristol (816003612)
+ * Amanda Seenath (816002935)
  *
  * INFO 3604
  * Project
@@ -13,8 +13,11 @@
 
 package edu.uwi.sta.srts.utils;
 
-import edu.uwi.sta.srts.models.Model;
-
 public interface OnListFragmentInteractionListener {
+
+    /**
+     * Method that is called when a click is detected on a recycler view list item
+     * @param model The model associated with the recycler view list item
+     */
     void onListFragmentInteraction(Model model);
 }

@@ -2,8 +2,8 @@
  * Copyright (c) 2019. Razor Sharp Software Solutions
  *
  * Azel Daniel (816002285)
- * Amanda Seenath (816002935)
  * Michael Bristol (816003612)
+ * Amanda Seenath (816002935)
  *
  * INFO 3604
  * Project
@@ -40,15 +40,16 @@ import edu.uwi.sta.srts.controllers.RoutesController;
 import edu.uwi.sta.srts.controllers.ShuttleController;
 import edu.uwi.sta.srts.controllers.ShuttlesController;
 import edu.uwi.sta.srts.controllers.UserController;
-import edu.uwi.sta.srts.models.Model;
+import edu.uwi.sta.srts.utils.Model;
 import edu.uwi.sta.srts.models.Route;
 import edu.uwi.sta.srts.models.Routes;
 import edu.uwi.sta.srts.models.Shuttle;
 import edu.uwi.sta.srts.models.Shuttles;
 import edu.uwi.sta.srts.models.User;
 import edu.uwi.sta.srts.utils.Utils;
+import edu.uwi.sta.srts.utils.View;
 
-public class DriverSetup extends AppCompatActivity implements View{
+public class DriverSetup extends AppCompatActivity implements View {
 
     private TextView toolbarText;
     private LinearLayout shuttlesLayout, routesLayout;

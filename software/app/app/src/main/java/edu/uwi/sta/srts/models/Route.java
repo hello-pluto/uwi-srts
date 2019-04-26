@@ -2,8 +2,8 @@
  * Copyright (c) 2019. Razor Sharp Software Solutions
  *
  * Azel Daniel (816002285)
- * Amanda Seenath (816002935)
  * Michael Bristol (816003612)
+ * Amanda Seenath (816002935)
  *
  * INFO 3604
  * Project
@@ -21,11 +21,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
 import edu.uwi.sta.srts.utils.DatabaseHelper;
+import edu.uwi.sta.srts.utils.Model;
 
 public class Route extends Model {
 
     private String name;
-
     private int frequency;
 
     /**
@@ -36,8 +36,8 @@ public class Route extends Model {
     }
 
     /**
-     * Constructor that fetches the route corresponding to the given routeId
-     * @param routeId The routeId of the route to fetch
+     * Constructor that fetches the route corresponding to the given route id
+     * @param routeId The route id of the route to fetch
      */
     public Route(String routeId){
         super();

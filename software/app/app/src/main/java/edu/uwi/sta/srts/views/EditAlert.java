@@ -2,8 +2,8 @@
  * Copyright (c) 2019. Razor Sharp Software Solutions
  *
  * Azel Daniel (816002285)
- * Amanda Seenath (816002935)
  * Michael Bristol (816003612)
+ * Amanda Seenath (816002935)
  *
  * INFO 3604
  * Project
@@ -27,8 +27,9 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import edu.uwi.sta.srts.R;
 import edu.uwi.sta.srts.controllers.AlertController;
 import edu.uwi.sta.srts.models.Alert;
-import edu.uwi.sta.srts.models.Model;
+import edu.uwi.sta.srts.utils.Model;
 import edu.uwi.sta.srts.utils.Utils;
+import edu.uwi.sta.srts.utils.View;
 
 public class EditAlert extends AppCompatActivity implements View {
 
@@ -44,7 +45,7 @@ public class EditAlert extends AppCompatActivity implements View {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_alert);
 
-        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        final Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         try {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -52,7 +53,7 @@ public class EditAlert extends AppCompatActivity implements View {
             e.printStackTrace();
         }
 
-        TextView toolbarText = (TextView)findViewById(R.id.toolbarText);
+        TextView toolbarText = findViewById(R.id.toolbarText);
 
         Alert alert = (Alert) getIntent().getSerializableExtra("alert");
 
@@ -64,8 +65,8 @@ public class EditAlert extends AppCompatActivity implements View {
         alertController = new AlertController(alert, this);
 
         android.view.View done = findViewById(R.id.done);
-        titleEditText = (EditText) findViewById(R.id.title);
-        messageEditText = (EditText) findViewById(R.id.message);
+        titleEditText = findViewById(R.id.title);
+        messageEditText = findViewById(R.id.message);
 
         Utils.setUpActivations(this, titleEditText, findViewById(R.id.titleUnderline));
         Utils.setUpActivations(this, messageEditText, findViewById(R.id.messageUnderline));
@@ -168,7 +169,6 @@ public class EditAlert extends AppCompatActivity implements View {
 
             findViewById(R.id.titleDone).setVisibility(android.view.View.VISIBLE);
             findViewById(R.id.messageDone).setVisibility(android.view.View.VISIBLE);
-
             findViewById(R.id.outline1).setVisibility(android.view.View.INVISIBLE);
             findViewById(R.id.outline2).setVisibility(android.view.View.INVISIBLE);
             findViewById(R.id.outline3).setVisibility(android.view.View.INVISIBLE);

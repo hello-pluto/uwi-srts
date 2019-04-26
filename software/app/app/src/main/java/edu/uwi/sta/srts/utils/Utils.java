@@ -2,8 +2,8 @@
  * Copyright (c) 2019. Razor Sharp Software Solutions
  *
  * Azel Daniel (816002285)
- * Amanda Seenath (816002935)
  * Michael Bristol (816003612)
+ * Amanda Seenath (816002935)
  *
  * INFO 3604
  * Project
@@ -34,6 +34,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import edu.uwi.sta.srts.R;
 
 public class Utils {
+
     /**
      * This method converts dp unit to equivalent pixels, depending on device density.
      *
@@ -107,7 +108,6 @@ public class Utils {
      * @param long1 The longitude of the first location
      * @param lat2 The latitude of the second location
      * @param long2 The longitude of the second location
-     *
      * @return The eta in minutes
      */
     public static int getEta(double lat1, double long1, double lat2, double long2){
@@ -148,6 +148,11 @@ public class Utils {
         return ColorUtils.blendARGB(Color.parseColor("#fbc02d"), Color.parseColor("#f44336"), urgency/5);
     }
 
+    /**
+     * Method that creates a Snackbar anchored to a given view and shows it when the application
+     * does not have access to the internet
+     * @param view The view to anchor the snackbar to
+     */
     public static void setupOfflineSnackbarListener(View view){
         final Snackbar offlineSnackbar = Snackbar.make(view,
                 "No internet. All changes saved locally.", Snackbar.LENGTH_INDEFINITE);
@@ -157,7 +162,6 @@ public class Utils {
                 offlineSnackbar.dismiss();
             }
         });
-
         DatabaseHelper.attachIsOnlineListener(offlineSnackbar);
     }
 

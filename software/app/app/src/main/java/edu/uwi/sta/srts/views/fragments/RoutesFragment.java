@@ -2,8 +2,8 @@
  * Copyright (c) 2019. Razor Sharp Software Solutions
  *
  * Azel Daniel (816002285)
- * Amanda Seenath (816002935)
  * Michael Bristol (816003612)
+ * Amanda Seenath (816002935)
  *
  * INFO 3604
  * Project
@@ -26,7 +26,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import edu.uwi.sta.srts.R;
-import edu.uwi.sta.srts.models.Model;
+import edu.uwi.sta.srts.utils.Model;
 import edu.uwi.sta.srts.models.Route;
 import edu.uwi.sta.srts.models.Routes;
 import edu.uwi.sta.srts.utils.OnListFragmentInteractionListener;
@@ -36,7 +36,6 @@ import edu.uwi.sta.srts.views.adapter.RoutesAdapter;
 public class RoutesFragment extends Fragment {
 
     private OnListFragmentInteractionListener listener;
-
     private boolean isAdmin;
 
     public RoutesFragment() {}
@@ -66,7 +65,7 @@ public class RoutesFragment extends Fragment {
             @Override
             public void onListFragmentInteraction(Model model) {
                 Intent intent = new Intent(getContext(), ViewRoute.class);
-                intent.putExtra("route", (Route)model);
+                intent.putExtra("route", model);
                 intent.putExtra("isAdmin", isAdmin);
                 startActivity(intent);
             }

@@ -2,8 +2,8 @@
  * Copyright (c) 2019. Razor Sharp Software Solutions
  *
  * Azel Daniel (816002285)
- * Amanda Seenath (816002935)
  * Michael Bristol (816003612)
+ * Amanda Seenath (816002935)
  *
  * INFO 3604
  * Project
@@ -25,12 +25,12 @@ import com.google.firebase.database.ValueEventListener;
 public class DatabaseHelper {
 
     private static DatabaseHelper instance;
-
     private static FirebaseDatabase database;
 
-    private DatabaseHelper(){
-
-    }
+    /**
+     * Private singleton constructor
+     */
+    private DatabaseHelper(){}
 
     public static DatabaseHelper getInstance() {
         if(instance == null){
@@ -41,10 +41,19 @@ public class DatabaseHelper {
         return instance;
     }
 
+    /**
+     * Method that returns the Firebase database reference for a given location in the database
+     * @param location The path in the database to get the reference for
+     * @return A DatabaseReference object at the given location
+     */
     public DatabaseReference getDatabaseReference(String location){
         return database.getReference(location);
     }
 
+    /**
+     * Method that shows a Snackbar whenever the internet connection is not available to the application
+     * @param offlineSnackbar The Snackbar notification to show when offline
+     */
     public static void attachIsOnlineListener(final Snackbar offlineSnackbar){
         getInstance().getDatabaseReference(".info/connected").addValueEventListener(new ValueEventListener() {
             @Override

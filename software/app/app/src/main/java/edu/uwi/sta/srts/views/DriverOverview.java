@@ -2,8 +2,8 @@
  * Copyright (c) 2019. Razor Sharp Software Solutions
  *
  * Azel Daniel (816002285)
- * Amanda Seenath (816002935)
  * Michael Bristol (816003612)
+ * Amanda Seenath (816002935)
  *
  * INFO 3604
  * Project
@@ -53,7 +53,6 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
@@ -75,7 +74,7 @@ import edu.uwi.sta.srts.controllers.RouteStopsController;
 import edu.uwi.sta.srts.controllers.ShuttleController;
 import edu.uwi.sta.srts.controllers.StopController;
 import edu.uwi.sta.srts.controllers.UserController;
-import edu.uwi.sta.srts.models.Model;
+import edu.uwi.sta.srts.utils.Model;
 import edu.uwi.sta.srts.models.Route;
 import edu.uwi.sta.srts.models.RouteStop;
 import edu.uwi.sta.srts.models.RouteStops;
@@ -84,6 +83,7 @@ import edu.uwi.sta.srts.models.Stop;
 import edu.uwi.sta.srts.models.User;
 import edu.uwi.sta.srts.utils.SimpleLocation;
 import edu.uwi.sta.srts.utils.Utils;
+import edu.uwi.sta.srts.utils.View;
 import pl.bclogic.pulsator4droid.library.PulsatorLayout;
 
 public class DriverOverview extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback, View {
@@ -97,7 +97,6 @@ public class DriverOverview extends AppCompatActivity implements NavigationView.
     private HashMap<String, Stop> stopsHashMap = new HashMap<>();
 
     private Location oldLoc = null;
-
     private boolean redraw = true;
 
     private TextView toolbarText;
@@ -121,9 +120,9 @@ public class DriverOverview extends AppCompatActivity implements NavigationView.
             e.printStackTrace();
         }
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        toolbarText = (TextView) findViewById(R.id.toolbarText);
+        toolbarText = findViewById(R.id.toolbarText);
 
         Utils.setupOfflineSnackbarListener(findViewById(R.id.content_frame));
 
@@ -267,10 +266,8 @@ public class DriverOverview extends AppCompatActivity implements NavigationView.
         this.googleMap.setTrafficEnabled(false);
         this.googleMap.setMyLocationEnabled(true);
         this.googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(10.642830, -61.399385), 15f));
-
         this.googleMap.setMapStyle(new MapStyleOptions(Utils.getMapStyle()));
         this.googleMap.setInfoWindowAdapter(new MyInfoWindowAdapter());
-
         this.googleMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
             @Override
             public void onInfoWindowClick(Marker marker) {
@@ -283,7 +280,6 @@ public class DriverOverview extends AppCompatActivity implements NavigationView.
 
             }
         });
-
         this.googleMap.setOnMyLocationChangeListener(new GoogleMap.OnMyLocationChangeListener() {
             @Override
             public void onMyLocationChange(final Location location) {
@@ -341,8 +337,6 @@ public class DriverOverview extends AppCompatActivity implements NavigationView.
                             return (int)(location.distanceTo(l1) - location.distanceTo(l2));
                         }
                     });
-
-
 
                     GoogleDirection.withServerKey(getResources().getString(R.string.google_maps_key))
                             .from(start)
@@ -406,7 +400,7 @@ public class DriverOverview extends AppCompatActivity implements NavigationView.
             for(RouteStop routeStop : ((RouteStops)model).getRouteStops()){
                 new StopController(new Stop(routeStop.getStopId()), this);
             }
-            TextView numStops = (TextView) findViewById(R.id.numStops);
+            TextView numStops = findViewById(R.id.numStops);
             numStops.setText(((RouteStops)model).getRouteStops().size() + " stops");
 
         }else if(model instanceof Stop){
@@ -417,7 +411,7 @@ public class DriverOverview extends AppCompatActivity implements NavigationView.
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -485,7 +479,7 @@ public class DriverOverview extends AppCompatActivity implements NavigationView.
 
         private final android.view.View myContentsView;
 
-        MyInfoWindowAdapter(){
+        public MyInfoWindowAdapter(){
             myContentsView = getLayoutInflater().inflate(R.layout.map_info_window, null);
         }
 
@@ -497,9 +491,9 @@ public class DriverOverview extends AppCompatActivity implements NavigationView.
 
         @Override
         public android.view.View getInfoWindow(Marker marker) {
-            TextView eta = ((TextView)myContentsView.findViewById(R.id.eta));
+            TextView eta = myContentsView.findViewById(R.id.eta);
             eta.setText(marker.getSnippet());
-            TextView title = ((TextView)myContentsView.findViewById(R.id.name));
+            TextView title = myContentsView.findViewById(R.id.name);
             title.setText(marker.getTitle());
             return myContentsView;
         }
@@ -571,7 +565,7 @@ public class DriverOverview extends AppCompatActivity implements NavigationView.
         }
     }
 
-    public class UserView implements edu.uwi.sta.srts.views.View {
+    public class UserView implements View {
 
         TextView name;
         TextView type;

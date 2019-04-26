@@ -2,8 +2,8 @@
  * Copyright (c) 2019. Razor Sharp Software Solutions
  *
  * Azel Daniel (816002285)
- * Amanda Seenath (816002935)
  * Michael Bristol (816003612)
+ * Amanda Seenath (816002935)
  *
  * INFO 3604
  * Project
@@ -21,22 +21,17 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
 import edu.uwi.sta.srts.utils.DatabaseHelper;
+import edu.uwi.sta.srts.utils.Model;
 import edu.uwi.sta.srts.utils.SimpleLocation;
 
-public class Shuttle extends Model{
+public class Shuttle extends Model {
 
     private int capacity;
-
     private String licensePlateNo;
-
     private SimpleLocation location;
-
     private String driverId;
-
     private String routeId;
-
     private boolean onDuty;
-
     private float rotation;
 
     /**

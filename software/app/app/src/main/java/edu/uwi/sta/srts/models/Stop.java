@@ -2,8 +2,8 @@
  * Copyright (c) 2019. Razor Sharp Software Solutions
  *
  * Azel Daniel (816002285)
- * Amanda Seenath (816002935)
  * Michael Bristol (816003612)
+ * Amanda Seenath (816002935)
  *
  * INFO 3604
  * Project
@@ -21,14 +21,13 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
 import edu.uwi.sta.srts.utils.DatabaseHelper;
+import edu.uwi.sta.srts.utils.Model;
 import edu.uwi.sta.srts.utils.SimpleLocation;
 
-public class Stop extends Model{
+public class Stop extends Model {
 
     private String routeId;
-
     private String name;
-
     private SimpleLocation location;
 
     /**
@@ -41,8 +40,8 @@ public class Stop extends Model{
     }
 
     /**
-     * Constructor that fetches the stop corresponding to the given stopId
-     * @param stopId The stopId of the stop to fetch
+     * Constructor that fetches the stop corresponding to the given stop id
+     * @param stopId The stop id of the stop to fetch
      */
     public Stop(String stopId){
         super();

@@ -2,8 +2,8 @@
  * Copyright (c) 2019. Razor Sharp Software Solutions
  *
  * Azel Daniel (816002285)
- * Amanda Seenath (816002935)
  * Michael Bristol (816003612)
+ * Amanda Seenath (816002935)
  *
  * INFO 3604
  * Project
@@ -21,7 +21,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import edu.uwi.sta.srts.R;
-import edu.uwi.sta.srts.models.Model;
+import edu.uwi.sta.srts.utils.Model;
+import edu.uwi.sta.srts.utils.View;
 import edu.uwi.sta.srts.views.fragments.AlertsFragment;
 
 public class ViewAlerts extends AppCompatActivity implements View {

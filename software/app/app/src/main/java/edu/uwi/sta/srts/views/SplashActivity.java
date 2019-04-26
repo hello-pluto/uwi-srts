@@ -2,8 +2,8 @@
  * Copyright (c) 2019. Razor Sharp Software Solutions
  *
  * Azel Daniel (816002285)
- * Amanda Seenath (816002935)
  * Michael Bristol (816003612)
+ * Amanda Seenath (816002935)
  *
  * INFO 3604
  * Project
@@ -31,11 +31,11 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import edu.uwi.sta.srts.R;
-import edu.uwi.sta.srts.controllers.Observer;
 import edu.uwi.sta.srts.controllers.UserController;
-import edu.uwi.sta.srts.models.Model;
+import edu.uwi.sta.srts.utils.Model;
 import edu.uwi.sta.srts.models.User;
 import edu.uwi.sta.srts.utils.UserType;
+import edu.uwi.sta.srts.utils.View;
 import pl.bclogic.pulsator4droid.library.PulsatorLayout;
 
 public class SplashActivity extends AppCompatActivity implements View {
@@ -58,10 +58,8 @@ public class SplashActivity extends AppCompatActivity implements View {
         PulsatorLayout pulsator = findViewById(R.id.pulsator);
         pulsator.start();
 
-
         final FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         Intent intent = getIntent();
-
 
         if (intent.getData() != null){
             SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", 0);
@@ -105,8 +103,6 @@ public class SplashActivity extends AppCompatActivity implements View {
                 finish();
             }
         }
-
-
     }
 
     @Override

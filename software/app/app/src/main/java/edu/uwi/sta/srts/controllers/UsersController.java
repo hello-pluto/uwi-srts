@@ -2,8 +2,8 @@
  * Copyright (c) 2019. Razor Sharp Software Solutions
  *
  * Azel Daniel (816002285)
- * Amanda Seenath (816002935)
  * Michael Bristol (816003612)
+ * Amanda Seenath (816002935)
  *
  * INFO 3604
  * Project
@@ -17,7 +17,8 @@ import java.util.ArrayList;
 
 import edu.uwi.sta.srts.models.User;
 import edu.uwi.sta.srts.models.Users;
-import edu.uwi.sta.srts.views.View;
+import edu.uwi.sta.srts.utils.Controller;
+import edu.uwi.sta.srts.utils.View;
 
 public class UsersController extends Controller {
 
@@ -34,7 +35,13 @@ public class UsersController extends Controller {
         return ((Users)this.model).getUsers();
     }
 
-    public UserController getUserController(int index, View view){
-        return new UserController(getUsers().get(index), view);
+    /**
+     * Method that returns the user controller for a given user
+     * @param position The index of the user
+     * @param view The view to link the controller to
+     * @return A newly created UserController object
+     */
+    public UserController getUserController(int position, View view){
+        return new UserController(getUsers().get(position), view);
     }
 }

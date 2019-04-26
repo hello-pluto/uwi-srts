@@ -2,8 +2,8 @@
  * Copyright (c) 2019. Razor Sharp Software Solutions
  *
  * Azel Daniel (816002285)
- * Amanda Seenath (816002935)
  * Michael Bristol (816003612)
+ * Amanda Seenath (816002935)
  *
  * INFO 3604
  * Project
@@ -32,7 +32,6 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.GroundOverlayOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
@@ -41,12 +40,12 @@ import edu.uwi.sta.srts.R;
 import edu.uwi.sta.srts.controllers.RouteController;
 import edu.uwi.sta.srts.controllers.ShuttleController;
 import edu.uwi.sta.srts.controllers.UserController;
-import edu.uwi.sta.srts.models.Model;
+import edu.uwi.sta.srts.utils.Model;
 import edu.uwi.sta.srts.models.Route;
 import edu.uwi.sta.srts.models.Shuttle;
 import edu.uwi.sta.srts.models.User;
-import edu.uwi.sta.srts.utils.UserType;
 import edu.uwi.sta.srts.utils.Utils;
+import edu.uwi.sta.srts.utils.View;
 
 public class ViewShuttle extends AppCompatActivity implements View, OnMapReadyCallback{
 
@@ -196,38 +195,6 @@ public class ViewShuttle extends AppCompatActivity implements View, OnMapReadyCa
         }
     }
 
-    public class DriverView implements edu.uwi.sta.srts.views.View {
-
-        TextView textView;
-
-        private DriverView(TextView textView){
-            this.textView = textView;
-        }
-
-        @Override
-        public void update(Model model) {
-            if(model instanceof User && textView != null){
-                this.textView.setText(((User)model).getFullName());
-            }
-        }
-    }
-
-    public class RouteView implements edu.uwi.sta.srts.views.View {
-
-        TextView textView;
-
-        private RouteView(TextView textView){
-            this.textView = textView;
-        }
-
-        @Override
-        public void update(Model model) {
-            if(model instanceof Route && textView != null){
-                this.textView.setText(((Route)model).getName());
-            }
-        }
-    }
-
     @Override
     protected void onResume() {
         super.onResume();
@@ -264,5 +231,37 @@ public class ViewShuttle extends AppCompatActivity implements View, OnMapReadyCa
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public class RouteView implements View {
+
+        TextView textView;
+
+        private RouteView(TextView textView){
+            this.textView = textView;
+        }
+
+        @Override
+        public void update(Model model) {
+            if(model instanceof Route && textView != null){
+                this.textView.setText(((Route)model).getName());
+            }
+        }
+    }
+
+    public class DriverView implements View {
+
+        TextView textView;
+
+        private DriverView(TextView textView){
+            this.textView = textView;
+        }
+
+        @Override
+        public void update(Model model) {
+            if(model instanceof User && textView != null){
+                this.textView.setText(((User)model).getFullName());
+            }
+        }
     }
 }

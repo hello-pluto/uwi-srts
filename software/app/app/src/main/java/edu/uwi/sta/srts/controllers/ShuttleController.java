@@ -2,8 +2,8 @@
  * Copyright (c) 2019. Razor Sharp Software Solutions
  *
  * Azel Daniel (816002285)
- * Amanda Seenath (816002935)
  * Michael Bristol (816003612)
+ * Amanda Seenath (816002935)
  *
  * INFO 3604
  * Project
@@ -13,11 +13,12 @@
 
 package edu.uwi.sta.srts.controllers;
 
+import edu.uwi.sta.srts.utils.Controller;
 import edu.uwi.sta.srts.utils.SimpleLocation;
 import edu.uwi.sta.srts.models.Shuttle;
-import edu.uwi.sta.srts.views.View;
+import edu.uwi.sta.srts.utils.View;
 
-public class ShuttleController extends Controller{
+public class ShuttleController extends Controller {
     
     /**
      * Constructor that requires the shuttle model and its corresponding view
@@ -87,5 +88,4 @@ public class ShuttleController extends Controller{
     public void setShuttleRotation(float rotation) {
         ((Shuttle)this.model).setRotation(rotation);
     }
-
 }

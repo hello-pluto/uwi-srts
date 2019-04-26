@@ -2,8 +2,8 @@
  * Copyright (c) 2019. Razor Sharp Software Solutions
  *
  * Azel Daniel (816002285)
- * Amanda Seenath (816002935)
  * Michael Bristol (816003612)
+ * Amanda Seenath (816002935)
  *
  * INFO 3604
  * Project
@@ -21,13 +21,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
 import edu.uwi.sta.srts.utils.DatabaseHelper;
+import edu.uwi.sta.srts.utils.Model;
 
 public class Alert extends Model {
 
     private String title;
-
     private String message;
-
     private int urgency;
 
     /**
@@ -38,8 +37,8 @@ public class Alert extends Model {
     }
 
     /**
-     * Constructor that fetches the alert corresponding to the given alertId
-     * @param alertId The alertId of the alert to fetch
+     * Constructor that fetches the alert corresponding to the given alert id
+     * @param alertId The alert id of the alert to fetch
      */
     public Alert(String alertId){
         super();
@@ -66,18 +65,6 @@ public class Alert extends Model {
 
                     }
                 });
-    }
-
-    /**
-     * Constructor that creates a new alert object given a title, message and urgency
-     * @param title The summary of the alert
-     * @param message The details of the alert
-     * @param urgency The level of urgency of the alert; ranges from 1-5, where 5 is most urgent
-     */
-    public Alert(String title, String message, int urgency) {
-        this.title = title;
-        this.message = message;
-        this.urgency = urgency;
     }
 
     public String getTitle() {

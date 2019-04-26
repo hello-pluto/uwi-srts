@@ -1,3 +1,16 @@
+/*
+ * Copyright (c) 2019. Razor Sharp Software Solutions
+ *
+ * Azel Daniel (816002285)
+ * Michael Bristol (816003612)
+ * Amanda Seenath (816002935)
+ *
+ * INFO 3604
+ * Project
+ *
+ * UWI Shuttle Routing and Tracking System
+ */
+
 package edu.uwi.sta.srts.views;
 
 import android.content.Intent;
@@ -9,16 +22,14 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import edu.uwi.sta.srts.R;
-import edu.uwi.sta.srts.controllers.AlertController;
 import edu.uwi.sta.srts.controllers.UserController;
-import edu.uwi.sta.srts.models.Alert;
-import edu.uwi.sta.srts.models.Model;
+import edu.uwi.sta.srts.utils.Model;
 import edu.uwi.sta.srts.models.User;
+import edu.uwi.sta.srts.utils.View;
 
 public class ViewUser extends AppCompatActivity implements View {
 
     private UserController userController;
-
     private boolean loaded = false;
 
     @Override

@@ -2,8 +2,8 @@
  * Copyright (c) 2019. Razor Sharp Software Solutions
  *
  * Azel Daniel (816002285)
- * Amanda Seenath (816002935)
  * Michael Bristol (816003612)
+ * Amanda Seenath (816002935)
  *
  * INFO 3604
  * Project
@@ -23,11 +23,11 @@ import android.widget.TextView;
 import edu.uwi.sta.srts.R;
 import edu.uwi.sta.srts.controllers.UserController;
 import edu.uwi.sta.srts.controllers.UsersController;
-import edu.uwi.sta.srts.models.Model;
+import edu.uwi.sta.srts.utils.Model;
 import edu.uwi.sta.srts.models.Users;
 import edu.uwi.sta.srts.utils.OnListFragmentInteractionListener;
 
-public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> implements edu.uwi.sta.srts.views.View {
+public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> implements edu.uwi.sta.srts.utils.View {
 
     private final UsersController usersController;
     private final OnListFragmentInteractionListener mListener;

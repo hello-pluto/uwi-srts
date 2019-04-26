@@ -2,8 +2,8 @@
  * Copyright (c) 2019. Razor Sharp Software Solutions
  *
  * Azel Daniel (816002285)
- * Amanda Seenath (816002935)
  * Michael Bristol (816003612)
+ * Amanda Seenath (816002935)
  *
  * INFO 3604
  * Project
@@ -27,7 +27,7 @@ import android.view.ViewGroup;
 
 import edu.uwi.sta.srts.R;
 import edu.uwi.sta.srts.models.Alerts;
-import edu.uwi.sta.srts.models.Model;
+import edu.uwi.sta.srts.utils.Model;
 import edu.uwi.sta.srts.utils.OnListFragmentInteractionListener;
 import edu.uwi.sta.srts.views.ViewAlert;
 import edu.uwi.sta.srts.views.adapter.AlertsAdapter;
@@ -35,7 +35,6 @@ import edu.uwi.sta.srts.views.adapter.AlertsAdapter;
 public class AlertsFragment extends Fragment {
 
     private OnListFragmentInteractionListener listener;
-
     private boolean isAdmin;
 
     public AlertsFragment() {}
@@ -58,7 +57,7 @@ public class AlertsFragment extends Fragment {
 
         View empty = view.findViewById(R.id.empty);
 
-        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.list);
+        RecyclerView recyclerView = view.findViewById(R.id.list);
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
 
         this.listener = new OnListFragmentInteractionListener() {

@@ -2,8 +2,8 @@
  * Copyright (c) 2019. Razor Sharp Software Solutions
  *
  * Azel Daniel (816002285)
- * Amanda Seenath (816002935)
  * Michael Bristol (816003612)
+ * Amanda Seenath (816002935)
  *
  * INFO 3604
  * Project
@@ -27,6 +27,12 @@ import edu.uwi.sta.srts.R;
 
 public class InfoDialogHelper {
 
+    /**
+     * Method that shows an information dialog with the given title and message
+     * @param context The context
+     * @param title The title of the information being conveyed to the user
+     * @param message The message of the information being conveyed to the user
+     */
     public static void showInfoDialog(Context context, String title, String message){
         View view = LayoutInflater.from(context).inflate(R.layout.info_header, null);
         TextView titleText =  view.findViewById(R.id.title);
@@ -44,7 +50,6 @@ public class InfoDialogHelper {
                 messageText.scrollTo(0,0);
             }
         }, 100);
-
         new AlertDialog.Builder(context)
                 .setView(view)
                 .setPositiveButton("Dismiss", new DialogInterface.OnClickListener() {

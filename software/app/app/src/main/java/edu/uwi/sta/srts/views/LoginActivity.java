@@ -2,8 +2,8 @@
  * Copyright (c) 2019. Razor Sharp Software Solutions
  *
  * Azel Daniel (816002285)
- * Amanda Seenath (816002935)
  * Michael Bristol (816003612)
+ * Amanda Seenath (816002935)
  *
  * INFO 3604
  * Project
@@ -25,7 +25,6 @@ import android.text.Html;
 import android.text.TextWatcher;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -67,7 +66,6 @@ public class LoginActivity extends AppCompatActivity {
         final TextView passwordError = findViewById(R.id.passwordError);
         final ImageButton passwordToggle = findViewById(R.id.passwordToggle);
         loading = findViewById(R.id.progressBar);
-
 
         Utils.setUpActivations(this, emailEditText, findViewById(R.id.emailUnderline));
         Utils.setUpActivations(this, passwordEditText, findViewById(R.id.passwordUnderline));
