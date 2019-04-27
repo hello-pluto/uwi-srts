@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="64dp">
+        <View
+            android:id="@+id/above"
+            android:layout_width="3dp"
+            android:layout_height="match_parent"
+            android:background="@color/colorPrimary"
+            android:layout_marginLeft="11dp"
+            android:layout_above="@+id/img"
+            android:layout_marginBottom="-3dp"/>
+
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/img"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginRight="16dp"
+            android:src="@color/colorPrimary"
+            android:layout_centerVertical="true"/>
+        <TextView
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:id="@+id/order"
+            android:paddingBottom="2dp"
+            android:textSize="11sp"
+            android:gravity="center"
+            android:layout_alignTop="@+id/img"
+            android:layout_alignStart="@id/img"
+            android:textColor="@android:color/white"/>
+
+        <View
+            android:id="@+id/below"
+            android:layout_width="3dp"
+            android:layout_height="match_parent"
+            android:background="@color/colorPrimary"
+            android:layout_marginLeft="11dp"
+            android:layout_below="@+id/img"
+            android:layout_marginTop="-3dp"/>
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:textSize="14sp"
+            android:paddingRight="28dp"
+            android:singleLine="true"
+            android:ellipsize="marquee"
+            android:fontFamily="@font/raleway"
+            android:textStyle="bold"
+            android:layout_toRightOf="@+id/img"
+            android:layout_toLeftOf="@id/remove"/>
+
+        <ImageButton
+            android:id="@+id/remove"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:src="@drawable/round_close_24"
+            android:background="?attr/selectableItemBackground"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:visibility="gone"/>
+
+    </RelativeLayout>
+</LinearLayout>

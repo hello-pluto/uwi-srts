@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/nav_change_shuttle_and_route"
+        android:title="Change shuttle and route"
+        app:showAsAction="always"
+        android:icon="@drawable/round_swap_vert_24"/>
+    <item
+        android:id="@+id/help"
+        android:orderInCategory="100"
+        android:title="Help"
+        app:showAsAction="never" />
+</menu>

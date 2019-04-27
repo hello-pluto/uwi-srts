@@ -1,0 +1,94 @@
+<!--
+  ~ Copyright (c) 2019. Razor Sharp Software Solutions
+  ~
+  ~ Azel Daniel (816002285)
+  ~ Amanda Seenath (816002935)
+  ~ Michael Bristol (816003612)
+  ~
+  ~ INFO 3604
+  ~ Project
+  ~
+  ~ UWI Shuttle Routing and Tracking System
+  -->
+
+<resources>
+    <string name="app_name">UWI SRTS</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="title_activity_track_shuttle">Map</string>
+    <string name="title_activity_admin_overview">AdminOverview</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+    <string name="email_error">Please enter a valid email</string>
+    <string name="sign_in">Sign In</string>
+    <string name="cont">Continue</string>
+    <string name="password_error">Password must be at least 8 characters long</string>
+    <string name="routes">Routes</string>
+    <string name="view_route">View Route</string>
+    <string name="alerts">Alerts</string>
+    <string name="view_alert">View Alert</string>
+    <string name="title">Title</string>
+    <string name="message">Message</string>
+    <string name="urgency">Urgency</string>
+    <string name="view_shuttle">View Shuttle</string>
+    <string name="eta">ETA</string>
+    <string name="calculating_time">calculating time&#8230;</string>
+    <string name="license_plate">License Plate</string>
+    <string name="max_capacity">Max Capacity</string>
+    <string name="driver">Driver</string>
+    <string name="no_driver">No driver</string>
+    <string name="route">Route</string>
+    <string name="no_route">No route</string>
+    <string name="shuttles">Shuttles</string>
+    <string name="view_stop">View Stop</string>
+    <string name="frequency">Frequency</string>
+    <string name="no_on_duty_shuttles">No on duty shuttles</string>
+    <string name="no_stops">No stops</string>
+    <string name="stops">Stops</string>
+    <string name="view_user">View User</string>
+    <string name="email">Email</string>
+    <string name="full_name">Full Name</string>
+    <string name="user_type">User Type</string>
+    <string name="choose_shuttle">Choose Shuttle</string>
+    <string name="on_duty">On Duty</string>
+    <string name="off_duty">Off Duty</string>
+    <string name="back">Back</string>
+    <string name="next">Next</string>
+    <string name="enter_title">Enter title</string>
+    <string name="enter_message">Enter Message</string>
+    <string name="_1">1</string>
+    <string name="_2">2</string>
+    <string name="_3">3</string>
+    <string name="_4">4</string>
+    <string name="_5">5</string>
+    <string name="enter_name">Enter name</string>
+    <string name="add_stop">Add stop</string>
+    <string name="enter_license_plate">Enter license plate</string>
+    <string name="you_must_enter_a_valid_email">You must enter a valid email</string>
+    <string name="capacity">Capacity</string>
+    <string name="enter_capacity">Enter capacity</string>
+    <string name="location">Location</string>
+    <string name="select_a_place_on_the_map">Select a place on the map</string>
+    <string name="enter_email">Enter email</string>
+    <string name="password">Password</string>
+    <string name="enter_password">Enter password</string>
+    <string name="enter_full_name">Enter full name</string>
+    <string name="welcome">Welcome</string>
+    <string name="forgot_password">Forgot password?</string>
+    <string name="are_you_a_driver_login">Are you a driver? Login</string>
+    <string name="no_route_selected">No Route selected</string>
+    <string name="no_shuttle_selected">No shuttle selected</string>
+    <string name="all_shuttles">All Shuttles</string>
+    <string name="nothing_to_show">Nothing to show</string>
+    <string name="min">MIN</string>
+    <string name="jfk_shuttle_stop">JFK Shuttle Stop</string>
+    <string name="name">Name</string>
+    <string name="save">Save</string>
+    <string name="student">Student</string>
+    <string name="administrator">Administrator</string>
+    <string name="filter_shuttle_by_route">Filter Shuttles by Route</string>
+    <string name="select_a_route_to_show_shuttles_for">Select a route to show shuttles for</string>
+</resources>

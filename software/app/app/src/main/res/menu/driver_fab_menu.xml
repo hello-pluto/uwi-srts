@@ -1,0 +1,11 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/nav_choose_shuttle"
+        android:icon="@drawable/round_directions_bus_24"
+        android:title="Change Shuttle" />
+    <item
+        android:id="@+id/nav_choose_route"
+        android:icon="@drawable/round_place_black_24"
+        android:title="Change Route" />
+</menu>
