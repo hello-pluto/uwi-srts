@@ -1,16 +1,3 @@
-/*
- * Copyright (c) 2019. Razor Sharp Software Solutions
- *
- * Azel Daniel (816002285)
- * Michael Bristol (816003612)
- * Amanda Seenath (816002935)
- *
- * INFO 3604
- * Project
- *
- * UWI Shuttle Routing and Tracking System
- */
-
 package edu.uwi.sta.srts.views;
 
 import android.Manifest;
@@ -38,14 +25,14 @@ import com.google.android.gms.maps.model.MapStyleOptions;
 
 import edu.uwi.sta.srts.R;
 import edu.uwi.sta.srts.controllers.RouteController;
-import edu.uwi.sta.srts.controllers.ShuttleController;
 import edu.uwi.sta.srts.controllers.UserController;
-import edu.uwi.sta.srts.utils.Model;
+import edu.uwi.sta.srts.controllers.ShuttleController;
+import edu.uwi.sta.srts.models.Model;
 import edu.uwi.sta.srts.models.Route;
-import edu.uwi.sta.srts.models.Shuttle;
 import edu.uwi.sta.srts.models.User;
+import edu.uwi.sta.srts.models.Shuttle;
+import edu.uwi.sta.srts.models.utils.UserType;
 import edu.uwi.sta.srts.utils.Utils;
-import edu.uwi.sta.srts.utils.View;
 
 public class ViewShuttle extends AppCompatActivity implements View, OnMapReadyCallback{
 
@@ -64,19 +51,11 @@ public class ViewShuttle extends AppCompatActivity implements View, OnMapReadyCa
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
-        try {
-            mapFragment.getMapAsync(this);
-        }catch (NullPointerException e){
-            e.printStackTrace();
-        }
+        mapFragment.getMapAsync(this);
 
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        try {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }catch (NullPointerException e){
-            e.printStackTrace();
-        }
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         Shuttle shuttle = (Shuttle) getIntent().getSerializableExtra("shuttle");
 
@@ -102,7 +81,7 @@ public class ViewShuttle extends AppCompatActivity implements View, OnMapReadyCa
                     public void onLocationChanged(Location location) {
                         ViewShuttle.this.location = location;
                         if(loaded){
-                            shuttleController.update();
+                            shuttleController.updateView();
                         }
                     }
 
@@ -122,11 +101,9 @@ public class ViewShuttle extends AppCompatActivity implements View, OnMapReadyCa
                     }
                 });
 
-        if(getIntent().getBooleanExtra("isAdmin", false)){
+        User user = (User)getIntent().getSerializableExtra("user");
+        if(user != null && user.getUserType() == UserType.ADMINISTRATOR){
             findViewById(R.id.etaLayout).setVisibility(android.view.View.GONE);
-        }else {
-            TextView eta = findViewById(R.id.eta);
-            eta.setText(getIntent().getStringExtra("eta"));
         }
     }
 
@@ -138,20 +115,25 @@ public class ViewShuttle extends AppCompatActivity implements View, OnMapReadyCa
             new UserController(new User(shuttleController.getShuttleDriverId()), new DriverView((TextView) findViewById(R.id.driver)));
             new RouteController(new Route(shuttleController.getShuttleRouteId()), new RouteView((TextView) findViewById(R.id.route)));
 
-            TextView plateNo = findViewById(R.id.plateNo);
+            TextView plateNo = (TextView)findViewById(R.id.plateNo);
             plateNo.setText(shuttleController.getShuttleLicensePlateNo());
 
-            TextView capacity = findViewById(R.id.capacity);
+            TextView capacity = (TextView)findViewById(R.id.capacity);
             capacity.setText(shuttleController.getShuttleCapacity() + " seats");
 
             if(location != null) {
-                TextView eta =  findViewById(R.id.eta);
+                TextView eta = (TextView) findViewById(R.id.eta);
                 int etaInMinutes = Utils.getEta(location.getLatitude(), location.getLongitude(),
                         shuttleController.getShuttleLocation().getLatitude(),
                         shuttleController.getShuttleLocation().getLongitude());
 
-                eta.setText(Utils.formatEta(etaInMinutes));
+                if (etaInMinutes == 1) {
+                    eta.setText("1 min away");
+                } else {
+                    eta.setText(etaInMinutes + " mins away");
+                }
             }
+
 
             if(mapReady){
                 this.googleMap.clear();
@@ -191,7 +173,39 @@ public class ViewShuttle extends AppCompatActivity implements View, OnMapReadyCa
         this.googleMap.setMapStyle(new MapStyleOptions(Utils.getMapStyle()));
 
         if(loaded) {
-            shuttleController.update();
+            shuttleController.updateView();
+        }
+    }
+
+    public class DriverView implements edu.uwi.sta.srts.views.View {
+
+        TextView textView;
+
+        public DriverView(TextView textView){
+            this.textView = textView;
+        }
+
+        @Override
+        public void update(Model model) {
+            if(model instanceof User && textView != null){
+                this.textView.setText(((User)model).getFullName());
+            }
+        }
+    }
+
+    public class RouteView implements edu.uwi.sta.srts.views.View {
+
+        TextView textView;
+
+        public RouteView(TextView textView){
+            this.textView = textView;
+        }
+
+        @Override
+        public void update(Model model) {
+            if(model instanceof Route && textView != null){
+                this.textView.setText(((Route)model).getName());
+            }
         }
     }
 
@@ -199,13 +213,14 @@ public class ViewShuttle extends AppCompatActivity implements View, OnMapReadyCa
     protected void onResume() {
         super.onResume();
         if(loaded) {
-            shuttleController.update();
+            shuttleController.updateView();
         }
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if(getIntent().getBooleanExtra("isAdmin", false)){
+        User user = (User)getIntent().getSerializableExtra("user");
+        if(user != null && user.getUserType() == UserType.ADMINISTRATOR){
             getMenuInflater().inflate(R.menu.model_menu, menu);
         }
 
@@ -231,37 +246,5 @@ public class ViewShuttle extends AppCompatActivity implements View, OnMapReadyCa
                 return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    public class RouteView implements View {
-
-        TextView textView;
-
-        private RouteView(TextView textView){
-            this.textView = textView;
-        }
-
-        @Override
-        public void update(Model model) {
-            if(model instanceof Route && textView != null){
-                this.textView.setText(((Route)model).getName());
-            }
-        }
-    }
-
-    public class DriverView implements View {
-
-        TextView textView;
-
-        private DriverView(TextView textView){
-            this.textView = textView;
-        }
-
-        @Override
-        public void update(Model model) {
-            if(model instanceof User && textView != null){
-                this.textView.setText(((User)model).getFullName());
-            }
-        }
     }
 }

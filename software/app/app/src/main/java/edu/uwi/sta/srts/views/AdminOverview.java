@@ -1,26 +1,14 @@
-/*
- * Copyright (c) 2019. Razor Sharp Software Solutions
- *
- * Azel Daniel (816002285)
- * Amanda Seenath (816002935)
- * Michael Bristol (816003612)
- *
- * INFO 3604
- * Project
- *
- * UWI Shuttle Routing and Tracking System
- */
-
 package edu.uwi.sta.srts.views;
 
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.view.View;
+import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -28,41 +16,43 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 
 import edu.uwi.sta.srts.R;
 import edu.uwi.sta.srts.controllers.UserController;
-import edu.uwi.sta.srts.utils.Model;
+import edu.uwi.sta.srts.models.Model;
 import edu.uwi.sta.srts.models.User;
-import edu.uwi.sta.srts.utils.InfoDialogHelper;
-import edu.uwi.sta.srts.utils.Utils;
+import edu.uwi.sta.srts.models.utils.DatabaseHelper;
 import edu.uwi.sta.srts.views.fragments.AlertsFragment;
 import edu.uwi.sta.srts.views.fragments.DriversFragment;
 import edu.uwi.sta.srts.views.fragments.RoutesFragment;
-import edu.uwi.sta.srts.views.fragments.ShuttlesFragment;
 import edu.uwi.sta.srts.views.fragments.StopsFragment;
+import edu.uwi.sta.srts.views.fragments.ShuttlesFragment;
 
 public class AdminOverview extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private ActionBarDrawerToggle toggle;
+
     private Fragment fragment;
+
     private TextView toolbarText;
+
+    private UserController userController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_overview);
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        toolbarText = findViewById(R.id.toolbarText);
+        toolbarText = (TextView)findViewById(R.id.toolbarText);
         toolbarText.setText("Routes");
 
-        FloatingActionButton fab = findViewById(R.id.fab);
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -83,13 +73,13 @@ public class AdminOverview extends AppCompatActivity
             }
         });
 
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
          toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = findViewById(R.id.nav_view);
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
         fragment = RoutesFragment.newInstance(true);
@@ -97,14 +87,23 @@ public class AdminOverview extends AppCompatActivity
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
 
-        Utils.setupOfflineSnackbarListener(findViewById(R.id.content_frame));
+        final Snackbar offlineSnackbar = Snackbar.make(findViewById(R.id.content_frame),
+                "No internet. All changes saved locally.", Snackbar.LENGTH_INDEFINITE);
+        offlineSnackbar.setAction("Dismiss", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                offlineSnackbar.dismiss();
+            }
+        });
+
+        DatabaseHelper.attachIsOnlineListener(offlineSnackbar);
 
         View headerLayout = navigationView.getHeaderView(0);
 
-        TextView navName = headerLayout.findViewById(R.id.navName);
-        TextView navEmail = headerLayout.findViewById(R.id.navEmail);
-        TextView navType = headerLayout.findViewById(R.id.navType);
-        FloatingActionButton navEditUser = headerLayout.findViewById(R.id.edit_user);
+        TextView navName = (TextView) headerLayout.findViewById(R.id.navName);
+        TextView navEmail = (TextView) headerLayout.findViewById(R.id.navEmail);
+        TextView navType = (TextView)headerLayout.findViewById(R.id.navType);
+        FloatingActionButton navEditUser = (FloatingActionButton)headerLayout.findViewById(R.id.edit_user);
         navEditUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -114,26 +113,34 @@ public class AdminOverview extends AppCompatActivity
             }
         });
 
-        headerLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(AdminOverview.this, ViewUser.class);
-                intent.putExtra("user", getIntent().getSerializableExtra("user"));
-                intent.putExtra("isAdmin", false);
-                startActivity(intent);
-            }
-        });
+        userController = new UserController(new User(FirebaseAuth.getInstance().getCurrentUser().getUid()), new UserView(navName, navType, navEmail));
+    }
 
-        try {
-            new UserController(new User(FirebaseAuth.getInstance().getCurrentUser().getUid()), new UserView(navName, navType, navEmail));
-        }catch (NullPointerException e){
-            e.printStackTrace();
+    public class UserView implements edu.uwi.sta.srts.views.View {
+
+        TextView name;
+        TextView type;
+        TextView email;
+
+        public UserView(TextView name, TextView type, TextView email){
+            this.name = name;
+            this.type = type;
+            this.email = email;
+        }
+
+        @Override
+        public void update(Model model) {
+            if(model instanceof User && name != null && email != null){
+                this.name.setText(((User)model).getFullName());
+                this.email.setText(((User)model).getEmail());
+                this.type.setText("Administrator");
+            }
         }
     }
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -143,13 +150,14 @@ public class AdminOverview extends AppCompatActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.admin_overview, menu);
         return true;
     }
 
     @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-
+    public boolean onNavigationItemSelected(MenuItem item) {
+        // Handle navigation view item clicks here.
         int id = item.getItemId();
 
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -164,11 +172,12 @@ public class AdminOverview extends AppCompatActivity
                 toolbarText.setText("Drivers");
                 break;
             case R.id.nav_shuttles:
-                fragment = ShuttlesFragment.newInstance(true);
+                fragment = ShuttlesFragment.newInstance();
+                ((ShuttlesFragment)fragment).user = (User)userController.getModel();
                 toolbarText.setText("Shuttles");
                 break;
             case R.id.nav_stops:
-                fragment = StopsFragment.newInstance(true);
+                fragment = StopsFragment.newInstance();
                 toolbarText.setText("Stops");
                 break;
             case R.id.nav_alerts:
@@ -184,7 +193,7 @@ public class AdminOverview extends AppCompatActivity
 
         fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
 
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
@@ -201,6 +210,7 @@ public class AdminOverview extends AppCompatActivity
         toggle.onConfigurationChanged(newConfig);
     }
 
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -208,55 +218,12 @@ public class AdminOverview extends AppCompatActivity
                 if(fragment instanceof RoutesFragment) {
                     InfoDialogHelper.showInfoDialog(this,
                             "Routes",
-                            "Click on the green button on the bottom right to add a new " +
-                                    "route or click on a route item in the list to view it in more detail.");
-                }else if(fragment instanceof DriversFragment){
-                    InfoDialogHelper.showInfoDialog(this,
-                            "Drivers",
-                            "Click on the green button on the bottom right to add a new " +
-                                    "driver or click on a driver item in the list to view it in more detail.");
-                }else if(fragment instanceof ShuttlesFragment){
-                    InfoDialogHelper.showInfoDialog(this,
-                            "Shuttles",
-                            "Click on the green button on the bottom right to add a new " +
-                                    "shuttle or click on a shuttle item in the list to view it in more detail.");
-                }else if(fragment instanceof StopsFragment){
-                    InfoDialogHelper.showInfoDialog(this,
-                            "Stops",
-                            "Click on the green button on the bottom right to add a new " +
-                                    "stop or click on a stop item in the list to view it in more detail.");
-                }else if(fragment instanceof AlertsFragment){
-                    InfoDialogHelper.showInfoDialog(this,
-                            "Alerts",
-                            "Click on the green button on the bottom right to add a new " +
-                                    "alert or click on a alert item in the list to view it in more detail.");
+                            "");
                 }
                 return true;
             default:
                 toggle.onOptionsItemSelected(item);
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    public class UserView implements edu.uwi.sta.srts.utils.View {
-
-        TextView name;
-        TextView type;
-        TextView email;
-
-        private UserView(TextView name, TextView type, TextView email){
-            this.name = name;
-            this.type = type;
-            this.email = email;
-        }
-
-        @Override
-        public void update(Model model) {
-            if(model instanceof User && name != null && email != null){
-                this.name.setText(((User)model).getFullName());
-                this.email.setText(((User)model).getEmail());
-                this.type.setText("Administrator");
-            }
-        }
     }
 }

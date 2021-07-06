@@ -1,16 +1,3 @@
-/*
- * Copyright (c) 2019. Razor Sharp Software Solutions
- *
- * Azel Daniel (816002285)
- * Michael Bristol (816003612)
- * Amanda Seenath (816002935)
- *
- * INFO 3604
- * Project
- *
- * UWI Shuttle Routing and Tracking System
- */
-
 package edu.uwi.sta.srts.views;
 
 import android.content.Intent;
@@ -26,9 +13,8 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import edu.uwi.sta.srts.R;
 import edu.uwi.sta.srts.controllers.AlertController;
 import edu.uwi.sta.srts.models.Alert;
-import edu.uwi.sta.srts.utils.Model;
+import edu.uwi.sta.srts.models.Model;
 import edu.uwi.sta.srts.utils.Utils;
-import edu.uwi.sta.srts.utils.View;
 
 public class ViewAlert extends AppCompatActivity implements View {
 
@@ -40,13 +26,9 @@ public class ViewAlert extends AppCompatActivity implements View {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_alert);
 
-        final Toolbar toolbar = findViewById(R.id.toolbar);
+        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        try {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }catch (NullPointerException e){
-            e.printStackTrace();
-        }
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         Alert alert = (Alert)getIntent().getSerializableExtra("alert");
 
@@ -57,10 +39,10 @@ public class ViewAlert extends AppCompatActivity implements View {
     public void update(Model model) {
         if (model instanceof Alert){
             loaded = true;
-            TextView title = findViewById(R.id.title);
+            TextView title = (TextView)findViewById(R.id.title);
             title.setText(alertController.getAlertTitle());
 
-            TextView message = findViewById(R.id.message);
+            TextView message = (TextView)findViewById(R.id.message);
             message.setText(alertController.getAlertMessage());
 
             int urgency = alertController.getAlertUrgency();
@@ -72,21 +54,21 @@ public class ViewAlert extends AppCompatActivity implements View {
             findViewById(R.id.outline5).setVisibility(android.view.View.INVISIBLE);
 
             ((CircleImageView)findViewById(R.id.circle1)).setImageDrawable(
-                    new ColorDrawable(Utils.getUrgencyColor(1)));
+                    new ColorDrawable(Utils.getColorBetweenRedAndYellow(0)));
             ((CircleImageView)findViewById(R.id.circle2)).setImageDrawable(
-                    new ColorDrawable(Utils.getUrgencyColor(2)));
+                    new ColorDrawable(Utils.getColorBetweenRedAndYellow(.25f)));
             ((CircleImageView)findViewById(R.id.circle3)).setImageDrawable(
-                    new ColorDrawable(Utils.getUrgencyColor(3)));
+                    new ColorDrawable(Utils.getColorBetweenRedAndYellow(.5f)));
             ((CircleImageView)findViewById(R.id.circle4)).setImageDrawable(
-                    new ColorDrawable(Utils.getUrgencyColor(4)));
+                    new ColorDrawable(Utils.getColorBetweenRedAndYellow(.75f)));
             ((CircleImageView)findViewById(R.id.circle5)).setImageDrawable(
-                    new ColorDrawable(Utils.getUrgencyColor(5)));
+                    new ColorDrawable(Utils.getColorBetweenRedAndYellow(1)));
 
-            ((CircleImageView)findViewById(R.id.outline1)).setBorderColor(Utils.getUrgencyColor(1));
-            ((CircleImageView)findViewById(R.id.outline2)).setBorderColor(Utils.getUrgencyColor(2));
-            ((CircleImageView)findViewById(R.id.outline3)).setBorderColor(Utils.getUrgencyColor(3));
-            ((CircleImageView)findViewById(R.id.outline4)).setBorderColor(Utils.getUrgencyColor(4));
-            ((CircleImageView)findViewById(R.id.outline5)).setBorderColor(Utils.getUrgencyColor(5));
+            ((CircleImageView)findViewById(R.id.outline1)).setBorderColor(Utils.getColorBetweenRedAndYellow(0));
+            ((CircleImageView)findViewById(R.id.outline2)).setBorderColor(Utils.getColorBetweenRedAndYellow(.25f));
+            ((CircleImageView)findViewById(R.id.outline3)).setBorderColor(Utils.getColorBetweenRedAndYellow(.5f));
+            ((CircleImageView)findViewById(R.id.outline4)).setBorderColor(Utils.getColorBetweenRedAndYellow(.75f));
+            ((CircleImageView)findViewById(R.id.outline5)).setBorderColor(Utils.getColorBetweenRedAndYellow(1));
 
             switch (urgency){
                 case 1:
@@ -113,7 +95,7 @@ public class ViewAlert extends AppCompatActivity implements View {
     protected void onResume() {
         super.onResume();
         if(loaded){
-            alertController.update();
+            alertController.updateView();
         }
     }
 

@@ -1,16 +1,3 @@
-/*
- * Copyright (c) 2019. Razor Sharp Software Solutions
- *
- * Azel Daniel (816002285)
- * Michael Bristol (816003612)
- * Amanda Seenath (816002935)
- *
- * INFO 3604
- * Project
- *
- * UWI Shuttle Routing and Tracking System
- */
-
 package edu.uwi.sta.srts.views;
 
 import android.support.v7.app.AppCompatActivity;
@@ -33,10 +20,9 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import edu.uwi.sta.srts.R;
 import edu.uwi.sta.srts.controllers.StopController;
-import edu.uwi.sta.srts.utils.Model;
+import edu.uwi.sta.srts.models.Model;
 import edu.uwi.sta.srts.models.Stop;
 import edu.uwi.sta.srts.utils.Utils;
-import edu.uwi.sta.srts.utils.View;
 
 public class EditStop extends AppCompatActivity implements View, OnMapReadyCallback {
 
@@ -55,15 +41,11 @@ public class EditStop extends AppCompatActivity implements View, OnMapReadyCallb
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_stop);
 
-        final Toolbar toolbar = findViewById(R.id.toolbar);
+        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        try {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }catch (NullPointerException e){
-            e.printStackTrace();
-        }
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        TextView toolbarText = findViewById(R.id.toolbarText);
+        TextView toolbarText = (TextView)findViewById(R.id.toolbarText);
 
         Stop stop = (Stop) getIntent().getSerializableExtra("stop");
 
@@ -75,17 +57,13 @@ public class EditStop extends AppCompatActivity implements View, OnMapReadyCallb
         stopController = new StopController(stop, this);
 
         android.view.View done = findViewById(R.id.done);
-        nameEditText = findViewById(R.id.name);
+        nameEditText = (EditText) findViewById(R.id.name);
 
         Utils.setUpActivations(this, nameEditText, findViewById(R.id.nameUnderline));
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
-        try {
-            mapFragment.getMapAsync(this);
-        }catch (NullPointerException e){
-            e.printStackTrace();
-        }
+        mapFragment.getMapAsync(this);
 
         if(isEditMode){
             update(stop);
@@ -96,7 +74,9 @@ public class EditStop extends AppCompatActivity implements View, OnMapReadyCallb
 
         nameEditText.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -108,13 +88,15 @@ public class EditStop extends AppCompatActivity implements View, OnMapReadyCallb
                     findViewById(R.id.nameDone).setVisibility(android.view.View.GONE);
                 }
 
-                if(findViewById(R.id.nameError).getVisibility() == android.view.View.VISIBLE){
-                    findViewById(R.id.nameError).setVisibility(android.view.View.INVISIBLE);
+                if(((TextView)findViewById(R.id.nameError)).getVisibility() == android.view.View.VISIBLE){
+                    ((TextView)findViewById(R.id.nameError)).setVisibility(android.view.View.INVISIBLE);
                 }
             }
 
             @Override
-            public void afterTextChanged(Editable s) {}
+            public void afterTextChanged(Editable s) {
+
+            }
         });
 
         done.setOnClickListener(new android.view.View.OnClickListener() {
@@ -176,11 +158,13 @@ public class EditStop extends AppCompatActivity implements View, OnMapReadyCallb
         this.isReady = true;
 
         this.googleMap = googleMap;
+
         this.googleMap.setBuildingsEnabled(true);
         this.googleMap.getUiSettings().setZoomControlsEnabled(true);
         this.googleMap.getUiSettings().setCompassEnabled(true);
         this.googleMap.getUiSettings().setMapToolbarEnabled(true);
         this.googleMap.setMapStyle(new MapStyleOptions(Utils.getMapStyle()));
+
         this.googleMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
             @Override
             public void onMapLongClick(LatLng latLng) {

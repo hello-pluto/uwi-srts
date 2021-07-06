@@ -1,17 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-  ~ Copyright (c) 2019. Razor Sharp Software Solutions
-  ~
-  ~ Azel Daniel (816002285)
-  ~ Amanda Seenath (816002935)
-  ~ Michael Bristol (816003612)
-  ~
-  ~ INFO 3604
-  ~ Project
-  ~
-  ~ UWI Shuttle Routing and Tracking System
-  -->
-
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -41,7 +28,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/welcome"
+                android:text="Welcome"
                 android:textColor="@android:color/white"
                 android:textSize="16sp"
                 android:alpha="0.5"
@@ -49,7 +36,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/sign_in"
+                android:text="Sign In"
                 android:textColor="@android:color/white"
                 android:fontFamily="@font/raleway"
                 android:textSize="32sp"
@@ -80,7 +67,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/email"
+                    android:text="Email"
                     android:textSize="14sp"
                     android:textStyle="bold"
                     android:fontFamily="@font/raleway"/>
@@ -96,7 +83,7 @@
                         android:fontFamily="@font/raleway"
                         android:inputType="textEmailAddress"
                         android:background="@null"
-                        android:hint="@string/enter_email"
+                        android:hint="Enter email"
                         android:textSize="14sp"
                         android:textStyle="bold"
                         android:layout_weight="1"/>
@@ -130,7 +117,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textSize="12sp"
-                    android:text="@string/you_must_enter_a_valid_email"
+                    android:text="You must enter a valid email"
                     android:fontFamily="@font/raleway"
                     android:textColor="@android:color/holo_red_light"
                     android:paddingTop="4dp"
@@ -147,7 +134,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/password"
+                    android:text="Password"
                     android:textSize="14sp"
                     android:textStyle="bold"
                     android:fontFamily="@font/raleway"/>
@@ -163,7 +150,7 @@
                         android:fontFamily="@font/raleway"
                         android:inputType="textPassword"
                         android:background="@null"
-                        android:hint="@string/enter_password"
+                        android:hint="Enter password"
                         android:textSize="14sp"
                         android:textStyle="bold"
                         android:layout_weight="1"/>
@@ -194,7 +181,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textSize="12sp"
-                    android:text="@string/you_must_enter_a_valid_email"
+                    android:text="You must enter a valid email"
                     android:fontFamily="@font/raleway"
                     android:textColor="@android:color/holo_red_light"
                     android:paddingTop="4dp"
@@ -204,7 +191,7 @@
                     android:id="@+id/resetPassword"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/forgot_password"
+                    android:text="Forgot password?"
                     android:gravity="center"
                     android:padding="12dp"
                     android:textColor="#ddd"/>
@@ -225,7 +212,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:text="@string/sign_in"
+                        android:text="Sign In"
                         android:id="@+id/login"
                         android:background="?attr/selectableItemBackground"
                         android:textColor="@android:color/white"
@@ -253,7 +240,7 @@
                 android:id="@+id/switchMode"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/are_you_a_driver_login"
+                android:text="Are you a driver? Login"
                 android:gravity="center"
                 android:padding="12dp"
                 android:textColor="#ddd"/>

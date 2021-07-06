@@ -1,21 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-  ~ Copyright (c) 2019. Razor Sharp Software Solutions
-  ~
-  ~ Azel Daniel (816002285)
-  ~ Amanda Seenath (816002935)
-  ~ Michael Bristol (816003612)
-  ~
-  ~ INFO 3604
-  ~ Project
-  ~
-  ~ UWI Shuttle Routing and Tracking System
-  -->
-
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:ripple="http://schemas.android.com/tools"
     android:fitsSystemWindows="true">
 
     <FrameLayout
@@ -23,6 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:map="http://schemas.android.com/apk/res-auto"
             xmlns:tools="http://schemas.android.com/tools"
             android:id="@+id/map"
             android:name="com.google.android.gms.maps.SupportMapFragment"
@@ -34,7 +23,8 @@
     <RelativeLayout
         android:id="@+id/rl"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        >
 
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
@@ -87,7 +77,7 @@
                         android:id="@+id/route"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/no_route_selected"
+                        android:text="No Route selected"
                         style="@style/TextAppearance.MaterialComponents.Body2"
                         android:textSize="16sp"
                         android:textStyle="bold"
@@ -99,7 +89,7 @@
                         android:id="@+id/plateNo"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/no_shuttle_selected"
+                        android:text="No shuttle selected"
                         style="@style/TextAppearance.MaterialComponents.Caption"
                         android:textStyle="bold"
                         android:textSize="14sp"/>

@@ -1,24 +1,24 @@
 /*
- * Copyright (c) 2019. Razor Sharp Software Solutions
+ * Copyright (c) 2019. Razor Sharp Software Solutions.
  *
  * Azel Daniel (816002285)
- * Michael Bristol (816003612)
  * Amanda Seenath (816002935)
+ * Michael Bristol (816003612)
  *
  * INFO 3604
  * Project
+ * UWI Shuttle Routing and Tracking System Project
  *
- * UWI Shuttle Routing and Tracking System
+ * This class acts as a bridge between a single shuttle model and its view.
  */
 
 package edu.uwi.sta.srts.controllers;
 
-import edu.uwi.sta.srts.utils.Controller;
-import edu.uwi.sta.srts.utils.SimpleLocation;
+import edu.uwi.sta.srts.models.utils.Location;
 import edu.uwi.sta.srts.models.Shuttle;
-import edu.uwi.sta.srts.utils.View;
+import edu.uwi.sta.srts.views.View;
 
-public class ShuttleController extends Controller {
+public class ShuttleController extends Controller{
     
     /**
      * Constructor that requires the shuttle model and its corresponding view
@@ -30,7 +30,7 @@ public class ShuttleController extends Controller {
     }
 
     public String getShuttleId() {
-        return this.model.getId();
+        return ((Shuttle)this.model).getId();
     }
 
     public int getShuttleCapacity() {
@@ -49,11 +49,11 @@ public class ShuttleController extends Controller {
         return ((Shuttle)this.model).setLicensePlateNo(licensePlateNo);
     }
 
-    public SimpleLocation getShuttleLocation() {
+    public Location getShuttleLocation() {
         return ((Shuttle)this.model).getLocation();
     }
 
-    public void setShuttleLocation(SimpleLocation location) {
+    public void setShuttleLocation(Location location) {
         ((Shuttle)this.model).setLocation(location);
     }
 
@@ -88,4 +88,5 @@ public class ShuttleController extends Controller {
     public void setShuttleRotation(float rotation) {
         ((Shuttle)this.model).setRotation(rotation);
     }
+
 }

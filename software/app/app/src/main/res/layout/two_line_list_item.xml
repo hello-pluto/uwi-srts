@@ -1,17 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-  ~ Copyright (c) 2019. Razor Sharp Software Solutions
-  ~
-  ~ Azel Daniel (816002285)
-  ~ Amanda Seenath (816002935)
-  ~ Michael Bristol (816003612)
-  ~
-  ~ INFO 3604
-  ~ Project
-  ~
-  ~ UWI Shuttle Routing and Tracking System
-  -->
-
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
     android:layout_height="72dp"
@@ -53,9 +40,7 @@
         android:gravity="top"
         android:textSize="12sp"
         android:fontFamily="@font/raleway"
-        android:layout_marginTop="4dp"
-        android:singleLine="true"
-        android:ellipsize="marquee"/>
+        android:layout_marginTop="4dp"/>
 
     <View
         android:layout_width="match_parent"

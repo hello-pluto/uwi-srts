@@ -1,16 +1,3 @@
-/*
- * Copyright (c) 2019. Razor Sharp Software Solutions
- *
- * Azel Daniel (816002285)
- * Michael Bristol (816003612)
- * Amanda Seenath (816002935)
- *
- * INFO 3604
- * Project
- *
- * UWI Shuttle Routing and Tracking System
- */
-
 package edu.uwi.sta.srts.views;
 
 import android.support.v7.app.AppCompatActivity;
@@ -32,14 +19,13 @@ import edu.uwi.sta.srts.controllers.RouteController;
 import edu.uwi.sta.srts.controllers.RouteStopsController;
 import edu.uwi.sta.srts.controllers.StopController;
 import edu.uwi.sta.srts.controllers.StopsController;
-import edu.uwi.sta.srts.utils.Model;
+import edu.uwi.sta.srts.models.Model;
 import edu.uwi.sta.srts.models.Route;
 import edu.uwi.sta.srts.models.RouteStop;
 import edu.uwi.sta.srts.models.RouteStops;
 import edu.uwi.sta.srts.models.Stop;
 import edu.uwi.sta.srts.models.Stops;
 import edu.uwi.sta.srts.utils.Utils;
-import edu.uwi.sta.srts.utils.View;
 
 public class EditRoute extends AppCompatActivity implements View {
 
@@ -60,15 +46,11 @@ public class EditRoute extends AppCompatActivity implements View {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_route);
 
-        final Toolbar toolbar = findViewById(R.id.toolbar);
+        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        try {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }catch (NullPointerException e){
-            e.printStackTrace();
-        }
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        TextView toolbarText = findViewById(R.id.toolbarText);
+        TextView toolbarText = (TextView)findViewById(R.id.toolbarText);
 
         Route route = (Route) getIntent().getSerializableExtra("route");
 
@@ -80,11 +62,11 @@ public class EditRoute extends AppCompatActivity implements View {
         routeController = new RouteController(route, this);
 
         android.view.View done = findViewById(R.id.done);
-        nameEditText =  findViewById(R.id.name);
-        frequencyEditText =  findViewById(R.id.frequency);
+        nameEditText = (EditText) findViewById(R.id.name);
+        frequencyEditText = (EditText) findViewById(R.id.frequency);
 
-        nameError = findViewById(R.id.nameError);
-        frequencyError = findViewById(R.id.frequencyError);
+        nameError = (TextView)findViewById(R.id.nameError);
+        frequencyError = (TextView)findViewById(R.id.frequencyError);
 
         Utils.setUpActivations(this, nameEditText, findViewById(R.id.nameUnderline));
         Utils.setUpActivations(this, frequencyEditText, findViewById(R.id.frequencyUnderline));
@@ -198,7 +180,7 @@ public class EditRoute extends AppCompatActivity implements View {
             findViewById(R.id.nameDone).setVisibility(android.view.View.VISIBLE);
             findViewById(R.id.frequencyDone).setVisibility(android.view.View.VISIBLE);
         }else if(model instanceof RouteStops){
-            ((RouteStops)model).filter(routeController.getRouteId());
+            ((RouteStops)model).filterSelf(routeController.getRouteId());
             redrawStops((RouteStops)model);
         }else if(model instanceof Stops){
             findViewById(R.id.addStop).setOnClickListener(new android.view.View.OnClickListener() {
@@ -218,9 +200,7 @@ public class EditRoute extends AppCompatActivity implements View {
 
                             for(Stop stop : ((Stops)model).getStops()){
                                 if(stop.hashCode() == item.getItemId()){
-                                    RouteStop rs = new RouteStop();
-                                    rs.setRouteId(routeController.getRouteId());
-                                    rs.setStopId(stop.getId());
+                                    RouteStop rs = new RouteStop(routeController.getRouteId(), stop.getId());
                                     rs.setOrder(nextOrder);
                                     rs.save();
                                     return true;
@@ -236,8 +216,7 @@ public class EditRoute extends AppCompatActivity implements View {
     }
 
     public void redrawStops(final RouteStops model){
-
-        LinearLayout ll = findViewById(R.id.stopsLayoutAdd);
+        LinearLayout ll = (LinearLayout)findViewById(R.id.stopsLayoutAdd);
         ll.removeAllViews();
 
         nextOrder = 1;
@@ -249,12 +228,12 @@ public class EditRoute extends AppCompatActivity implements View {
             LayoutInflater inflater = getLayoutInflater();
             android.view.View view = inflater.inflate(R.layout.route_stop_list_item, null);
 
-            TextView stopName = view.findViewById(R.id.title);
+            TextView stopName = (TextView) view.findViewById(R.id.title);
 
-            TextView order = view.findViewById(R.id.order);
+            TextView order = (TextView) view.findViewById(R.id.order);
             order.setText(String.valueOf(routeStop.getOrder()));
 
-            ImageButton remove = view.findViewById(R.id.remove);
+            ImageButton remove = (ImageButton) view.findViewById(R.id.remove);
             remove.setVisibility(android.view.View.VISIBLE);
             remove.setOnClickListener(new android.view.View.OnClickListener() {
                 @Override
@@ -283,11 +262,11 @@ public class EditRoute extends AppCompatActivity implements View {
         }
     }
 
-    public class StopView implements View {
+    public class StopView implements edu.uwi.sta.srts.views.View {
 
         TextView textView;
 
-        private StopView(TextView textView){
+        public StopView(TextView textView){
             this.textView = textView;
         }
 

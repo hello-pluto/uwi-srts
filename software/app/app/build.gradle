@@ -31,6 +31,10 @@ dependencies {
     implementation 'com.android.support:recyclerview-v7:28.+'
     implementation 'com.android.support:design:28.+'
     implementation 'de.hdodenhof:circleimageview:3.0.0'
+<<<<<<< HEAD:app/app/build.gradle
+    implementation 'io.github.yavski:fab-speed-dial:1.0.6'
+=======
+>>>>>>> master:software/app/app/build.gradle
     implementation 'com.akexorcist:googledirectionlibrary:1.1.1'
     implementation 'pl.bclogic:pulsator4droid:1.0.3'
     testImplementation 'junit:junit:4.12'

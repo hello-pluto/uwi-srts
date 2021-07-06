@@ -1,16 +1,3 @@
-/*
- * Copyright (c) 2019. Razor Sharp Software Solutions
- *
- * Azel Daniel (816002285)
- * Michael Bristol (816003612)
- * Amanda Seenath (816002935)
- *
- * INFO 3604
- * Project
- *
- * UWI Shuttle Routing and Tracking System
- */
-
 package edu.uwi.sta.srts.models;
 
 import android.support.annotation.NonNull;
@@ -21,8 +8,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-import edu.uwi.sta.srts.utils.DatabaseHelper;
-import edu.uwi.sta.srts.utils.Model;
+import edu.uwi.sta.srts.models.utils.DatabaseHelper;
 
 public class Alerts extends Model {
 
@@ -55,6 +41,14 @@ public class Alerts extends Model {
 
     public ArrayList<Alert> getAlerts() {
         return alerts;
+    }
+
+    public void addAlert(Alert alert){
+        this.alerts.add(alert);
+    }
+
+    public void removeAlert(int index){
+        this.alerts.remove(index);
     }
 
     @Override

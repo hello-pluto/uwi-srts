@@ -1,16 +1,3 @@
-/*
- * Copyright (c) 2019. Razor Sharp Software Solutions
- *
- * Azel Daniel (816002285)
- * Amanda Seenath (816002935)
- * Michael Bristol (816003612)
- *
- * INFO 3604
- * Project
- *
- * UWI Shuttle Routing and Tracking System
- */
-
 package edu.uwi.sta.srts.views;
 
 import android.graphics.Color;
@@ -37,11 +24,10 @@ import com.google.firebase.auth.FirebaseUser;
 
 import edu.uwi.sta.srts.R;
 import edu.uwi.sta.srts.controllers.UserController;
-import edu.uwi.sta.srts.utils.Model;
+import edu.uwi.sta.srts.models.Model;
 import edu.uwi.sta.srts.models.User;
-import edu.uwi.sta.srts.utils.UserType;
+import edu.uwi.sta.srts.models.utils.UserType;
 import edu.uwi.sta.srts.utils.Utils;
-import edu.uwi.sta.srts.utils.View;
 
 public class EditUser extends AppCompatActivity implements View {
 
@@ -65,13 +51,9 @@ public class EditUser extends AppCompatActivity implements View {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_user);
 
-        final Toolbar toolbar = findViewById(R.id.toolbar);
+        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        try {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }catch (NullPointerException e){
-            e.printStackTrace();
-        }
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         User user = (User) getIntent().getSerializableExtra("user");
 
@@ -81,16 +63,16 @@ public class EditUser extends AppCompatActivity implements View {
         }
         userController = new UserController(user, this);
 
-        TextView done = findViewById(R.id.done);
+        TextView done = (TextView) findViewById(R.id.done);
 
-        emailEditText = findViewById(R.id.email);
-        passwordEditText = findViewById(R.id.password);
-        fullNameEditText = findViewById(R.id.fullname);
-        userTypeText = findViewById(R.id.userType);
+        emailEditText = (EditText) findViewById(R.id.email);
+        passwordEditText = (EditText) findViewById(R.id.password);
+        fullNameEditText = (EditText)findViewById(R.id.fullname);
+        userTypeText = (TextView)findViewById(R.id.userType);
 
-        emailError = findViewById(R.id.emailError);
-        passwordError = findViewById(R.id.passwordError);
-        fullNameError = findViewById(R.id.fullnameError);
+        emailError = (TextView)findViewById(R.id.emailError);
+        passwordError = (TextView)findViewById(R.id.passwordError);
+        fullNameError = (TextView)findViewById(R.id.fullnameError);
 
         final ImageButton passwordToggle = findViewById(R.id.passwordToggle);
 
@@ -98,7 +80,7 @@ public class EditUser extends AppCompatActivity implements View {
         Utils.setUpActivations(this, passwordEditText, findViewById(R.id.passwordUnderline));
         Utils.setUpActivations(this, fullNameEditText, findViewById(R.id.fullnameUnderline));
 
-        TextView toolbarText = findViewById(R.id.toolbarText);
+        TextView toolbarText = (TextView)findViewById(R.id.toolbarText);
 
         if(isEditMode){
             update(user);
@@ -110,7 +92,9 @@ public class EditUser extends AppCompatActivity implements View {
 
         emailEditText.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -128,12 +112,16 @@ public class EditUser extends AppCompatActivity implements View {
             }
 
             @Override
-            public void afterTextChanged(Editable s) {}
+            public void afterTextChanged(Editable s) {
+
+            }
         });
 
         passwordEditText.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -151,7 +139,9 @@ public class EditUser extends AppCompatActivity implements View {
             }
 
             @Override
-            public void afterTextChanged(Editable s) {}
+            public void afterTextChanged(Editable s) {
+
+            }
         });
 
         passwordToggle.setOnClickListener(new android.view.View.OnClickListener() {
@@ -171,7 +161,9 @@ public class EditUser extends AppCompatActivity implements View {
 
         fullNameEditText.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -190,7 +182,9 @@ public class EditUser extends AppCompatActivity implements View {
             }
 
             @Override
-            public void afterTextChanged(Editable s) {}
+            public void afterTextChanged(Editable s) {
+
+            }
         });
 
         done.setOnClickListener(new android.view.View.OnClickListener() {
@@ -230,13 +224,9 @@ public class EditUser extends AppCompatActivity implements View {
                                 @Override
                                 public void onComplete(@NonNull Task<AuthResult> task) {
                                     if (task.isSuccessful()) {
-                                        try {
-                                            FirebaseUser user = task.getResult().getUser();
-                                            userController.setUserId(user.getUid());
-                                            userController.saveModel();
-                                        }catch (NullPointerException e){
-                                            e.printStackTrace();
-                                        }
+                                        FirebaseUser user = task.getResult().getUser();
+                                        userController.setUserId(user.getUid());
+                                        userController.saveModel();
                                         finish();
                                     }
                                 }
@@ -246,6 +236,7 @@ public class EditUser extends AppCompatActivity implements View {
         });
 
         if(!isEditMode) {
+
             findViewById(R.id.userTypeLayout).setOnClickListener(new android.view.View.OnClickListener() {
                 @Override
                 public void onClick(android.view.View v) {
@@ -300,6 +291,7 @@ public class EditUser extends AppCompatActivity implements View {
             findViewById(R.id.emailDone).setVisibility(android.view.View.VISIBLE);
             findViewById(R.id.fullnameDone).setVisibility(android.view.View.VISIBLE);
             findViewById(R.id.userTypeDone).setVisibility(android.view.View.VISIBLE);
+
             findViewById(R.id.passwordLayout).setVisibility(android.view.View.GONE);
 
             emailEditText.setEnabled(false);

@@ -1,16 +1,3 @@
-/*
- * Copyright (c) 2019. Razor Sharp Software Solutions
- *
- * Azel Daniel (816002285)
- * Michael Bristol (816003612)
- * Amanda Seenath (816002935)
- *
- * INFO 3604
- * Project
- *
- * UWI Shuttle Routing and Tracking System
- */
-
 package edu.uwi.sta.srts.views;
 
 import android.content.Intent;
@@ -26,20 +13,20 @@ import android.widget.TextView;
 import edu.uwi.sta.srts.R;
 import edu.uwi.sta.srts.controllers.RouteController;
 import edu.uwi.sta.srts.controllers.RouteStopsController;
-import edu.uwi.sta.srts.controllers.ShuttlesController;
 import edu.uwi.sta.srts.controllers.StopController;
-import edu.uwi.sta.srts.utils.Model;
+import edu.uwi.sta.srts.controllers.ShuttlesController;
+import edu.uwi.sta.srts.models.Model;
 import edu.uwi.sta.srts.models.Route;
 import edu.uwi.sta.srts.models.RouteStop;
 import edu.uwi.sta.srts.models.RouteStops;
-import edu.uwi.sta.srts.models.Shuttles;
 import edu.uwi.sta.srts.models.Stop;
-import edu.uwi.sta.srts.utils.View;
+import edu.uwi.sta.srts.models.Shuttles;
 
 public class ViewRoute extends AppCompatActivity implements View {
 
     private RouteController routeController;
     private LinearLayout ll;
+
     private boolean loaded = false;
 
     @Override
@@ -47,33 +34,29 @@ public class ViewRoute extends AppCompatActivity implements View {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_route);
 
-        final Toolbar toolbar = findViewById(R.id.toolbar);
+        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        try {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }catch (NullPointerException e){
-            e.printStackTrace();
-        }
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         Route route = (Route) getIntent().getSerializableExtra("route");
 
         routeController = new RouteController(new Route(route.getId()), this);
 
-        ll = findViewById(R.id.stopsLayoutAdd);
+        ll = (LinearLayout)findViewById(R.id.stopsLayoutAdd);
     }
 
     @Override
     public void update(Model model) {
         if(model instanceof Route){
             loaded = true;
-            TextView name = findViewById(R.id.name);
+            TextView name = (TextView)findViewById(R.id.name);
             name.setText(routeController.getRouteName());
 
-            TextView frequency = findViewById(R.id.frequency);
+            TextView frequency = (TextView)findViewById(R.id.frequency);
             frequency.setText("Every " + ((Route)model).getFrequency() + " minutes");
 
             RouteStops routeStops = new RouteStops();
-            routeStops.filter(routeController.getRouteId());
+            routeStops.filterSelf(routeController.getRouteId());
 
             new RouteStopsController(routeStops, this);
 
@@ -108,11 +91,11 @@ public class ViewRoute extends AppCompatActivity implements View {
         }
     }
 
-    public class StopView implements View {
+    public class StopView implements edu.uwi.sta.srts.views.View {
 
         TextView textView;
 
-        private StopView(TextView textView){
+        public StopView(TextView textView){
             this.textView = textView;
         }
 
@@ -123,11 +106,11 @@ public class ViewRoute extends AppCompatActivity implements View {
             }
         }
     }
-    public class ShuttlesView implements View {
+    public class ShuttlesView implements edu.uwi.sta.srts.views.View {
 
         TextView textView;
 
-        private ShuttlesView(TextView textView){
+        public ShuttlesView(TextView textView){
             this.textView = textView;
         }
 

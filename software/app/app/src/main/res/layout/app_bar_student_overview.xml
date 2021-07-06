@@ -1,17 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-  ~ Copyright (c) 2019. Razor Sharp Software Solutions
-  ~
-  ~ Azel Daniel (816002285)
-  ~ Amanda Seenath (816002935)
-  ~ Michael Bristol (816003612)
-  ~
-  ~ INFO 3604
-  ~ Project
-  ~
-  ~ UWI Shuttle Routing and Tracking System
-  -->
-
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
@@ -23,6 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:map="http://schemas.android.com/apk/res-auto"
             xmlns:tools="http://schemas.android.com/tools"
             android:id="@+id/map"
             android:name="com.google.android.gms.maps.SupportMapFragment"
@@ -34,7 +22,8 @@
     <RelativeLayout
         android:id="@+id/rl"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        >
 
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
@@ -52,7 +41,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/raleway"
-                    android:text="@string/all_shuttles"
+                    android:text="All Shuttles"
                     android:textSize="16sp"
                     android:textStyle="bold"
                     android:layout_margin="0dp"
@@ -92,7 +81,7 @@
                         android:id="@+id/route"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/no_shuttle_selected"
+                        android:text="No Shuttle Selected"
                         android:fontFamily="@font/raleway"
                         android:textSize="16sp"
                         android:textStyle="bold"
@@ -119,6 +108,7 @@
 
         </android.support.v7.widget.CardView>
         <android.support.design.widget.FloatingActionButton
+
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
@@ -128,6 +118,10 @@
             android:layout_alignParentRight="true"
             android:tint="@android:color/white"
             android:layout_marginRight="16dp"
-            android:layout_marginTop="-32dp" />
+            android:layout_marginTop="-32dp"
+            />
     </RelativeLayout>
+
+
+
 </android.support.design.widget.CoordinatorLayout>

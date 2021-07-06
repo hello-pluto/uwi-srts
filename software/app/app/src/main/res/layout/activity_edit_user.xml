@@ -1,20 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-  ~ Copyright (c) 2019. Razor Sharp Software Solutions
-  ~
-  ~ Azel Daniel (816002285)
-  ~ Amanda Seenath (816002935)
-  ~ Michael Bristol (816003612)
-  ~
-  ~ INFO 3604
-  ~ Project
-  ~
-  ~ UWI Shuttle Routing and Tracking System
-  -->
-
 <android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/content"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -79,7 +67,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/email"
+                        android:text="Email"
                         android:textSize="14sp"
                         android:textStyle="bold"
                         android:fontFamily="@font/raleway"/>
@@ -95,7 +83,7 @@
                             android:fontFamily="@font/raleway"
                             android:inputType="textEmailAddress"
                             android:background="@null"
-                            android:hint="@string/enter_email"
+                            android:hint="Enter email"
                             android:textSize="14sp"
                             android:textStyle="bold"
                             android:layout_weight="1"/>
@@ -121,7 +109,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textSize="12sp"
-                        android:text="@string/you_must_enter_a_valid_email"
+                        android:text="You must enter a valid email"
                         android:fontFamily="@font/raleway"
                         android:textColor="@android:color/holo_red_light"
                         android:paddingTop="4dp"
@@ -137,7 +125,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/password"
+                        android:text="Password"
                         android:textSize="14sp"
                         android:textStyle="bold"
                         android:fontFamily="@font/raleway"/>
@@ -153,7 +141,7 @@
                             android:fontFamily="@font/raleway"
                             android:inputType="textPassword"
                             android:background="@null"
-                            android:hint="@string/enter_password"
+                            android:hint="Enter password"
                             android:textSize="14sp"
                             android:textStyle="bold"
                             android:layout_weight="1"/>
@@ -184,7 +172,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textSize="12sp"
-                        android:text="@string/you_must_enter_a_valid_email"
+                        android:text="You must enter a valid email"
                         android:fontFamily="@font/raleway"
                         android:textColor="@android:color/holo_red_light"
                         android:paddingTop="4dp"
@@ -200,7 +188,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/full_name"
+                        android:text="Full Name"
                         android:textSize="14sp"
                         android:textStyle="bold"
                         android:fontFamily="@font/raleway"/>
@@ -216,7 +204,7 @@
                             android:fontFamily="@font/raleway"
                             android:inputType="textCapWords"
                             android:background="@null"
-                            android:hint="@string/enter_full_name"
+                            android:hint="Enter full name"
                             android:textSize="14sp"
                             android:textStyle="bold"
                             android:layout_weight="1"/>
@@ -242,7 +230,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textSize="12sp"
-                        android:text="@string/you_must_enter_a_valid_email"
+                        android:text="You must enter a valid email"
                         android:fontFamily="@font/raleway"
                         android:textColor="@android:color/holo_red_light"
                         android:paddingTop="4dp"
@@ -259,7 +247,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/user_type"
+                        android:text="User Type"
                         android:textSize="14sp"
                         android:textStyle="bold"
                         android:fontFamily="@font/raleway"/>
@@ -273,7 +261,7 @@
                             android:id="@+id/userType"
                             android:fontFamily="@font/raleway"
                             android:background="@null"
-                            android:text="@string/driver"
+                            android:text="Driver"
                             android:textSize="14sp"
                             android:textStyle="bold"
                             android:layout_weight="1"
@@ -315,10 +303,11 @@
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
+
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:text="@string/save"
+                            android:text="Save"
                             android:id="@+id/done"
                             android:background="?attr/selectableItemBackground"
                             android:textColor="@android:color/white"
@@ -326,6 +315,7 @@
                             android:textSize="16sp"
                             android:textStyle="bold"
                             android:fontFamily="@font/raleway"/>
+
                         <ProgressBar
                             android:id="@+id/progressBar"
                             android:layout_width="24dp"
@@ -336,8 +326,11 @@
                             android:layout_centerVertical="true"
                             android:layout_marginRight="12dp"
                             android:visibility="gone"/>
+
                     </RelativeLayout>
+
                 </android.support.v7.widget.CardView>
+
             </LinearLayout>
         </android.support.v7.widget.CardView>
     </ScrollView>

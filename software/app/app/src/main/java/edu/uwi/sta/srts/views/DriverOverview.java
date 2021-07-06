@@ -1,16 +1,3 @@
-/*
- * Copyright (c) 2019. Razor Sharp Software Solutions
- *
- * Azel Daniel (816002285)
- * Michael Bristol (816003612)
- * Amanda Seenath (816002935)
- *
- * INFO 3604
- * Project
- *
- * UWI Shuttle Routing and Tracking System
- */
-
 package edu.uwi.sta.srts.views;
 
 import android.Manifest;
@@ -18,6 +5,7 @@ import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
 import android.animation.ValueAnimator;
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
@@ -25,26 +13,28 @@ import android.content.res.Configuration;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.animation.FastOutSlowInInterpolator;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.akexorcist.googledirection.DirectionCallback;
 import com.akexorcist.googledirection.GoogleDirection;
 import com.akexorcist.googledirection.constant.TransportMode;
 import com.akexorcist.googledirection.model.Direction;
+import com.akexorcist.googledirection.model.Info;
 import com.akexorcist.googledirection.model.Leg;
 import com.akexorcist.googledirection.model.Step;
 import com.akexorcist.googledirection.util.DirectionConverter;
@@ -57,13 +47,11 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.maps.model.RoundCap;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -71,19 +59,22 @@ import java.util.List;
 import edu.uwi.sta.srts.R;
 import edu.uwi.sta.srts.controllers.RouteController;
 import edu.uwi.sta.srts.controllers.RouteStopsController;
+import edu.uwi.sta.srts.controllers.RoutesController;
 import edu.uwi.sta.srts.controllers.ShuttleController;
+import edu.uwi.sta.srts.controllers.ShuttlesController;
 import edu.uwi.sta.srts.controllers.StopController;
 import edu.uwi.sta.srts.controllers.UserController;
-import edu.uwi.sta.srts.utils.Model;
+import edu.uwi.sta.srts.models.Model;
 import edu.uwi.sta.srts.models.Route;
 import edu.uwi.sta.srts.models.RouteStop;
 import edu.uwi.sta.srts.models.RouteStops;
+import edu.uwi.sta.srts.models.Routes;
 import edu.uwi.sta.srts.models.Shuttle;
+import edu.uwi.sta.srts.models.Shuttles;
 import edu.uwi.sta.srts.models.Stop;
 import edu.uwi.sta.srts.models.User;
-import edu.uwi.sta.srts.utils.SimpleLocation;
+import edu.uwi.sta.srts.models.utils.DatabaseHelper;
 import edu.uwi.sta.srts.utils.Utils;
-import edu.uwi.sta.srts.utils.View;
 import pl.bclogic.pulsator4droid.library.PulsatorLayout;
 
 public class DriverOverview extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback, View {
@@ -96,16 +87,21 @@ public class DriverOverview extends AppCompatActivity implements NavigationView.
     private RouteController routeController;
     private HashMap<String, Stop> stopsHashMap = new HashMap<>();
 
+    private boolean showRoutesDialog = false;
+    private boolean showShuttlesDialog = false;
+
     private Location oldLoc = null;
+
     private boolean redraw = true;
+
+    private int shuttleIndex = -1;
+    private int routeIndex = -1;
 
     private TextView toolbarText;
 
     private FloatingActionButton fab;
     private ObjectAnimator scaleDown;
     private PulsatorLayout pulsator;
-
-    private List<Polyline> polylines = new ArrayList<Polyline>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,32 +110,37 @@ public class DriverOverview extends AppCompatActivity implements NavigationView.
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
-        try {
-            mapFragment.getMapAsync(this);
-        }catch (NullPointerException e){
-            e.printStackTrace();
-        }
+        mapFragment.getMapAsync(this);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        toolbarText = findViewById(R.id.toolbarText);
+        toolbarText = (TextView) findViewById(R.id.toolbarText);
 
-        Utils.setupOfflineSnackbarListener(findViewById(R.id.content_frame));
+        final Snackbar offlineSnackbar = Snackbar.make(findViewById(R.id.content_frame),
+                "No internet. All changes saved locally.", Snackbar.LENGTH_INDEFINITE);
+        offlineSnackbar.setAction("Dismiss", new android.view.View.OnClickListener() {
+            @Override
+            public void onClick(android.view.View v) {
+                offlineSnackbar.dismiss();
+            }
+        });
 
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        DatabaseHelper.attachIsOnlineListener(offlineSnackbar);
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = findViewById(R.id.nav_view);
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
         android.view.View headerLayout = navigationView.getHeaderView(0);
 
-        TextView navName = headerLayout.findViewById(R.id.navName);
-        TextView navEmail = headerLayout.findViewById(R.id.navEmail);
-        TextView navType = headerLayout.findViewById(R.id.navType);
+        TextView navName = (TextView) headerLayout.findViewById(R.id.navName);
+        TextView navEmail = (TextView) headerLayout.findViewById(R.id.navEmail);
+        TextView navType = (TextView) headerLayout.findViewById(R.id.navType);
         FloatingActionButton navEditUser = (FloatingActionButton)headerLayout.findViewById(R.id.edit_user);
         navEditUser.setOnClickListener(new android.view.View.OnClickListener() {
             @Override
@@ -150,22 +151,12 @@ public class DriverOverview extends AppCompatActivity implements NavigationView.
             }
         });
 
-        headerLayout.setOnClickListener(new android.view.View.OnClickListener() {
-            @Override
-            public void onClick(android.view.View v) {
-                Intent intent = new Intent(DriverOverview.this, ViewUser.class);
-                intent.putExtra("user", getIntent().getSerializableExtra("user"));
-                intent.putExtra("isAdmin", false);
-                startActivity(intent);
-            }
-        });
-
         driverController = new UserController((User)getIntent().getSerializableExtra("user"),
                 new DriverOverview.UserView(navName, navType, navEmail));
 
         driverController.getModel().notifyObservers();
 
-        fab = findViewById(R.id.onDuty);
+        fab = (FloatingActionButton) findViewById(R.id.onDuty);
 
         scaleDown = ObjectAnimator.ofPropertyValuesHolder(
                 fab,
@@ -178,7 +169,7 @@ public class DriverOverview extends AppCompatActivity implements NavigationView.
         scaleDown.setRepeatMode(ObjectAnimator.REVERSE);
         scaleDown.setInterpolator(new FastOutSlowInInterpolator());
 
-        pulsator = findViewById(R.id.pulsator);
+        pulsator = (PulsatorLayout) findViewById(R.id.pulsator);
 
         fab.setOnClickListener(new android.view.View.OnClickListener() {
             @Override
@@ -196,9 +187,6 @@ public class DriverOverview extends AppCompatActivity implements NavigationView.
         shuttleController = new ShuttleController((Shuttle)getIntent().getSerializableExtra("shuttle"), this);
         routeController = new RouteController((Route)getIntent().getSerializableExtra("route"), this);
 
-        shuttleController.setShuttleRouteId(routeController.getRouteId());
-        shuttleController.saveModel();
-
         TextView routeText = findViewById(R.id.route);
         routeText.setText(routeController.getRouteName());
 
@@ -208,16 +196,13 @@ public class DriverOverview extends AppCompatActivity implements NavigationView.
         shuttleText.setText(shuttleController.getShuttleLicensePlateNo());
 
         RouteStops routeStops = new RouteStops();
-        routeStops.filter(routeController.getRouteId());
-        new RouteStopsController(routeStops, this).update();
+        routeStops.filterSelf(routeController.getRouteId());
+        new RouteStopsController(routeStops, this).updateView();
+
 
         setOnDuty(getIntent().getBooleanExtra("onDuty", false));
     }
 
-    /**
-     * Sets the on duty status of a driver and updates the UI accordingly
-     * @param onDuty Whether or not the driver is on duty
-     */
     public void setOnDuty(boolean onDuty){
         if(onDuty) {
             if(shuttleController != null) {
@@ -230,7 +215,7 @@ public class DriverOverview extends AppCompatActivity implements NavigationView.
             scaleDown.setRepeatCount(ValueAnimator.INFINITE);
             pulsator.setVisibility(android.view.View.VISIBLE);
             fab.setImageDrawable(getDrawable(R.drawable.round_timer_24));
-            fab.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(this, R.color.colorPrimary)));
+            fab.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorPrimary, null)));
             Snackbar.make(findViewById(R.id.content_frame), "You are now on duty", Snackbar.LENGTH_SHORT).show();
         }else{
             if(shuttleController != null) {
@@ -262,12 +247,15 @@ public class DriverOverview extends AppCompatActivity implements NavigationView.
             return;
         }
 
+
         this.googleMap.setBuildingsEnabled(true);
         this.googleMap.setTrafficEnabled(false);
         this.googleMap.setMyLocationEnabled(true);
         this.googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(10.642830, -61.399385), 15f));
+
         this.googleMap.setMapStyle(new MapStyleOptions(Utils.getMapStyle()));
         this.googleMap.setInfoWindowAdapter(new MyInfoWindowAdapter());
+
         this.googleMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
             @Override
             public void onInfoWindowClick(Marker marker) {
@@ -280,51 +268,30 @@ public class DriverOverview extends AppCompatActivity implements NavigationView.
 
             }
         });
+
         this.googleMap.setOnMyLocationChangeListener(new GoogleMap.OnMyLocationChangeListener() {
             @Override
             public void onMyLocationChange(final Location location) {
                 if(redraw) {
                     DriverOverview.this.googleMap.clear();
-
+                    List<LatLng> waypoints = new ArrayList<>();
+                    waypoints.add(new LatLng(location.getLatitude(), location.getLongitude()));
                     for (Stop stop : stopsHashMap.values()) {
                         googleMap.addMarker(new MarkerOptions().position(new LatLng(stop.getLocation().getLatitude(), stop.getLocation().getLongitude()))
                                 .title(stop.getName()).snippet(
                                         String.valueOf(Utils.getEta(location.getLatitude(), location.getLongitude(),
                                                 stop.getLocation().getLatitude(), stop.getLocation().getLongitude())))
                                 .icon(Utils.bitmapDescriptorFromVector(DriverOverview.this, R.drawable.round_place_24)));
-                    }
-
-                    redraw = false;
-                }
-
-                if(oldLoc == null || location.distanceTo(oldLoc) > 1) {
-
-                    if(oldLoc==null){
-                        oldLoc = location;
-                    }
-
-                    CameraUpdate center = CameraUpdateFactory.newLatLng(new LatLng(location.getLatitude(), location.getLongitude()));
-
-                    DriverOverview.this.googleMap.animateCamera(center);
-
-                    if (shuttleController != null && shuttleController.isShuttleOnDuty()) {
-                        shuttleController.setShuttleLocation(new SimpleLocation(location.getLatitude(), location.getLongitude()));
-                        shuttleController.setShuttleRotation(oldLoc.bearingTo(location));
-                        shuttleController.saveModel();
-                    }
-
-                    List<LatLng> waypoints = new ArrayList<>();
-                    waypoints.add(new LatLng(location.getLatitude(), location.getLongitude()));
-                    for (Stop stop : stopsHashMap.values()) {
                         waypoints.add(new LatLng(stop.getLocation().getLatitude(), stop.getLocation().getLongitude()));
                     }
+
                     LatLng start = waypoints.remove(0);
                     LatLng end = start;
                     if(waypoints.size() != 0) {
                         end = waypoints.remove(waypoints.size() - 1);
                     }
 
-                    Collections.sort(waypoints, new Comparator<LatLng>() {
+                    waypoints.sort(new Comparator<LatLng>() {
                         @Override
                         public int compare(LatLng o1, LatLng o2) {
                             Location l1 = new Location("");
@@ -347,12 +314,6 @@ public class DriverOverview extends AppCompatActivity implements NavigationView.
                                 @Override
                                 public void onDirectionSuccess(Direction direction, String rawBody) {
                                     if(direction.isOK()) {
-                                        for(Polyline polyline: polylines){
-                                            polyline.remove();
-                                        }
-
-                                        polylines.clear();
-
                                         int i = 0;
                                         for(Leg leg : direction.getRouteList().get(0).getLegList()) {
                                             List<Step> stepList = leg.getStepList();
@@ -363,7 +324,7 @@ public class DriverOverview extends AppCompatActivity implements NavigationView.
                                                 for (PolylineOptions polylineOption : polylineOptionList) {
                                                     polylineOption.startCap(new RoundCap());
                                                     polylineOption.endCap(new RoundCap());
-                                                    polylines.add(googleMap.addPolyline(polylineOption));
+                                                    googleMap.addPolyline(polylineOption);
                                                 }
                                             }
                                             i++;
@@ -377,19 +338,63 @@ public class DriverOverview extends AppCompatActivity implements NavigationView.
                                         for (PolylineOptions polylineOption : polylineOptionList) {
                                             polylineOption.startCap(new RoundCap());
                                             polylineOption.endCap(new RoundCap());
-                                            polylines.add(googleMap.addPolyline(polylineOption));
+                                            googleMap.addPolyline(polylineOption);
                                         }
+                                        Info info = direction.getRouteList().get(0).getLegList().get(0).getDuration();
                                     }
                                 }
 
                                 @Override
-                                public void onDirectionFailure(Throwable t) {}
+                                public void onDirectionFailure(Throwable t) {
+                                    // Do something
+                                }
                             });
+
+                    redraw = false;
+                }
+
+                if(oldLoc == null || location.distanceTo(oldLoc) > 1) {
+
+                    if(oldLoc==null){
+                        oldLoc = location;
+                    }
+
+                    CameraUpdate center = CameraUpdateFactory.newLatLng(new LatLng(location.getLatitude(), location.getLongitude()));
+
+                    DriverOverview.this.googleMap.animateCamera(center);
+
+                    if (shuttleController != null && shuttleController.isShuttleOnDuty()) {
+                        shuttleController.setShuttleLocation(new edu.uwi.sta.srts.models.utils.Location(location.getLatitude(), location.getLongitude()));
+                        shuttleController.setShuttleRotation(oldLoc.bearingTo(location));
+                        shuttleController.saveModel();
+                    }
 
                     oldLoc = location;
                 }
             }
         });
+    }
+
+    public class UserView implements edu.uwi.sta.srts.views.View {
+
+        TextView name;
+        TextView type;
+        TextView email;
+
+        public UserView(TextView name, TextView type, TextView email){
+            this.name = name;
+            this.type = type;
+            this.email = email;
+        }
+
+        @Override
+        public void update(Model model) {
+            if(model instanceof User && name != null && email != null){
+                this.name.setText(((User)model).getFullName());
+                this.email.setText(((User)model).getEmail());
+                this.type.setText("Driver");
+            }
+        }
     }
 
     @Override
@@ -400,7 +405,7 @@ public class DriverOverview extends AppCompatActivity implements NavigationView.
             for(RouteStop routeStop : ((RouteStops)model).getRouteStops()){
                 new StopController(new Stop(routeStop.getStopId()), this);
             }
-            TextView numStops = findViewById(R.id.numStops);
+            TextView numStops = (TextView) findViewById(R.id.numStops);
             numStops.setText(((RouteStops)model).getRouteStops().size() + " stops");
 
         }else if(model instanceof Stop){
@@ -411,7 +416,7 @@ public class DriverOverview extends AppCompatActivity implements NavigationView.
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -426,7 +431,7 @@ public class DriverOverview extends AppCompatActivity implements NavigationView.
     }
 
     @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+    public boolean onNavigationItemSelected(MenuItem item) {
         int id = item.getItemId();
 
         switch (id) {
@@ -443,7 +448,7 @@ public class DriverOverview extends AppCompatActivity implements NavigationView.
                 break;
         }
 
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
@@ -479,7 +484,7 @@ public class DriverOverview extends AppCompatActivity implements NavigationView.
 
         private final android.view.View myContentsView;
 
-        public MyInfoWindowAdapter(){
+        MyInfoWindowAdapter(){
             myContentsView = getLayoutInflater().inflate(R.layout.map_info_window, null);
         }
 
@@ -491,28 +496,24 @@ public class DriverOverview extends AppCompatActivity implements NavigationView.
 
         @Override
         public android.view.View getInfoWindow(Marker marker) {
-            TextView eta = myContentsView.findViewById(R.id.eta);
+            TextView eta = ((TextView)myContentsView.findViewById(R.id.eta));
             eta.setText(marker.getSnippet());
-            TextView title = myContentsView.findViewById(R.id.name);
+            TextView title = ((TextView)myContentsView.findViewById(R.id.name));
             title.setText(marker.getTitle());
             return myContentsView;
         }
 
     }
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[],
-                                           @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
         switch (requestCode) {
             case 1: {
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                             .findFragmentById(R.id.map);
-                    try {
-                        mapFragment.getMapAsync(this);
-                    }catch (NullPointerException e){
-                        e.printStackTrace();
-                    }
+                    mapFragment.getMapAsync(this);
                 } else {
                     Snackbar.make(findViewById(R.id.content_frame), "Cannot use app without location permission", Snackbar.LENGTH_INDEFINITE).show();
                 }
@@ -545,9 +546,6 @@ public class DriverOverview extends AppCompatActivity implements NavigationView.
                 shuttleController = new ShuttleController((Shuttle)data.getSerializableExtra("shuttle"), this);
                 routeController = new RouteController((Route)data.getSerializableExtra("route"), this);
 
-                shuttleController.setShuttleRouteId(routeController.getRouteId());
-                shuttleController.saveModel();
-
                 TextView routeText = findViewById(R.id.route);
                 routeText.setText(routeController.getRouteName());
 
@@ -557,32 +555,10 @@ public class DriverOverview extends AppCompatActivity implements NavigationView.
                 shuttleText.setText(shuttleController.getShuttleLicensePlateNo());
 
                 RouteStops routeStops = new RouteStops();
-                routeStops.filter(routeController.getRouteId());
-                new RouteStopsController(routeStops, this).update();
+                routeStops.filterSelf(routeController.getRouteId());
+                new RouteStopsController(routeStops, this).updateView();
 
                 setOnDuty(data.getBooleanExtra("onDuty", false));
-            }
-        }
-    }
-
-    public class UserView implements View {
-
-        TextView name;
-        TextView type;
-        TextView email;
-
-        private UserView(TextView name, TextView type, TextView email){
-            this.name = name;
-            this.type = type;
-            this.email = email;
-        }
-
-        @Override
-        public void update(Model model) {
-            if(model instanceof User && name != null && email != null){
-                this.name.setText(((User)model).getFullName());
-                this.email.setText(((User)model).getEmail());
-                this.type.setText("Driver");
             }
         }
     }

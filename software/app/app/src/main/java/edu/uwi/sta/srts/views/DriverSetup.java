@@ -1,25 +1,13 @@
-/*
- * Copyright (c) 2019. Razor Sharp Software Solutions
- *
- * Azel Daniel (816002285)
- * Michael Bristol (816003612)
- * Amanda Seenath (816002935)
- *
- * INFO 3604
- * Project
- *
- * UWI Shuttle Routing and Tracking System
- */
-
 package edu.uwi.sta.srts.views;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -32,6 +20,7 @@ import android.widget.TextView;
 import android.widget.ViewFlipper;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import edu.uwi.sta.srts.R;
@@ -40,16 +29,15 @@ import edu.uwi.sta.srts.controllers.RoutesController;
 import edu.uwi.sta.srts.controllers.ShuttleController;
 import edu.uwi.sta.srts.controllers.ShuttlesController;
 import edu.uwi.sta.srts.controllers.UserController;
-import edu.uwi.sta.srts.utils.Model;
+import edu.uwi.sta.srts.models.Model;
 import edu.uwi.sta.srts.models.Route;
 import edu.uwi.sta.srts.models.Routes;
 import edu.uwi.sta.srts.models.Shuttle;
 import edu.uwi.sta.srts.models.Shuttles;
 import edu.uwi.sta.srts.models.User;
 import edu.uwi.sta.srts.utils.Utils;
-import edu.uwi.sta.srts.utils.View;
 
-public class DriverSetup extends AppCompatActivity implements View {
+public class DriverSetup extends AppCompatActivity implements View{
 
     private TextView toolbarText;
     private LinearLayout shuttlesLayout, routesLayout;
@@ -70,12 +58,12 @@ public class DriverSetup extends AppCompatActivity implements View {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_driver_setup);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        toolbarText =  findViewById(R.id.toolbarText);
+        toolbarText = (TextView) findViewById(R.id.toolbarText);
 
-        shuttlesLayout = findViewById(R.id.shuttlesLayout);
+        shuttlesLayout = (LinearLayout)findViewById(R.id.shuttlesLayout);
         routesLayout = findViewById(R.id.routesLayout);
 
         new ShuttlesController(new Shuttles(), this);
@@ -173,10 +161,6 @@ public class DriverSetup extends AppCompatActivity implements View {
         });
     }
 
-    /**
-     * Method that updates the progress layout
-     * @param index The level of progress; ranges from 1-3
-     */
     private void updateProgressLayout(int index){
         int[] attrs = new int[] { android.R.attr.textColorSecondary };
         TypedArray a = getTheme().obtainStyledAttributes(R.style.AppTheme, attrs);
@@ -234,7 +218,7 @@ public class DriverSetup extends AppCompatActivity implements View {
 
             for(final Shuttle shuttle: ((Shuttles)model).getShuttles()){
                 android.view.View view = inflater.inflate(R.layout.selectable_list_tem, null);
-                TextView title = view.findViewById(R.id.title);
+                TextView title = (TextView)view.findViewById(R.id.title);
                 title.setText(shuttle.getLicensePlateNo());
                 final RadioButton radioButton = view.findViewById(R.id.radioButton);
 
@@ -243,7 +227,7 @@ public class DriverSetup extends AppCompatActivity implements View {
                     shuttleController = new ShuttleController(shuttle, null);
 
                     if(routesController!= null){
-                        routesController.update();
+                        routesController.updateView();
                     }
                 }
 
@@ -301,7 +285,7 @@ public class DriverSetup extends AppCompatActivity implements View {
 
             for(final Route route: ((Routes)model).getRoutes()){
                 android.view.View view = inflater.inflate(R.layout.selectable_list_tem, null);
-                TextView title = view.findViewById(R.id.title);
+                TextView title = (TextView)view.findViewById(R.id.title);
                 title.setText(route.getName());
                 final RadioButton radioButton = view.findViewById(R.id.radioButton);
 

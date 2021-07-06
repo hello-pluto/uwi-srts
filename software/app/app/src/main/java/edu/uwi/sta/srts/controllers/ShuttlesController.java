@@ -1,14 +1,15 @@
 /*
- * Copyright (c) 2019. Razor Sharp Software Solutions
+ * Copyright (c) 2019. Razor Sharp Software Solutions.
  *
  * Azel Daniel (816002285)
- * Michael Bristol (816003612)
  * Amanda Seenath (816002935)
+ * Michael Bristol (816003612)
  *
  * INFO 3604
  * Project
+ * UWI Shuttle Routing and Tracking System Project
  *
- * UWI Shuttle Routing and Tracking System
+ * This class acts as a bridge between a list of route shuttles and their view.
  */
 
 package edu.uwi.sta.srts.controllers;
@@ -17,10 +18,9 @@ import java.util.ArrayList;
 
 import edu.uwi.sta.srts.models.Shuttle;
 import edu.uwi.sta.srts.models.Shuttles;
-import edu.uwi.sta.srts.utils.Controller;
-import edu.uwi.sta.srts.utils.View;
+import edu.uwi.sta.srts.views.View;
 
-public class ShuttlesController extends Controller {
+public class ShuttlesController extends Controller{
 
     /**
      * Constructor that requires the shuttle model and its corresponding view
@@ -35,13 +35,24 @@ public class ShuttlesController extends Controller {
         return ((Shuttles)this.model).getShuttles();
     }
 
-    /**
-     * Method that returns the shuttle controller for a given shuttle
-     * @param position The index of the shuttle
-     * @param view The view to link the controller to
-     * @return A newly created ShuttleController object
-     */
-    public ShuttleController getShuttleController(int position, View view){
-        return new ShuttleController(getShuttles().get(position), view);
+    public void addShuttle(Shuttle shuttle){
+        ((Shuttles)this.model).addShuttle(shuttle);
+    }
+
+    public void removeShuttle(int index){
+        ((Shuttles)this.model).removeShuttle(index);
+    }
+
+    public ShuttleController getShuttleController(int index, View view){
+        return new ShuttleController(getShuttles().get(index), view);
+    }
+
+    public Shuttle filter(String shuttleId){
+        for(Shuttle shuttle: getShuttles()){
+            if(shuttle.getId().equals(shuttleId)){
+                return shuttle;
+            }
+        }
+        return null;
     }
 }

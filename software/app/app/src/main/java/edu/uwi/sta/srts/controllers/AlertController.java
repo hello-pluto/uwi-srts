@@ -1,22 +1,8 @@
-/*
- * Copyright (c) 2019. Razor Sharp Software Solutions
- *
- * Azel Daniel (816002285)
- * Michael Bristol (816003612)
- * Amanda Seenath (816002935)
- *
- * INFO 3604
- * Project
- *
- * UWI Shuttle Routing and Tracking System
- */
-
 package edu.uwi.sta.srts.controllers;
 
 import edu.uwi.sta.srts.models.Alert;
-import edu.uwi.sta.srts.utils.Controller;
-import edu.uwi.sta.srts.utils.Model;
-import edu.uwi.sta.srts.utils.View;
+import edu.uwi.sta.srts.models.Model;
+import edu.uwi.sta.srts.views.View;
 
 public class AlertController extends Controller {
 
@@ -30,7 +16,7 @@ public class AlertController extends Controller {
     }
 
     public String getAlertId() {
-        return this.model.getId();
+        return ((Alert)this.model).getId();
     }
 
     public String getAlertTitle() {
@@ -42,7 +28,7 @@ public class AlertController extends Controller {
     }
 
     public String getAlertMessage() {
-        return (((Alert)this.model)).getMessage();
+        return ((Alert)((Alert)this.model)).getMessage();
     }
 
     public void setAlertMessage(String name) {

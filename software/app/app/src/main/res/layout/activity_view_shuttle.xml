@@ -1,17 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-  ~ Copyright (c) 2019. Razor Sharp Software Solutions
-  ~
-  ~ Azel Daniel (816002285)
-  ~ Amanda Seenath (816002935)
-  ~ Michael Bristol (816003612)
-  ~
-  ~ INFO 3604
-  ~ Project
-  ~
-  ~ UWI Shuttle Routing and Tracking System
-  -->
-
 <android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -35,6 +22,7 @@
             app:contentScrim="@color/colorPrimary">
 
             <fragment
+                xmlns:map="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/map"
                 android:name="com.google.android.gms.maps.SupportMapFragment"
                 android:layout_width="match_parent"
@@ -61,7 +49,7 @@
                     android:layout_margin="0dp"
                     android:singleLine="true"
                     android:ellipsize="marquee"
-                    android:text="@string/view_shuttle"/>
+                    android:text="View Shuttle"/>
             </android.support.v7.widget.Toolbar>
 
         </android.support.design.widget.CollapsingToolbarLayout>
@@ -99,7 +87,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/eta"
+                        android:text="ETA"
                         android:textSize="14sp"
                         android:fontFamily="@font/raleway"
                         android:textColor="#ccc"/>
@@ -112,7 +100,7 @@
                         android:textSize="14sp"
                         android:textStyle="bold"
                         android:layout_weight="1"
-                        android:text="@string/calculating_time"
+                        android:text="calculating time..."
                         android:textColor="@android:color/holo_red_light"/>
                 </LinearLayout>
 
@@ -125,7 +113,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/license_plate"
+                        android:text="License Plate"
                         android:textSize="14sp"
                         android:fontFamily="@font/raleway"
                         android:textColor="#ccc"/>
@@ -149,7 +137,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/max_capacity"
+                        android:text="Max Capacity"
                         android:textSize="14sp"
                         android:fontFamily="@font/raleway"
                         android:textColor="#ccc"/>
@@ -173,7 +161,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/driver"
+                        android:text="Driver"
                         android:textSize="14sp"
                         android:fontFamily="@font/raleway"
                         android:textColor="#ccc"/>
@@ -186,7 +174,7 @@
                         android:textSize="14sp"
                         android:textStyle="bold"
                         android:layout_weight="1"
-                        android:text="@string/no_driver"/>
+                        android:text="No driver"/>
                 </LinearLayout>
                 <LinearLayout
                     android:id="@+id/routeLayout"
@@ -197,7 +185,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/route"
+                        android:text="Route"
                         android:textSize="14sp"
                         android:fontFamily="@font/raleway"
                         android:textColor="#ccc"/>
@@ -210,7 +198,7 @@
                         android:textSize="14sp"
                         android:textStyle="bold"
                         android:layout_weight="1"
-                        android:text="@string/no_route"/>
+                        android:text="No route"/>
                 </LinearLayout>
             </LinearLayout>
         </android.support.v7.widget.CardView>

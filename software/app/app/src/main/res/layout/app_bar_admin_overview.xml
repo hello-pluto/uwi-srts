@@ -2,13 +2,15 @@
 <android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/content"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white"
     android:focusable="true"
     android:focusableInTouchMode="true"
-    android:descendantFocusability="beforeDescendants">
+    android:descendantFocusability="beforeDescendants"
+        >
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appBar"
@@ -36,7 +38,7 @@
                 android:singleLine="true"
                 android:ellipsize="marquee"
                 android:textColor="@android:color/white"
-                android:text="@string/routes"/>
+                android:text="Routes"/>
         </android.support.v7.widget.Toolbar>
 
     </android.support.design.widget.AppBarLayout>

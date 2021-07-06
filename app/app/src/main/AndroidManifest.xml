@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="edu.uwi.sta.srts">
+    <!--
+         The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
+         Google Maps Android API v2, but you must specify either coarse or fine
+         location permissions for the 'MyLocation' functionality.
+    -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity android:name=".views.ViewRoutes"></activity>
+        <activity android:name=".views.DriverSetup" />
+        <activity android:name=".views.ViewStop" />
+        <activity android:name=".views.StudentOverview" />
+        <activity android:name=".views.EditAlert" />
+        <activity android:name=".views.EditStop" />
+        <activity android:name=".views.EditShuttle" />
+        <activity android:name=".views.SplashActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="srts.page.link"
+                    android:scheme="http" />
+                <data
+                    android:host="srts.page.link"
+                    android:scheme="https" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".views.EditUser" />
+        <activity android:name=".views.EditRoute" />
+        <activity
+            android:name=".views.AdminOverview"
+            android:label="@string/title_activity_admin_overview"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_key" />
+
+        <activity
+            android:name=".views.DriverOverview"
+            android:label="@string/title_activity_track_shuttle" />
+        <activity
+            android:name=".views.LoginActivity"
+            android:label="@string/app_name" />
+
+        <uses-library
+            android:name="org.apache.http.legacy"
+            android:required="false" />
+
+        <activity android:name=".views.ViewShuttle" />
+        <activity android:name=".views.ViewAlerts" />
+        <activity android:name=".views.ViewAlert" />
+        <activity android:name=".views.ViewRoute" />
+    </application>
+
+</manifest>

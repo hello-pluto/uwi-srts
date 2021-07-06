@@ -1,22 +1,8 @@
-/*
- * Copyright (c) 2019. Razor Sharp Software Solutions
- *
- * Azel Daniel (816002285)
- * Michael Bristol (816003612)
- * Amanda Seenath (816002935)
- *
- * INFO 3604
- * Project
- *
- * UWI Shuttle Routing and Tracking System
- */
-
 package edu.uwi.sta.srts.views.fragments;
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -26,22 +12,24 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import edu.uwi.sta.srts.R;
-import edu.uwi.sta.srts.utils.Model;
+import edu.uwi.sta.srts.models.Model;
+import edu.uwi.sta.srts.models.User;
+import edu.uwi.sta.srts.models.Shuttle;
 import edu.uwi.sta.srts.models.Shuttles;
-import edu.uwi.sta.srts.utils.OnListFragmentInteractionListener;
+import edu.uwi.sta.srts.views.OnListFragmentInteractionListener;
 import edu.uwi.sta.srts.views.adapter.ShuttlesAdapter;
 import edu.uwi.sta.srts.views.ViewShuttle;
 
 public class ShuttlesFragment extends Fragment {
 
     private OnListFragmentInteractionListener listener;
-    private boolean isAdmin;
+
+    public static User user;
 
     public ShuttlesFragment() {}
 
-    public static ShuttlesFragment newInstance(boolean isAdmin) {
-        ShuttlesFragment fragment =  new ShuttlesFragment();
-        fragment.isAdmin = isAdmin;
+    public static ShuttlesFragment newInstance() {
+        ShuttlesFragment fragment = new ShuttlesFragment();
         return fragment;
     }
 
@@ -51,30 +39,26 @@ public class ShuttlesFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.recycler_view_layout, container, false);
 
         View empty = view.findViewById(R.id.empty);
 
-        RecyclerView recyclerView = view.findViewById(R.id.list);
+        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.list);
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
 
-        this.listener = new OnListFragmentInteractionListener() {
+        listener = new OnListFragmentInteractionListener() {
             @Override
             public void onListFragmentInteraction(Model model) {
                 Intent intent = new Intent(getContext(), ViewShuttle.class);
-                intent.putExtra("shuttle", model);
-                intent.putExtra("isAdmin", isAdmin);
+                intent.putExtra("shuttle", (Shuttle)model);
+                intent.putExtra("user", user);
                 startActivity(intent);
             }
         };
 
-        Shuttles shuttles = new Shuttles();
-        if(!isAdmin){
-            shuttles.filter(true);
-        }
-        ShuttlesAdapter adapter = new ShuttlesAdapter(shuttles, listener, empty);
+        ShuttlesAdapter adapter = new ShuttlesAdapter(new Shuttles(), listener, empty);
         recyclerView.setAdapter(adapter);
 
         return view;

@@ -1,42 +1,26 @@
-/*
- * Copyright (c) 2019. Razor Sharp Software Solutions
- *
- * Azel Daniel (816002285)
- * Michael Bristol (816003612)
- * Amanda Seenath (816002935)
- *
- * INFO 3604
- * Project
- *
- * UWI Shuttle Routing and Tracking System
- */
-
 package edu.uwi.sta.srts.views;
 
-import android.animation.ObjectAnimator;
-import android.animation.PropertyValuesHolder;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Handler;
 import android.support.annotation.NonNull;
-import android.support.v4.view.animation.FastOutSlowInInterpolator;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import edu.uwi.sta.srts.R;
 import edu.uwi.sta.srts.controllers.UserController;
-import edu.uwi.sta.srts.utils.Model;
+import edu.uwi.sta.srts.models.Model;
 import edu.uwi.sta.srts.models.User;
-import edu.uwi.sta.srts.utils.UserType;
-import edu.uwi.sta.srts.utils.View;
-import pl.bclogic.pulsator4droid.library.PulsatorLayout;
+import edu.uwi.sta.srts.models.utils.UserType;
 
 public class SplashActivity extends AppCompatActivity implements View {
 
@@ -45,27 +29,16 @@ public class SplashActivity extends AppCompatActivity implements View {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
-        ObjectAnimator scaleDown = ObjectAnimator.ofPropertyValuesHolder(
-                findViewById(R.id.icon),
-                PropertyValuesHolder.ofFloat("rotation", 0f, 360f));
-        scaleDown.setDuration(800);
-
-        scaleDown.setRepeatCount(ObjectAnimator.INFINITE);
-
-        scaleDown.setInterpolator(new FastOutSlowInInterpolator());
-        scaleDown.start();
-
-        PulsatorLayout pulsator = findViewById(R.id.pulsator);
-        pulsator.start();
-
         final FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         Intent intent = getIntent();
+
 
         if (intent.getData() != null){
             SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", 0);
             final String email = pref.getString("email", null);
             final String emailLink = intent.getData().toString();
             if(firebaseAuth.isSignInWithEmailLink(emailLink)) {
+
 
                 if (email == null) {
                     return;
@@ -83,10 +56,11 @@ public class SplashActivity extends AppCompatActivity implements View {
                                         userController.setUserFullName(
                                                 email.split("\\.")[0].substring(0,1).toUpperCase() + email.split("\\.")[0].substring(1).toLowerCase() + " "+
                                                 email.split("\\.")[1].substring(0,1).toUpperCase() + email.split("\\.")[1].replace("@my", "").substring(1).toLowerCase());
+                                        userController.setUserVerified(true);
                                         userController.setUserType(UserType.STUDENT);
                                         userController.setUserEmail(email);
                                         userController.saveModel();
-                                        userController.update();
+                                        userController.updateView();
                                     }
                                 } else {
                                     Log.e("", "Error signing in with email link", task.getException());
@@ -106,9 +80,9 @@ public class SplashActivity extends AppCompatActivity implements View {
     }
 
     @Override
-    public void update(final Model model) {
+    public void update(Model model) {
         if(model instanceof User){
-            final Intent intent;
+            Intent intent;
             switch (((User)model).getUserType()){
                 case ADMINISTRATOR:
                     intent = new Intent(this, AdminOverview.class);
@@ -121,15 +95,10 @@ public class SplashActivity extends AppCompatActivity implements View {
                     intent = new Intent(this, StudentOverview.class);
                     break;
             }
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    intent.putExtra("user", (User) model);
-                    startActivity(intent);
+            intent.putExtra("user", (User)model);
+            startActivity(intent);
 
-                    finish();
-                }
-            }, 1600);
+            finish();
         }
     }
 }

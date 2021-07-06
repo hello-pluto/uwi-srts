@@ -1,33 +1,20 @@
-/*
- * Copyright (c) 2019. Razor Sharp Software Solutions
- *
- * Azel Daniel (816002285)
- * Michael Bristol (816003612)
- * Amanda Seenath (816002935)
- *
- * INFO 3604
- * Project
- *
- * UWI Shuttle Routing and Tracking System
- */
-
 package edu.uwi.sta.srts.views.adapter;
 
-import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import edu.uwi.sta.srts.R;
 import edu.uwi.sta.srts.controllers.UserController;
 import edu.uwi.sta.srts.controllers.UsersController;
-import edu.uwi.sta.srts.utils.Model;
+import edu.uwi.sta.srts.models.Model;
 import edu.uwi.sta.srts.models.Users;
-import edu.uwi.sta.srts.utils.OnListFragmentInteractionListener;
+import edu.uwi.sta.srts.views.OnListFragmentInteractionListener;
 
-public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> implements edu.uwi.sta.srts.utils.View {
+public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> implements edu.uwi.sta.srts.views.View {
 
     private final UsersController usersController;
     private final OnListFragmentInteractionListener mListener;
@@ -42,15 +29,15 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
         }
     }
 
-    @Override @NonNull
-    public UsersAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    @Override
+    public UsersAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.single_line_list_item, parent, false);
         return new UsersAdapter.ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final UsersAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(final UsersAdapter.ViewHolder holder, int position) {
 
         holder.userController = usersController.getUserController(position, null);
 
@@ -74,17 +61,19 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View view;
         public final TextView title;
+        public final TextView meta;
         public UserController userController;
 
         public ViewHolder(View view) {
             super(view);
             this.view = view;
             this.userController = null;
-            this.title = view.findViewById(R.id.title);
-            this.view.findViewById(R.id.img).setVisibility(View.GONE);
+            title = (TextView) view.findViewById(R.id.title);
+            meta = (TextView) view.findViewById(R.id.meta);
+            view.findViewById(R.id.img).setVisibility(View.GONE);
         }
 
-        @Override @NonNull
+        @Override
         public String toString() {
             return super.toString() + " '" + title.getText() + "'";
         }

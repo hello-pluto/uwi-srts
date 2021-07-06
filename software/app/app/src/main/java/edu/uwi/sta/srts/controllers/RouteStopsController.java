@@ -1,30 +1,20 @@
-/*
- * Copyright (c) 2019. Razor Sharp Software Solutions
- *
- * Azel Daniel (816002285)
- * Michael Bristol (816003612)
- * Amanda Seenath (816002935)
- *
- * INFO 3604
- * Project
- *
- * UWI Shuttle Routing and Tracking System
- */
-
 package edu.uwi.sta.srts.controllers;
 
 import java.util.ArrayList;
 
+import edu.uwi.sta.srts.models.Route;
 import edu.uwi.sta.srts.models.RouteStop;
 import edu.uwi.sta.srts.models.RouteStops;
-import edu.uwi.sta.srts.utils.Controller;
-import edu.uwi.sta.srts.utils.View;
+import edu.uwi.sta.srts.models.Routes;
+import edu.uwi.sta.srts.views.View;
 
-public class RouteStopsController extends Controller {
+public class RouteStopsController extends Controller{
+
+    private String filter;
 
     /**
-     * Constructor that requires the route stops model and its corresponding view
-     * @param model The list of route stop models
+     * Constructor that requires the routes model and its corresponding view
+     * @param model The list of route models
      * @param view The corresponding view
      */
     public RouteStopsController(RouteStops model, View view) {
@@ -33,5 +23,13 @@ public class RouteStopsController extends Controller {
 
     public ArrayList<RouteStop> getRouteStops() {
         return ((RouteStops)this.model).getRouteStops();
+    }
+
+    public void addRouteStop(RouteStop route){
+        ((RouteStops)this.model).addRouteStop(route);
+    }
+
+    public void removeRoute(int index){
+        ((RouteStops)this.model).removeRouteStop(index);
     }
 }

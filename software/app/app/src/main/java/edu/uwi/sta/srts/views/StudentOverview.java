@@ -1,16 +1,3 @@
-/*
- * Copyright (c) 2019. Razor Sharp Software Solutions
- *
- * Azel Daniel (816002285)
- * Michael Bristol (816003612)
- * Amanda Seenath (816002935)
- *
- * INFO 3604
- * Project
- *
- * UWI Shuttle Routing and Tracking System
- */
-
 package edu.uwi.sta.srts.views;
 
 import android.Manifest;
@@ -19,8 +6,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.location.Location;
-import android.os.CountDownTimer;
-import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -32,11 +17,13 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.animation.AccelerateInterpolator;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -59,20 +46,21 @@ import edu.uwi.sta.srts.controllers.RoutesController;
 import edu.uwi.sta.srts.controllers.UserController;
 import edu.uwi.sta.srts.controllers.ShuttleController;
 import edu.uwi.sta.srts.controllers.ShuttlesController;
-import edu.uwi.sta.srts.utils.Model;
+import edu.uwi.sta.srts.models.Model;
 import edu.uwi.sta.srts.models.Route;
 import edu.uwi.sta.srts.models.Routes;
 import edu.uwi.sta.srts.models.User;
 import edu.uwi.sta.srts.models.Shuttle;
 import edu.uwi.sta.srts.models.Shuttles;
+import edu.uwi.sta.srts.models.utils.DatabaseHelper;
 import edu.uwi.sta.srts.utils.Utils;
-import edu.uwi.sta.srts.utils.View;
 
 public class StudentOverview extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback, View {
 
     private GoogleMap googleMap;
     private ActionBarDrawerToggle toggle;
 
+    private UserController userController;
     private RoutesController routesController;
     private ShuttlesController shuttlesController;
     private ShuttleController shuttleController;
@@ -96,9 +84,6 @@ public class StudentOverview extends AppCompatActivity implements NavigationView
     private float previousZoomLevel = -1.0f;
     private ArrayList<GroundOverlay> groundOverlays = new ArrayList<>();
 
-    private CountDownTimer etaTimer;
-    private String etaText = "";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -106,33 +91,38 @@ public class StudentOverview extends AppCompatActivity implements NavigationView
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
-        try {
-            mapFragment.getMapAsync(this);
-        }catch (NullPointerException e){
-            e.printStackTrace();
-        }
+        mapFragment.getMapAsync(this);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        toolbarText = findViewById(R.id.toolbarText);
+        toolbarText = (TextView) findViewById(R.id.toolbarText);
 
-        Utils.setupOfflineSnackbarListener(findViewById(R.id.content_frame));
+        final Snackbar offlineSnackbar = Snackbar.make(findViewById(R.id.content_frame),
+                "No internet. All changes saved locally.", Snackbar.LENGTH_INDEFINITE);
+        offlineSnackbar.setAction("Dismiss", new android.view.View.OnClickListener() {
+            @Override
+            public void onClick(android.view.View v) {
+                offlineSnackbar.dismiss();
+            }
+        });
 
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        DatabaseHelper.attachIsOnlineListener(offlineSnackbar);
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = findViewById(R.id.nav_view);
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
         android.view.View headerLayout = navigationView.getHeaderView(0);
 
-        TextView navName = headerLayout.findViewById(R.id.navName);
-        TextView navEmail = headerLayout.findViewById(R.id.navEmail);
-        TextView navType = headerLayout.findViewById(R.id.navType);
-        FloatingActionButton navEditUser = headerLayout.findViewById(R.id.edit_user);
+        TextView navName = (TextView) headerLayout.findViewById(R.id.navName);
+        TextView navEmail = (TextView) headerLayout.findViewById(R.id.navEmail);
+        TextView navType = (TextView) headerLayout.findViewById(R.id.navType);
+        FloatingActionButton navEditUser = (FloatingActionButton)headerLayout.findViewById(R.id.edit_user);
         navEditUser.setOnClickListener(new android.view.View.OnClickListener() {
             @Override
             public void onClick(android.view.View v) {
@@ -142,35 +132,27 @@ public class StudentOverview extends AppCompatActivity implements NavigationView
             }
         });
 
-        headerLayout.setOnClickListener(new android.view.View.OnClickListener() {
-            @Override
-            public void onClick(android.view.View v) {
-                Intent intent = new Intent(StudentOverview.this, ViewUser.class);
-                intent.putExtra("user", getIntent().getSerializableExtra("user"));
-                intent.putExtra("isAdmin", false);
-                startActivity(intent);
-            }
-        });
-
         latLngShuttleHashMap = new HashMap<>();
 
-        new UserController((User)getIntent().getSerializableExtra("user"),
-                new StudentOverview.UserView(navName, navType, navEmail)).update();
+        userController = new UserController((User)getIntent().getSerializableExtra("user"),
+                new StudentOverview.UserView(navName, navType, navEmail));
+
+        userController.updateView();
 
         shuttlesController = new ShuttlesController(new Shuttles(), this);
 
         routesController = new RoutesController(new Routes(), this);
 
-        filter = findViewById(R.id.filter);
+        filter = (FloatingActionButton) findViewById(R.id.filter);
         filter.setOnClickListener(new android.view.View.OnClickListener() {
             @Override
             public void onClick(android.view.View v) {
 
                 android.view.View view = LayoutInflater.from(getApplicationContext()).inflate(R.layout.filter_header, null);
-                TextView titleText = view.findViewById(R.id.title);
-                final TextView messageText = view.findViewById(R.id.message);
-                titleText.setText(getString(R.string.filter_shuttle_by_route));
-                messageText.setText(getString(R.string.select_a_route_to_show_shuttles_for));
+                TextView titleText = (TextView) view.findViewById(R.id.title);
+                final TextView messageText = (TextView) view.findViewById(R.id.message);
+                titleText.setText("Filter Shuttles by Route");
+                messageText.setText("Select a route to show shuttles for");
 
                 final CharSequence[] routes = new CharSequence[routesController.getRoutes().size() + 1];
                 for (int i = 0; i < routesController.getRoutes().size(); i++) {
@@ -183,6 +165,7 @@ public class StudentOverview extends AppCompatActivity implements NavigationView
                 if(routeIndex == -1){
                     index = routes.length -1;
                 }
+
 
                 new AlertDialog.Builder(StudentOverview.this)
                         .setSingleChoiceItems(routes, index, new DialogInterface.OnClickListener() {
@@ -202,7 +185,7 @@ public class StudentOverview extends AppCompatActivity implements NavigationView
                                     Route route = routesController.getRoutes().get(routeIndex);
                                     toolbarText.setText(route.getName());
                                 }else{
-                                    toolbarText.setText(getString(R.string.all_shuttles));
+                                    toolbarText.setText("All Shuttles");
                                 }
                                 if(mapReady && dataLoaded) {
                                     populateMap();
@@ -230,7 +213,6 @@ public class StudentOverview extends AppCompatActivity implements NavigationView
                     Shuttle shuttle = (Shuttle) shuttleController.getModel();
                     Intent intent = new Intent(StudentOverview.this, ViewShuttle.class);
                     intent.putExtra("shuttle", shuttle);
-                    intent.putExtra("eta", etaText);
                     startActivity(intent);
                 }
             }
@@ -267,9 +249,6 @@ public class StudentOverview extends AppCompatActivity implements NavigationView
         this.googleMap.setOnMyLocationChangeListener(new GoogleMap.OnMyLocationChangeListener() {
             @Override
             public void onMyLocationChange(Location location) {
-                if(StudentOverview.this.location!=null && StudentOverview.this.location.distanceTo(location) > 100){
-                    updateEta();
-                }
                 StudentOverview.this.location = location;
             }
         });
@@ -294,12 +273,14 @@ public class StudentOverview extends AppCompatActivity implements NavigationView
             @Override
             public void onGroundOverlayClick(GroundOverlay groundOverlay) {
                 shuttleController = new ShuttleController(latLngShuttleHashMap.get(groundOverlay.getPosition()), null);
+
                 showShuttleDetails();
 
                 TextView routeNameText = findViewById(R.id.route);
                 TextView licenseText = findViewById(R.id.licence);
+                TextView eta = findViewById(R.id.eta);
 
-                Route route = routesController.getRoute(shuttleController.getShuttleRouteId());
+                Route route = routesController.filter(shuttleController.getShuttleRouteId());
                 if(route != null){
                     routeNameText.setText(route.getName());
                 }else{
@@ -307,6 +288,18 @@ public class StudentOverview extends AppCompatActivity implements NavigationView
                 }
 
                 licenseText.setText(shuttleController.getShuttleLicensePlateNo());
+
+                if(location != null) {
+                    int etaInt = Utils.getEta(location.getLatitude(), location.getLongitude(),
+                            shuttleController.getShuttleLocation().getLatitude(), shuttleController.getShuttleLocation().getLongitude());
+                    if(etaInt == 0){
+                        eta.setText("a few seconds away");
+                    }else if(etaInt == 1){
+                        eta.setText("1 min away");
+                    }else{
+                        eta.setText(etaInt+ " mins away");
+                    }
+                }
 
                 googleMap.animateCamera(CameraUpdateFactory.newLatLng(groundOverlay.getPosition()));
             }
@@ -330,122 +323,6 @@ public class StudentOverview extends AppCompatActivity implements NavigationView
         }
     }
 
-    @Override
-    public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            moveTaskToBack(true);
-        }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.student_menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        int id = item.getItemId();
-
-        switch (id) {
-            case R.id.nav_routes:
-                startActivity(new Intent(this, ViewRoutes.class));
-                break;
-            case R.id.nav_alerts:
-                startActivity(new Intent(this, ViewAlerts.class));
-                break;
-            case R.id.nav_log_out:
-                FirebaseAuth.getInstance().signOut();
-                startActivity(new Intent(this, LoginActivity.class));
-                finish();
-                break;
-        }
-
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
-    }
-
-    @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-        toggle.syncState();
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        toggle.onConfigurationChanged(newConfig);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.view_as_list:
-                startActivity(new Intent(this, ViewShuttles.class));
-                break;
-            default:
-                toggle.onOptionsItemSelected(item);
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[],
-                                           @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case 1: {
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                            .findFragmentById(R.id.map);
-                    try {
-                        mapFragment.getMapAsync(this);
-                    }catch (NullPointerException e){
-                        e.printStackTrace();
-                    }
-                } else {
-                    Snackbar.make(findViewById(R.id.content_frame), "Cannot use app without location permission", Snackbar.LENGTH_INDEFINITE).show();
-                }
-            }
-        }
-    }
-
-    /**
-     * Method that updates the ETA ui for a given shuttle
-     */
-    public void updateEta(){
-        final TextView eta = findViewById(R.id.eta);
-        if(location != null && shuttleController!=null) {
-            int etaInMinutes = Utils.getEta(location.getLatitude(), location.getLongitude(),
-                    shuttleController.getShuttleLocation().getLatitude(), shuttleController.getShuttleLocation().getLongitude());
-
-            if(etaTimer != null){
-                etaTimer.cancel();
-            }
-
-            etaTimer = new CountDownTimer(etaInMinutes*60*1000, 60*1000) {
-                @Override
-                public void onTick(long millisUntilFinished) {
-                    etaText = Utils.formatEta((int)millisUntilFinished/60/1000);
-                    eta.setText(etaText);
-                }
-
-                @Override
-                public void onFinish() {
-                    eta.setText("a few seconds away");
-                }
-            };
-            etaTimer.start();
-        }
-    }
-
-    /**
-     * Method that populates the map with shuttles and other information
-     */
     private void populateMap(){
 
         googleMap.clear();
@@ -473,12 +350,8 @@ public class StudentOverview extends AppCompatActivity implements NavigationView
                 builder.include(latLng);
 
                 hasShuttles = true;
-
-                if(shuttleController != null && shuttleController.getModel().getId().equals(shuttle.getId())){
-                    shuttleController = new ShuttleController(shuttle, null);
-                    updateEta();
-                }
             }
+
         }
 
         if(hasShuttles) {
@@ -502,44 +375,78 @@ public class StudentOverview extends AppCompatActivity implements NavigationView
                 }
             });
             snackbar.show();
-            hideShuttleDetails();
+        }
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            moveTaskToBack(true);
         }
     }
 
-    /**
-     * Method that hides the shuttle information UI
-     */
-    public void hideShuttleDetails(){
-        etaTimer = null;
-        shuttleDetails.animate().translationY(Utils.convertDpToPixel(40, getApplicationContext()))
-                .setInterpolator(new AccelerateInterpolator());
-        filter.animate().translationY(Utils.convertDpToPixel(40, getApplicationContext()))
-                .setInterpolator(new AccelerateInterpolator());;
-        TextView routeNameText = findViewById(R.id.route);
-        TextView licenseText = findViewById(R.id.licence);
-        routeNameText.setText("No shuttle selected");
-        licenseText.setText("");
-        shuttleDetailsVisible = false;
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.student_menu, menu);
+        return true;
     }
 
-    /**
-     * Method that shows the shuttle information UI
-     */
-    public void showShuttleDetails(){
-        shuttleDetails.animate().translationY(0).setInterpolator(new AccelerateInterpolator());;
-        filter.animate().translationY(0).setInterpolator(new AccelerateInterpolator());
-        shuttleDetailsVisible =true;
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        int id = item.getItemId();
 
-        updateEta();
+        switch (id) {
+            case R.id.nav_routes:
+                startActivity(new Intent(this, ViewRoutes.class));
+                break;
+            case R.id.nav_alerts:
+                startActivity(new Intent(this, ViewAlerts.class));
+                break;
+            case R.id.nav_log_out:
+                FirebaseAuth.getInstance().signOut();
+                startActivity(new Intent(this, LoginActivity.class));
+                finish();
+                break;
+        }
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
     }
 
-    public class UserView implements View {
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        toggle.syncState();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        toggle.onConfigurationChanged(newConfig);
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            default:
+                toggle.onOptionsItemSelected(item);
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    public class UserView implements edu.uwi.sta.srts.views.View {
 
         TextView name;
         TextView type;
         TextView email;
 
-        private UserView(TextView name, TextView type, TextView email){
+        public UserView(TextView name, TextView type, TextView email){
             this.name = name;
             this.type = type;
             this.email = email;
@@ -553,5 +460,40 @@ public class StudentOverview extends AppCompatActivity implements NavigationView
                 this.type.setText("Student");
             }
         }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case 1: {
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                            .findFragmentById(R.id.map);
+                    mapFragment.getMapAsync(this);
+                } else {
+                    Snackbar.make(findViewById(R.id.content_frame), "Cannot use app without location permission", Snackbar.LENGTH_INDEFINITE).show();
+                }
+            }
+        }
+    }
+
+    public void hideShuttleDetails(){
+        shuttleDetails.animate().translationY(Utils.convertDpToPixel(40, getApplicationContext()))
+                .setInterpolator(new AccelerateInterpolator());
+        filter.animate().translationY(Utils.convertDpToPixel(40, getApplicationContext()))
+                .setInterpolator(new AccelerateInterpolator());;
+        TextView routeNameText = findViewById(R.id.route);
+        TextView licenseText = findViewById(R.id.licence);
+        routeNameText.setText("No shuttle selected");
+        licenseText.setText("");
+        shuttleDetailsVisible = false;
+    }
+
+    public void showShuttleDetails(){
+        shuttleDetails.animate().translationY(0).setInterpolator(new AccelerateInterpolator());;
+        filter.animate().translationY(0).setInterpolator(new AccelerateInterpolator());
+        shuttleDetailsVisible =true;
     }
 }

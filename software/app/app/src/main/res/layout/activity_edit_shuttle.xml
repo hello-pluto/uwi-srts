@@ -1,20 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-  ~ Copyright (c) 2019. Razor Sharp Software Solutions
-  ~
-  ~ Azel Daniel (816002285)
-  ~ Amanda Seenath (816002935)
-  ~ Michael Bristol (816003612)
-  ~
-  ~ INFO 3604
-  ~ Project
-  ~
-  ~ UWI Shuttle Routing and Tracking System
-  -->
-
 <android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/content"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -79,7 +67,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/license_plate"
+                        android:text="License Plate"
                         android:textSize="14sp"
                         android:textStyle="bold"
                         android:fontFamily="@font/raleway"/>
@@ -95,7 +83,7 @@
                             android:fontFamily="@font/raleway"
                             android:inputType="textCapCharacters"
                             android:background="@null"
-                            android:hint="@string/enter_license_plate"
+                            android:hint="Enter license plate"
                             android:textSize="14sp"
                             android:textStyle="bold"
                             android:layout_weight="1"/>
@@ -121,7 +109,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textSize="12sp"
-                        android:text="@string/you_must_enter_a_valid_email"
+                        android:text="You must enter a valid email"
                         android:fontFamily="@font/raleway"
                         android:textColor="@android:color/holo_red_light"
                         android:paddingTop="4dp"
@@ -137,7 +125,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/capacity"
+                        android:text="Capacity"
                         android:textSize="14sp"
                         android:textStyle="bold"
                         android:fontFamily="@font/raleway"/>
@@ -153,7 +141,7 @@
                             android:fontFamily="@font/raleway"
                             android:inputType="number"
                             android:background="@null"
-                            android:hint="@string/enter_capacity"
+                            android:hint="Enter capacity"
                             android:textSize="14sp"
                             android:textStyle="bold"
                             android:layout_weight="1"/>
@@ -178,7 +166,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textSize="12sp"
-                        android:text="@string/you_must_enter_a_valid_email"
+                        android:text="You must enter a valid email"
                         android:fontFamily="@font/raleway"
                         android:textColor="@android:color/holo_red_light"
                         android:paddingTop="4dp"
@@ -196,7 +184,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/driver"
+                        android:text="Driver"
                         android:textSize="14sp"
                         android:textStyle="bold"
                         android:fontFamily="@font/raleway"/>
@@ -210,7 +198,7 @@
                             android:id="@+id/driver"
                             android:fontFamily="@font/raleway"
                             android:background="@null"
-                            android:text="@string/no_driver"
+                            android:text="No driver"
                             android:textSize="14sp"
                             android:textStyle="bold"
                             android:layout_weight="1"
@@ -252,7 +240,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/route"
+                        android:text="Route"
                         android:textSize="14sp"
                         android:textStyle="bold"
                         android:fontFamily="@font/raleway"/>
@@ -266,7 +254,7 @@
                             android:id="@+id/route"
                             android:fontFamily="@font/raleway"
                             android:background="@null"
-                            android:text="@string/no_route"
+                            android:text="No route"
                             android:textSize="14sp"
                             android:textStyle="bold"
                             android:layout_weight="1"
@@ -308,10 +296,11 @@
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
+
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:text="@string/save"
+                            android:text="Save"
                             android:id="@+id/done"
                             android:background="?attr/selectableItemBackground"
                             android:textColor="@android:color/white"
@@ -319,6 +308,7 @@
                             android:textSize="16sp"
                             android:textStyle="bold"
                             android:fontFamily="@font/raleway"/>
+
                         <ProgressBar
                             android:id="@+id/progressBar"
                             android:layout_width="24dp"
@@ -329,8 +319,11 @@
                             android:layout_centerVertical="true"
                             android:layout_marginRight="12dp"
                             android:visibility="gone"/>
+
                     </RelativeLayout>
+
                 </android.support.v7.widget.CardView>
+
             </LinearLayout>
         </android.support.v7.widget.CardView>
     </ScrollView>

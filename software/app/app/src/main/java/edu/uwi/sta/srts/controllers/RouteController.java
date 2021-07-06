@@ -1,23 +1,25 @@
 /*
- * Copyright (c) 2019. Razor Sharp Software Solutions
+ * Copyright (c) 2019. Razor Sharp Software Solutions.
  *
  * Azel Daniel (816002285)
- * Michael Bristol (816003612)
  * Amanda Seenath (816002935)
+ * Michael Bristol (816003612)
  *
  * INFO 3604
  * Project
+ * UWI Shuttle Routing and Tracking System Project
  *
- * UWI Shuttle Routing and Tracking System
+ * This class acts as a bridge between a single route model and its view.
  */
 
 package edu.uwi.sta.srts.controllers;
 
 import edu.uwi.sta.srts.models.Route;
-import edu.uwi.sta.srts.utils.Controller;
-import edu.uwi.sta.srts.utils.View;
+import edu.uwi.sta.srts.models.RouteStop;
+import edu.uwi.sta.srts.models.RouteStops;
+import edu.uwi.sta.srts.views.View;
 
-public class RouteController extends Controller {
+public class RouteController extends Controller{
 
     /**
      * Constructor that requires the route model and its corresponding view
@@ -29,11 +31,11 @@ public class RouteController extends Controller {
     }
 
     public String getRouteId() {
-        return this.model.getId();
+        return ((Route)this.model).getId();
     }
 
     public String getRouteName() {
-        return (((Route)this.model)).getName();
+        return ((Route)((Route)this.model)).getName();
     }
 
     public void setRouteName(String name) {

@@ -1,16 +1,3 @@
-/*
- * Copyright (c) 2019. Razor Sharp Software Solutions
- *
- * Azel Daniel (816002285)
- * Michael Bristol (816003612)
- * Amanda Seenath (816002935)
- *
- * INFO 3604
- * Project
- *
- * UWI Shuttle Routing and Tracking System
- */
-
 package edu.uwi.sta.srts.views;
 
 import android.content.Intent;
@@ -31,15 +18,14 @@ import edu.uwi.sta.srts.controllers.RoutesController;
 import edu.uwi.sta.srts.controllers.UserController;
 import edu.uwi.sta.srts.controllers.UsersController;
 import edu.uwi.sta.srts.controllers.ShuttleController;
-import edu.uwi.sta.srts.utils.Model;
+import edu.uwi.sta.srts.models.Model;
 import edu.uwi.sta.srts.models.Route;
 import edu.uwi.sta.srts.models.Routes;
 import edu.uwi.sta.srts.models.User;
 import edu.uwi.sta.srts.models.Users;
 import edu.uwi.sta.srts.models.Shuttle;
-import edu.uwi.sta.srts.utils.UserType;
+import edu.uwi.sta.srts.models.utils.UserType;
 import edu.uwi.sta.srts.utils.Utils;
-import edu.uwi.sta.srts.utils.View;
 
 public class EditShuttle extends AppCompatActivity implements View {
 
@@ -61,15 +47,11 @@ public class EditShuttle extends AppCompatActivity implements View {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_shuttle);
 
-        final Toolbar toolbar = findViewById(R.id.toolbar);
+        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        try {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }catch (NullPointerException e){
-            e.printStackTrace();
-        }
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        TextView toolbarText = findViewById(R.id.toolbarText);
+        TextView toolbarText = (TextView)findViewById(R.id.toolbarText);
 
         Shuttle shuttle = (Shuttle) getIntent().getSerializableExtra("shuttle");
 
@@ -81,15 +63,15 @@ public class EditShuttle extends AppCompatActivity implements View {
         shuttleController = new ShuttleController(shuttle, this);
 
         android.view.View done = findViewById(R.id.done);
-        licensePlateEditText =  findViewById(R.id.licensePlate);
-        capacityEditText = findViewById(R.id.capacity);
+        licensePlateEditText = (EditText) findViewById(R.id.licensePlate);
+        capacityEditText = (EditText) findViewById(R.id.capacity);
 
-        final TextView licensePlateError = findViewById(R.id.licensePlateError);
-        final TextView capacityError = findViewById(R.id.capacityError);
+        final TextView licensePlateError = (TextView) findViewById(R.id.licensePlateError);
+        final TextView capacityError = (TextView) findViewById(R.id.capacityError);
 
         driversLayout = findViewById(R.id.driverLayout);
-        driverText = findViewById(R.id.driver);
-        routeText = findViewById(R.id.route);
+        driverText = (TextView)findViewById(R.id.driver);
+        routeText = (TextView)findViewById(R.id.route);
         routesLayout = findViewById(R.id.routeLayout);
 
         Utils.setUpActivations(this, licensePlateEditText, findViewById(R.id.licensePlateUnderline));
@@ -187,7 +169,7 @@ public class EditShuttle extends AppCompatActivity implements View {
         });
 
         Users drivers = new Users();
-        drivers.filter(UserType.DRIVER);
+        drivers.filterSelf(UserType.DRIVER);
 
         new UsersController(drivers, this);
         new RoutesController(new Routes(), this);

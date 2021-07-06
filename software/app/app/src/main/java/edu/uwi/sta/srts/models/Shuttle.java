@@ -1,14 +1,15 @@
 /*
- * Copyright (c) 2019. Razor Sharp Software Solutions
+ * Copyright (c) 2019. Razor Sharp Software Solutions.
  *
  * Azel Daniel (816002285)
- * Michael Bristol (816003612)
  * Amanda Seenath (816002935)
+ * Michael Bristol (816003612)
  *
  * INFO 3604
  * Project
+ * UWI Shuttle Routing and Tracking System Project
  *
- * UWI Shuttle Routing and Tracking System
+ * This class represents a shuttle in the system
  */
 
 package edu.uwi.sta.srts.models;
@@ -20,26 +21,31 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
-import edu.uwi.sta.srts.utils.DatabaseHelper;
-import edu.uwi.sta.srts.utils.Model;
-import edu.uwi.sta.srts.utils.SimpleLocation;
+import edu.uwi.sta.srts.models.utils.DatabaseHelper;
+import edu.uwi.sta.srts.models.utils.Location;
 
-public class Shuttle extends Model {
+public class Shuttle extends Model{
 
     private int capacity;
+
     private String licensePlateNo;
-    private SimpleLocation location;
+
+    private Location location;
+
     private String driverId;
+
     private String routeId;
+
     private boolean onDuty;
+
     private float rotation;
 
     /**
-     * Default constructor
+     * Default constructor for Firebase
      */
     public Shuttle() {
         super();
-        this.location = new SimpleLocation();
+        this.location = new Location();
         this.driverId = "";
         this.routeId = "";
         this.onDuty = false;
@@ -52,7 +58,7 @@ public class Shuttle extends Model {
      */
     public Shuttle(String shuttleId){
         super();
-        if(shuttleId == null || shuttleId.equals("")){
+        if(shuttleId.equals("")){
             return;
         }
         DatabaseHelper.getInstance().getDatabaseReference("shuttles").child(shuttleId)
@@ -63,7 +69,7 @@ public class Shuttle extends Model {
                         if(v != null) {
                             Shuttle.this.setCapacity(v.getCapacity());
                             Shuttle.this.setLicensePlateNo(v.getLicensePlateNo());
-                            Shuttle.this.setLocation(new SimpleLocation(v.getLocation().getLatitude(), v.getLocation().getLongitude()));
+                            Shuttle.this.setLocation(new Location(v.getLocation().getLatitude(), v.getLocation().getLongitude()));
                             Shuttle.this.setDriverId(v.getDriverId());
                             Shuttle.this.setRouteId(v.getRouteId());
                             Shuttle.this.setOnDuty(v.isOnDuty());
@@ -79,6 +85,37 @@ public class Shuttle extends Model {
 
                     }
                 });
+    }
+
+    /**
+     * Constructor that requires the number of capacity, licence plate number of a shuttle
+     * @param capacity The maximum amount of passengers that the shuttle can hold e.g. 12
+     * @param licensePlateNo The licence plate number of the shuttle
+     */
+    public Shuttle(int capacity, String licensePlateNo) {
+        this();
+        this.capacity = capacity;
+        this.licensePlateNo = licensePlateNo;
+        this.location = new Location();
+        this.driverId = "";
+        this.routeId = "";
+    }
+
+    /**
+     * Constructor that requires the number of capacity, licence plate number, location, driverId
+     * and routeId of a shuttle
+     * @param capacity The maximum amount of passengers that the shuttle can hold e.g. 12
+     * @param licensePlateNo The licence plate number of the shuttle
+     * @param driverId The driver that the shuttle is currently assigned to
+     * @param routeId The route that the shuttle is currently taking
+     */
+    public Shuttle(int capacity, String licensePlateNo, String driverId, String routeId) {
+        this();
+        this.capacity = capacity;
+        this.licensePlateNo = licensePlateNo;
+        this.location = new Location();
+        this.driverId = driverId;
+        this.routeId = routeId;
     }
 
     public int getCapacity() {
@@ -106,11 +143,11 @@ public class Shuttle extends Model {
         return null;
     }
 
-    public SimpleLocation getLocation() {
+    public Location getLocation() {
         return location;
     }
 
-    public void setLocation(SimpleLocation location) {
+    public void setLocation(Location location) {
         this.location = location;
     }
 

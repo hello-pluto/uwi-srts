@@ -1,16 +1,3 @@
-/*
- * Copyright (c) 2019. Razor Sharp Software Solutions
- *
- * Azel Daniel (816002285)
- * Michael Bristol (816003612)
- * Amanda Seenath (816002935)
- *
- * INFO 3604
- * Project
- *
- * UWI Shuttle Routing and Tracking System
- */
-
 package edu.uwi.sta.srts.models;
 
 import android.support.annotation.NonNull;
@@ -20,8 +7,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
-import edu.uwi.sta.srts.utils.DatabaseHelper;
-import edu.uwi.sta.srts.utils.Model;
+import edu.uwi.sta.srts.models.utils.DatabaseHelper;
 
 public class RouteStop extends Model {
 
@@ -32,21 +18,18 @@ public class RouteStop extends Model {
     private String stopId;
 
     /**
-     * Default constructor
+     * Default constructor for Firebase
      */
     public RouteStop(){
         super();
     }
 
     /**
-     * Constructor that fetches the route stop corresponding to the given route stop id
-     * @param routeStopId The id of the route stop to fetch
+     * Constructor that fetches the route-stop corresponding to the given stopId
+     * @param routeStopId The id of the route-stop to fetch
      */
     public RouteStop(String routeStopId){
         super();
-        if(routeStopId == null || routeStopId.equals("")){
-            return;
-        }
         DatabaseHelper.getInstance().getDatabaseReference("routeStop").child(routeStopId)
                 .addValueEventListener(new ValueEventListener() {
                     @Override
@@ -68,6 +51,11 @@ public class RouteStop extends Model {
                 });
     }
 
+    public RouteStop(String routeId, String stopId) {
+        this.routeId = routeId;
+        this.stopId = stopId;
+    }
+
     public int getOrder() {
         return order;
     }
@@ -82,6 +70,14 @@ public class RouteStop extends Model {
 
     public void setRouteId(String routeId) {
         this.routeId = routeId;
+    }
+
+    public String getRouteStopId() {
+        return id;
+    }
+
+    public void setRouteStopId(String routeStopId) {
+        this.id = routeStopId;
     }
 
     public String getStopId() {

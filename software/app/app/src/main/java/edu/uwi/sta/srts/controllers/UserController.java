@@ -1,22 +1,22 @@
 /*
- * Copyright (c) 2019. Razor Sharp Software Solutions
+ * Copyright (c) 2019. Razor Sharp Software Solutions.
  *
  * Azel Daniel (816002285)
- * Michael Bristol (816003612)
  * Amanda Seenath (816002935)
+ * Michael Bristol (816003612)
  *
  * INFO 3604
  * Project
+ * UWI Shuttle Routing and Tracking System Project
  *
- * UWI Shuttle Routing and Tracking System
+ * This class acts as a bridge between a single user model and its view.
  */
 
 package edu.uwi.sta.srts.controllers;
 
 import edu.uwi.sta.srts.models.User;
-import edu.uwi.sta.srts.utils.Controller;
-import edu.uwi.sta.srts.utils.UserType;
-import edu.uwi.sta.srts.utils.View;
+import edu.uwi.sta.srts.models.utils.UserType;
+import edu.uwi.sta.srts.views.View;
 
 public class UserController extends Controller {
 
@@ -59,5 +59,13 @@ public class UserController extends Controller {
 
     public void setUserType(UserType userType) {
         ((User)this.model).setUserType(userType);
+    }
+
+    public boolean isUserVerified() {
+        return ((User)this.model).isVerified();
+    }
+
+    public void setUserVerified(boolean verified) {
+        ((User)this.model).setVerified(verified);
     }
 }

@@ -1,16 +1,3 @@
-/*
- * Copyright (c) 2019. Razor Sharp Software Solutions
- *
- * Azel Daniel (816002285)
- * Michael Bristol (816003612)
- * Amanda Seenath (816002935)
- *
- * INFO 3604
- * Project
- *
- * UWI Shuttle Routing and Tracking System
- */
-
 package edu.uwi.sta.srts.models;
 
 import android.support.annotation.NonNull;
@@ -21,8 +8,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-import edu.uwi.sta.srts.utils.DatabaseHelper;
-import edu.uwi.sta.srts.utils.Model;
+import edu.uwi.sta.srts.models.utils.DatabaseHelper;
 
 public class RouteStops extends Model {
 
@@ -45,7 +31,7 @@ public class RouteStops extends Model {
                         }
 
                         if(filter != null){
-                            filter(filter);
+                            filterSelf(filter);
                         }
 
                         notifyObservers();
@@ -58,8 +44,42 @@ public class RouteStops extends Model {
                 });
     }
 
+    /**
+     * Constructor that accepts a local collection of routes
+     * @param routeStops The collection of routes
+     */
+    public RouteStops(ArrayList<RouteStop> routeStops){
+        super();
+        this.routeStops.addAll(routeStops);
+    }
+
     public ArrayList<RouteStop> getRouteStops() {
         return this.routeStops;
+    }
+
+    public void addRouteStop(RouteStop routeStop){
+        this.routeStops.add(routeStop);
+    }
+
+    public void removeRouteStop(int index){
+        this.routeStops.remove(index);
+    }
+
+    public ArrayList<RouteStop> filterSelf(String routeId){
+
+        filter = routeId;
+
+        ArrayList<RouteStop> routeStops = new ArrayList<>();
+        for(RouteStop user: getRouteStops()){
+            if(user.getRouteId().equals(routeId)){
+                routeStops.add(user);
+            }
+        }
+
+        this.getRouteStops().clear();
+        this.getRouteStops().addAll(routeStops);
+
+        return routeStops;
     }
 
     @Override
@@ -74,24 +94,5 @@ public class RouteStops extends Model {
         for(RouteStop routeStop: this.getRouteStops()){
             routeStop.delete();
         }
-    }
-
-    /**
-     * Method that filters the list of route stops for a given route
-     * @param routeId The id of the route to get route stops for
-     */
-    public void filter(String routeId){
-
-        filter = routeId;
-
-        ArrayList<RouteStop> routeStops = new ArrayList<>();
-        for(RouteStop user: getRouteStops()){
-            if(user.getRouteId().equals(routeId)){
-                routeStops.add(user);
-            }
-        }
-
-        this.getRouteStops().clear();
-        this.getRouteStops().addAll(routeStops);
     }
 }

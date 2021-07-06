@@ -2,12 +2,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/view_as_list"
-        android:orderInCategory="100"
-        android:title="View as list"
-        app:showAsAction="always"
-        android:icon="@drawable/round_view_list_24"/>
-    <item
         android:id="@+id/help"
         android:orderInCategory="100"
         android:title="Help"

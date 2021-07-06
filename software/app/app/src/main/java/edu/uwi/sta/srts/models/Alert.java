@@ -1,50 +1,37 @@
-/*
- * Copyright (c) 2019. Razor Sharp Software Solutions
- *
- * Azel Daniel (816002285)
- * Michael Bristol (816003612)
- * Amanda Seenath (816002935)
- *
- * INFO 3604
- * Project
- *
- * UWI Shuttle Routing and Tracking System
- */
-
 package edu.uwi.sta.srts.models;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
-import edu.uwi.sta.srts.utils.DatabaseHelper;
-import edu.uwi.sta.srts.utils.Model;
+import edu.uwi.sta.srts.models.utils.DatabaseHelper;
 
 public class Alert extends Model {
 
     private String title;
+
     private String message;
+
     private int urgency;
 
     /**
-     * Default constructor
+     * Default constructor for Firebase
      */
     public Alert () {
         super();
     }
 
     /**
-     * Constructor that fetches the alert corresponding to the given alert id
-     * @param alertId The alert id of the alert to fetch
+     * Constructor that fetches the route corresponding to the given routeId
+     * @param alertId The alertId of the alert to fetch
      */
     public Alert(String alertId){
         super();
-        if(alertId == null || alertId.equals("")){
-            return;
-        }
         DatabaseHelper.getInstance().getDatabaseReference("alerts").child(alertId)
                 .addValueEventListener(new ValueEventListener() {
                     @Override

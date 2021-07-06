@@ -1,19 +1,5 @@
-/*
- * Copyright (c) 2019. Razor Sharp Software Solutions
- *
- * Azel Daniel (816002285)
- * Michael Bristol (816003612)
- * Amanda Seenath (816002935)
- *
- * INFO 3604
- * Project
- *
- * UWI Shuttle Routing and Tracking System
- */
-
 package edu.uwi.sta.srts.views;
 
-import android.app.Service;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -25,9 +11,9 @@ import android.text.Html;
 import android.text.TextWatcher;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -44,10 +30,11 @@ import com.google.firebase.database.ValueEventListener;
 
 import edu.uwi.sta.srts.R;
 import edu.uwi.sta.srts.models.User;
-import edu.uwi.sta.srts.utils.DatabaseHelper;
+import edu.uwi.sta.srts.models.utils.DatabaseHelper;
+import edu.uwi.sta.srts.utils.Closable;
 import edu.uwi.sta.srts.utils.Utils;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity implements Closable {
 
     private android.view.View loading;
     private boolean passwordVisible = false;
@@ -66,6 +53,7 @@ public class LoginActivity extends AppCompatActivity {
         final TextView passwordError = findViewById(R.id.passwordError);
         final ImageButton passwordToggle = findViewById(R.id.passwordToggle);
         loading = findViewById(R.id.progressBar);
+
 
         Utils.setUpActivations(this, emailEditText, findViewById(R.id.emailUnderline));
         Utils.setUpActivations(this, passwordEditText, findViewById(R.id.passwordUnderline));
@@ -158,7 +146,7 @@ public class LoginActivity extends AppCompatActivity {
                 boolean error = false;
 
                 if (emailError.getVisibility() == View.VISIBLE) {
-                    emailError.setText(getString(R.string.email_error));
+                    emailError.setText("Please enter a valid email");
                     emailError.setVisibility(View.VISIBLE);
                     findViewById(R.id.emailUnderline).setBackgroundColor(getResources().getColor(android.R.color.holo_red_light));
                     error = true;
@@ -167,7 +155,7 @@ public class LoginActivity extends AppCompatActivity {
                 }
 
                 if (!studentMode && passwordError.getVisibility() == View.VISIBLE) {
-                    passwordError.setText(getString(R.string.password_error));
+                    passwordError.setText("Password must be at least 8 characters long");
                     passwordError.setVisibility(View.VISIBLE);
                     findViewById(R.id.passwordUnderline).setBackgroundColor(getResources().getColor(android.R.color.holo_red_light));
                     error = true;
@@ -199,6 +187,8 @@ public class LoginActivity extends AppCompatActivity {
                                     loading.setVisibility(View.GONE);
                                     if (task.isSuccessful()) {
                                         Snackbar.make(findViewById(R.id.rl), "Confirmation email sent to " + email + "", Snackbar.LENGTH_INDEFINITE).show();
+                                    }else{
+                                        Log.d("meh", email + "  " + task.getException().toString());
                                     }
                                 }
                             });
@@ -240,9 +230,6 @@ public class LoginActivity extends AppCompatActivity {
                                 }
                             });
                 }
-
-                InputMethodManager imm = (InputMethodManager)getSystemService(Service.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(emailEditText.getWindowToken(), 0);
             }
         });
 
@@ -256,46 +243,18 @@ public class LoginActivity extends AppCompatActivity {
                 View passwordLayout = findViewById(R.id.passwordLayout);
                 if(studentMode){
                     passwordLayout.setVisibility(View.GONE);
-                    login.setText(getString(R.string.cont));
+                    login.setText("Continue");
                     String styledText = "Are you a driver or administrator? <b><font color='#009688'>Click here</font></b>.";
                     switchMode.setText(Html.fromHtml(styledText), TextView.BufferType.SPANNABLE);
                     emailEditText.setHint("Enter your UWI email");
                     findViewById(R.id.uwiEmailPlaceholder).setVisibility(View.VISIBLE);
                 }else{
                     passwordLayout.setVisibility(View.VISIBLE);
-                    login.setText(getString(R.string.sign_in));
+                    login.setText("Sign In");
                     String styledText = "Are you a student? <b><font color='#009688'>Click here</font></b>.";
                     switchMode.setText(Html.fromHtml(styledText), TextView.BufferType.SPANNABLE);
                     emailEditText.setHint("Enter email");
                     findViewById(R.id.uwiEmailPlaceholder).setVisibility(View.GONE);
-                }
-            }
-        });
-
-        View resetPassword = findViewById(R.id.resetPassword);
-        resetPassword.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                if (emailError.getVisibility() == View.VISIBLE || emailEditText.getText().toString().trim().equals("")) {
-                    emailError.setText(getString(R.string.email_error));
-                    emailError.setVisibility(View.VISIBLE);
-                    findViewById(R.id.emailUnderline).setBackgroundColor(getResources().getColor(android.R.color.holo_red_light));
-                } else {
-                    emailError.setVisibility(View.INVISIBLE);
-
-                    FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-                    firebaseAuth.sendPasswordResetEmail(emailEditText.getText().toString().trim()).addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            if(task.isSuccessful()){
-                                Snackbar.make(findViewById(R.id.rl), "Reset password link sent to " + emailEditText.getText().toString().trim(), Snackbar.LENGTH_INDEFINITE).show();
-                            }else{
-                                Snackbar.make(findViewById(R.id.rl), "Account for " + emailEditText.getText().toString().trim() + " does not exist", Snackbar.LENGTH_SHORT).show();
-                            }
-                        }
-                    });
-
                 }
             }
         });
@@ -313,6 +272,7 @@ public class LoginActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
     public void close(User user) {
         loading.setVisibility(android.view.View.GONE);
         Intent intent;

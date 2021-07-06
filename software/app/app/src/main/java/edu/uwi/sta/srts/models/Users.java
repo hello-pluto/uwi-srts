@@ -1,16 +1,3 @@
-/*
- * Copyright (c) 2019. Razor Sharp Software Solutions
- *
- * Azel Daniel (816002285)
- * Michael Bristol (816003612)
- * Amanda Seenath (816002935)
- *
- * INFO 3604
- * Project
- *
- * UWI Shuttle Routing and Tracking System
- */
-
 package edu.uwi.sta.srts.models;
 
 import android.support.annotation.NonNull;
@@ -21,9 +8,8 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-import edu.uwi.sta.srts.utils.DatabaseHelper;
-import edu.uwi.sta.srts.utils.Model;
-import edu.uwi.sta.srts.utils.UserType;
+import edu.uwi.sta.srts.models.utils.DatabaseHelper;
+import edu.uwi.sta.srts.models.utils.UserType;
 
 public class Users extends Model {
 
@@ -42,7 +28,7 @@ public class Users extends Model {
                         users.clear();
                         for (DataSnapshot user: dataSnapshot.getChildren()) {
                             User u = user.getValue(User.class);
-                            if(filter != null && u != null && u.getUserType() == filter){
+                            if(filter != null && u.getUserType() == filter){
                                 users.add(u);
                             }
                         }
@@ -57,29 +43,28 @@ public class Users extends Model {
                 });
     }
 
+    /**
+     * Constructor that accepts a local collection of users
+     * @param users The collection of users
+     */
+    public Users(ArrayList<User> users){
+        super();
+        this.users.addAll(users);
+    }
+
     public ArrayList<User> getUsers() {
         return this.users;
     }
 
-    @Override
-    public void save() {
-        for(User user: this.getUsers()){
-            user.save();
-        }
+    public void addUser(User user){
+        this.users.add(user);
     }
 
-    @Override
-    public void delete() {
-        for(User user: this.getUsers()){
-            user.delete();
-        }
+    public void removeUser(int index){
+        this.users.remove(index);
     }
 
-    /**
-     * Method that filters the list of users by a given user type
-     * @param userType The type of user to filter the users by
-     */
-    public ArrayList<User> filter(UserType userType){
+    public ArrayList<User> filterSelf(UserType userType){
 
         filter = userType;
 
@@ -94,5 +79,19 @@ public class Users extends Model {
         this.users.addAll(users);
 
         return users;
+    }
+
+    @Override
+    public void save() {
+        for(User user: this.getUsers()){
+            user.save();
+        }
+    }
+
+    @Override
+    public void delete() {
+        for(User user: this.getUsers()){
+            user.delete();
+        }
     }
 }

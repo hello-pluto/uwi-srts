@@ -1,20 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-  ~ Copyright (c) 2019. Razor Sharp Software Solutions
-  ~
-  ~ Azel Daniel (816002285)
-  ~ Amanda Seenath (816002935)
-  ~ Michael Bristol (816003612)
-  ~
-  ~ INFO 3604
-  ~ Project
-  ~
-  ~ UWI Shuttle Routing and Tracking System
-  -->
-
 <android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/content"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -79,7 +67,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/title"
+                        android:text="Title"
                         android:textSize="14sp"
                         android:textStyle="bold"
                         android:fontFamily="@font/raleway"/>
@@ -95,7 +83,7 @@
                             android:fontFamily="@font/raleway"
                             android:inputType="textEmailAddress"
                             android:background="@null"
-                            android:hint="@string/enter_title"
+                            android:hint="Enter title"
                             android:textSize="14sp"
                             android:textStyle="bold"
                             android:layout_weight="1"/>
@@ -136,7 +124,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/message"
+                        android:text="Message"
                         android:textSize="14sp"
                         android:textStyle="bold"
                         android:fontFamily="@font/raleway"/>
@@ -153,7 +141,7 @@
                             android:fontFamily="@font/raleway"
                             android:inputType="textLongMessage|textCapSentences"
                             android:background="@null"
-                            android:hint="@string/enter_message"
+                            android:hint="Enter Message"
                             android:textSize="14sp"
                             android:textStyle="bold"
                             android:layout_weight="1"
@@ -197,7 +185,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/urgency"
+                        android:text="Urgency"
                         android:textSize="14sp"
                         android:textStyle="bold"
                         android:fontFamily="@font/raleway"
@@ -236,7 +224,7 @@
                             <TextView
                                 android:layout_width="40dp"
                                 android:layout_height="40dp"
-                                android:text="@string/_1"
+                                android:text="1"
                                 android:fontFamily="@font/raleway"
                                 android:textStyle="bold"
                                 android:textSize="14sp"
@@ -274,7 +262,7 @@
                             <TextView
                                 android:layout_width="40dp"
                                 android:layout_height="40dp"
-                                android:text="@string/_2"
+                                android:text="2"
                                 android:fontFamily="@font/raleway"
                                 android:textStyle="bold"
                                 android:textSize="14sp"
@@ -308,7 +296,7 @@
                             <TextView
                                 android:layout_width="40dp"
                                 android:layout_height="40dp"
-                                android:text="@string/_3"
+                                android:text="3"
                                 android:fontFamily="@font/raleway"
                                 android:textStyle="bold"
                                 android:textSize="14sp"
@@ -343,7 +331,7 @@
                             <TextView
                                 android:layout_width="40dp"
                                 android:layout_height="40dp"
-                                android:text="@string/_4"
+                                android:text="4"
                                 android:fontFamily="@font/raleway"
                                 android:textStyle="bold"
                                 android:textSize="14sp"
@@ -388,13 +376,25 @@
                                 android:fontFamily="@font/raleway"
                                 android:gravity="center"
                                 android:paddingBottom="2dp"
-                                android:text="@string/_5"
+                                android:text="5"
                                 android:textColor="@android:color/white"
                                 android:textSize="14sp"
                                 android:textStyle="bold"
                                 android:layout_marginRight="5dp"/>
                         </RelativeLayout>
+
                     </LinearLayout>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="More Urgent"
+                        android:textSize="14sp"
+                        android:fontFamily="@font/raleway"
+                        android:textColor="#ddd"
+                        android:drawableLeft="@drawable/round_arrow_back_24"
+                        android:drawableTint="#ddd"
+                        android:layout_gravity="center"
+                        android:gravity="center"/>
                 </LinearLayout>
 
                 <android.support.v7.widget.CardView
@@ -408,10 +408,11 @@
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
+
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:text="@string/save"
+                            android:text="Save"
                             android:id="@+id/done"
                             android:background="?attr/selectableItemBackground"
                             android:textColor="@android:color/white"
@@ -419,8 +420,22 @@
                             android:textSize="16sp"
                             android:textStyle="bold"
                             android:fontFamily="@font/raleway"/>
+
+                        <ProgressBar
+                            android:id="@+id/progressBar"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:indeterminate="true"
+                            android:indeterminateTint="@android:color/white"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginRight="12dp"
+                            android:visibility="gone"/>
+
                     </RelativeLayout>
+
                 </android.support.v7.widget.CardView>
+
             </LinearLayout>
         </android.support.v7.widget.CardView>
     </ScrollView>

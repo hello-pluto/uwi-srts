@@ -1,16 +1,3 @@
-/*
- * Copyright (c) 2019. Razor Sharp Software Solutions
- *
- * Azel Daniel (816002285)
- * Michael Bristol (816003612)
- * Amanda Seenath (816002935)
- *
- * INFO 3604
- * Project
- *
- * UWI Shuttle Routing and Tracking System
- */
-
 package edu.uwi.sta.srts.views;
 
 import android.content.Intent;
@@ -32,10 +19,9 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import edu.uwi.sta.srts.R;
 import edu.uwi.sta.srts.controllers.StopController;
-import edu.uwi.sta.srts.utils.Model;
+import edu.uwi.sta.srts.models.Model;
 import edu.uwi.sta.srts.models.Stop;
 import edu.uwi.sta.srts.utils.Utils;
-import edu.uwi.sta.srts.utils.View;
 
 public class ViewStop extends AppCompatActivity implements View, OnMapReadyCallback {
 
@@ -53,19 +39,11 @@ public class ViewStop extends AppCompatActivity implements View, OnMapReadyCallb
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
-        try {
-            mapFragment.getMapAsync(this);
-        }catch (NullPointerException e){
-            e.printStackTrace();
-        }
+        mapFragment.getMapAsync(this);
 
-        final Toolbar toolbar = findViewById(R.id.toolbar);
+        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        try {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }catch (NullPointerException e){
-            e.printStackTrace();
-        }
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         Stop stop = (Stop) getIntent().getSerializableExtra("stop");
 
@@ -76,7 +54,7 @@ public class ViewStop extends AppCompatActivity implements View, OnMapReadyCallb
     public void update(Model model) {
         if(model instanceof Stop){
             loaded = true;
-            TextView name = findViewById(R.id.name);
+            TextView name = (TextView)findViewById(R.id.name);
             name.setText(stopController.getStopName());
 
             if(mapReady){
@@ -115,7 +93,7 @@ public class ViewStop extends AppCompatActivity implements View, OnMapReadyCallb
         this.googleMap.setMapStyle(new MapStyleOptions(Utils.getMapStyle()));
 
         if(loaded){
-            stopController.update();
+            stopController.updateView();
         }
     }
 
@@ -123,7 +101,7 @@ public class ViewStop extends AppCompatActivity implements View, OnMapReadyCallb
     protected void onResume() {
         super.onResume();
         if(loaded) {
-            stopController.update();
+            stopController.updateView();
         }
     }
 

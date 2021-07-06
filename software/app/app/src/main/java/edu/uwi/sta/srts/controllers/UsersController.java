@@ -1,24 +1,10 @@
-/*
- * Copyright (c) 2019. Razor Sharp Software Solutions
- *
- * Azel Daniel (816002285)
- * Michael Bristol (816003612)
- * Amanda Seenath (816002935)
- *
- * INFO 3604
- * Project
- *
- * UWI Shuttle Routing and Tracking System
- */
-
 package edu.uwi.sta.srts.controllers;
 
 import java.util.ArrayList;
 
 import edu.uwi.sta.srts.models.User;
 import edu.uwi.sta.srts.models.Users;
-import edu.uwi.sta.srts.utils.Controller;
-import edu.uwi.sta.srts.utils.View;
+import edu.uwi.sta.srts.views.View;
 
 public class UsersController extends Controller {
 
@@ -35,13 +21,24 @@ public class UsersController extends Controller {
         return ((Users)this.model).getUsers();
     }
 
-    /**
-     * Method that returns the user controller for a given user
-     * @param position The index of the user
-     * @param view The view to link the controller to
-     * @return A newly created UserController object
-     */
-    public UserController getUserController(int position, View view){
-        return new UserController(getUsers().get(position), view);
+    public void addUser(User user){
+        ((Users)this.model).addUser(user);
+    }
+
+    public void removeUser(int index){
+        ((Users)this.model).removeUser(index);
+    }
+
+    public User filter(String userId){
+        for(User user: getUsers()){
+            if(user.getId().equals(userId)){
+                return user;
+            }
+        }
+        return null;
+    }
+
+    public UserController getUserController(int index, View view){
+        return new UserController(getUsers().get(index), view);
     }
 }

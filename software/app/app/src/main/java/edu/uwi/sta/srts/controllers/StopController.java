@@ -1,24 +1,24 @@
 /*
- * Copyright (c) 2019. Razor Sharp Software Solutions
+ * Copyright (c) 2019. Razor Sharp Software Solutions.
  *
  * Azel Daniel (816002285)
- * Michael Bristol (816003612)
  * Amanda Seenath (816002935)
+ * Michael Bristol (816003612)
  *
  * INFO 3604
  * Project
+ * UWI Shuttle Routing and Tracking System Project
  *
- * UWI Shuttle Routing and Tracking System
+ * This class acts as a bridge between a single stop model and its view.
  */
 
 package edu.uwi.sta.srts.controllers;
 
 import edu.uwi.sta.srts.models.Stop;
-import edu.uwi.sta.srts.utils.Controller;
-import edu.uwi.sta.srts.utils.SimpleLocation;
-import edu.uwi.sta.srts.utils.View;
+import edu.uwi.sta.srts.models.utils.Location;
+import edu.uwi.sta.srts.views.View;
 
-public class StopController extends Controller {
+public class StopController extends Controller{
 
     /**
      * Constructor that requires the stop model and its corresponding view
@@ -49,11 +49,12 @@ public class StopController extends Controller {
         ((Stop)this.model).setRouteId(routeId);
     }
 
-    public SimpleLocation getStopLocation() {
+    public Location getStopLocation() {
         return ((Stop)this.model).getLocation();
     }
 
-    public void setStopLocation(SimpleLocation location) {
+    public void setStopLocation(Location location) {
         ((Stop)this.model).setLocation(location);
     }
+
 }

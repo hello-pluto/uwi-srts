@@ -1,19 +1,21 @@
 /*
- * Copyright (c) 2019. Razor Sharp Software Solutions
+ * Copyright (c) 2019. Razor Sharp Software Solutions.
  *
  * Azel Daniel (816002285)
- * Michael Bristol (816003612)
  * Amanda Seenath (816002935)
+ * Michael Bristol (816003612)
  *
  * INFO 3604
  * Project
+ * UWI Shuttle Routing and Tracking System Project
  *
- * UWI Shuttle Routing and Tracking System
+ * This class represents a list of shuttles in the system
  */
 
 package edu.uwi.sta.srts.models;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -21,8 +23,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-import edu.uwi.sta.srts.utils.DatabaseHelper;
-import edu.uwi.sta.srts.utils.Model;
+import edu.uwi.sta.srts.models.utils.DatabaseHelper;
 
 public class Shuttles extends Model {
 
@@ -69,7 +70,7 @@ public class Shuttles extends Model {
                             shuttles.add(v);
                         }
 
-                        filter(routeId);
+                        filterSelf(routeId);
 
                         notifyObservers();
                     }
@@ -82,10 +83,27 @@ public class Shuttles extends Model {
     }
 
     /**
-     * Method that filters the list of shuttles for a given route id
-     * @param routeId The id of the route to get shuttles for
+     * Constructor that accepts a local collection of shuttles
+     * @param shuttles The collection of shuttles
      */
-    public void filter(String routeId){
+    public Shuttles(ArrayList<Shuttle> shuttles){
+        super();
+        this.shuttles.addAll(shuttles);
+    }
+
+    public ArrayList<Shuttle> getShuttles() {
+        return this.shuttles;
+    }
+
+    public void addShuttle(Shuttle shuttle){
+        this.shuttles.add(shuttle);
+    }
+
+    public void removeShuttle(int index){
+        this.shuttles.remove(index);
+    }
+
+    public void filterSelf(String routeId){
 
         ArrayList<Shuttle> shuttles = new ArrayList<>();
 
@@ -99,8 +117,13 @@ public class Shuttles extends Model {
         this.getShuttles().addAll(shuttles);
     }
 
-    public ArrayList<Shuttle> getShuttles() {
-        return this.shuttles;
+    public Shuttle filter(String driverId){
+        for(Shuttle shuttle:getShuttles()){
+            if(shuttle.getDriverId().equals(driverId)){
+                return shuttle;
+            }
+        }
+        return null;
     }
 
     @Override
@@ -115,22 +138,5 @@ public class Shuttles extends Model {
         for(Shuttle shuttle: this.getShuttles()){
             shuttle.delete();
         }
-    }
-
-    /**
-     * Method that filters the list of shuttles for a given on duty status
-     * @param onDuty Whether to filter by shuttles that are on duty or not
-     */
-    public void filter(boolean onDuty){
-        ArrayList<Shuttle> shuttles = new ArrayList<>();
-
-        for(Shuttle shuttle : getShuttles()){
-            if(shuttle.isOnDuty() == onDuty){
-                shuttles.add(shuttle);
-            }
-        }
-
-        this.getShuttles().clear();
-        this.getShuttles().addAll(shuttles);
     }
 }
